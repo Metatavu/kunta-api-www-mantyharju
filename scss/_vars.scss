@@ -1,0 +1,40 @@
+@charset "UTF-8";
+
+$break-small: 767px;
+$break-x-small: 543px;
+$break-medium: 991px;
+$break-large: 1199px;
+$break-x-large: 1280px;
+
+@mixin font-ultra($size) {
+  font-family: 'Covered By Your Grace', cursive;
+  font-size: $size;
+}
+
+@mixin font-std($size) {
+  font-family: 'Quattrocento Sans', sans-serif;
+  font-size: $size;
+  font-weight: 400;
+  font-style: normal;
+}
+
+@mixin font-std-italic($size) {
+  font-family: 'Quattrocento Sans', sans-serif;
+  font-size: $size;
+  font-weight: 400;
+  font-style: italic;
+}
+
+@mixin font-std-bold($size) {
+  font-family: 'Quattrocento Sans', sans-serif;
+  font-size: $size;
+  font-weight: 700;
+  font-style: normal;
+}
+
+@mixin font-std-bold-italic($size) {
+  font-family: 'Quattrocento Sans', sans-serif;
+  font-size: $size;
+  font-weight: 700;
+  font-style: italic;
+}

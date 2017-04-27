@@ -1,0 +1,17 @@
+table.table.table-inverse
+  thead
+    tr
+      th Linja
+      th Reitti
+      th Aika
+      th Pysäkki
+  tbody
+    each timetable in timetables
+      tr
+        td
+          =timetable.route.shortName
+        td
+          =timetable.route.longName
+        td(data-departure-time=timetable.stopTime.departureTime)
+        td(data-stop-id=timetable.stop.id)
+          =timetable.stop.name

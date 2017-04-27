@@ -1,0 +1,225 @@
+@charset "UTF-8";
+
+@import "vars";
+@import "colors";
+
+.carousel-indicators {
+  bottom: initial;
+  top: 10px;
+}
+
+.header-banner {
+  position: relative;
+  
+  .header-banner-item {
+    height: 500px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+    padding-top: 55px;
+    
+    @media (max-width: $break-small) { 
+      height: 300px;
+    }
+
+    .banner-content-container {
+      padding: 35px;
+      margin-left: 35px;
+      
+
+      a.banner-link {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        opacity: 0;
+        background: transparent;
+        z-index: 0;
+      }
+    
+      h1 {
+        @include font-ultra(70px);
+        display: inline-block;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #fff;
+
+        @media (max-width: $break-x-small) { 
+          @include font-ultra(40px);
+        }
+      }
+      
+      .banner-text {
+        @include font-std(18px);
+      }
+    
+      p, h1 {
+        position: relative;
+        z-index: 1;
+        color: #fff;
+      }
+    }  
+  }
+}
+
+.index-box {
+  width: 100%;
+  margin-bottom: 15px;
+  min-height: 450px;
+  
+  .box-banner {
+    width: 100%;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    
+    h3 {
+      @include font-ultra(32px); 
+      padding: 15px;
+      padding-top: 35px;
+      padding-bottom: 35px;
+      margin: 0;
+    }
+  }
+  
+  ul {
+    list-style-type: none;
+    padding: 0;
+    
+    li {
+      padding-left: 25px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid $index-box-border-color;
+      border-collapse: collapse;
+      
+      &:first-of-type {
+        border-top: 1px solid $index-box-border-color;
+      }
+    }
+  }
+  
+}
+
+.most-wanted-container {
+  
+  a {
+    @include font-ultra(16px); 
+  }
+  
+  .banner-most-wanted {
+    background-image: url('/gfx/layout/etsityimmat.jpg');
+  }
+  
+}
+
+.shortcuts-container {
+    
+  a {
+    @include font-ultra(16px); 
+  }
+
+  .banner-shortcuts {
+    background-image: url('/gfx/layout/oikopolut.jpg');
+  }
+}
+
+.contacts-container {
+  background-image: url('/gfx/layout/espl_kartta.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.tilannehuone-container {
+  
+  .banner-tilannehuone {
+    background-image: url('/gfx/layout/tilannehuone.jpg');
+  }
+}
+
+.thumb-articles-container {
+  @media (max-width: $break-x-small) { 
+    padding-left: 25px;
+    padding-right: 25px; 
+  }
+  
+  .news-articles-header {
+    @include font-ultra(24px);
+    margin-bottom: 20px;
+    margin-top: 20px;
+  }
+}
+
+.news-article {
+  
+  position: relative;
+  overflow: hidden;
+  background-size: cover;
+  
+  .date {
+    display: inline-block;
+    @include font-std(16px);
+    padding: 2px 15px;
+  }
+
+  .details {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 19px;
+    
+    .title {
+      
+      a {
+        color: $common-title-color;
+        text-decoration: none;
+        
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    
+      @include font-ultra(22px);
+      @media (max-width: $break-x-small) { 
+        @include font-ultra(18px);
+      }
+    }
+  }
+  
+  &.thumb-article {
+    min-height: 250px;
+    margin-bottom: 15px;
+    
+    .details {
+      min-height: 120px;
+      padding-top: 6px;
+     
+      .date {
+        margin-top: -34px;
+        position: absolute;
+        left: 0;
+      }
+      
+      .title {
+        font-size: 20px;
+        @media (max-width: $break-x-small) { 
+          font-size: 16px;
+        }
+      }
+    }
+  }
+    
+}
+
+.all-news-link {
+  margin-top: 15px;
+  margin-bottom: 30px;
+  display: inline-block;
+  @include font-ultra(18px);
+  padding: 20px 24px;
+  line-height: 20px;
+}

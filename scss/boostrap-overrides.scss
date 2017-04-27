@@ -1,0 +1,48 @@
+@charset "UTF-8";
+
+@import "vars";
+
+.container {
+  @media (min-width: $break-x-large) {
+    max-width: 1280px;
+  }
+}
+.no-gutter-left {
+  padding-left: 0;
+}
+
+.no-gutter-right { 
+  padding-right: 0;
+}
+
+.no-gutters {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.no-gutters-small {
+  @media (max-width: $break-small) { 
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+.no-gutters-medium {
+  @media (max-width: $break-medium) { 
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+.no-margin-left {
+  margin-left: 0;
+}
+
+.no-margin-right {
+  margin-right: 0;
+}
+
+.no-margins {
+  margin-left: 0;
+  margin-right: 0;
+}

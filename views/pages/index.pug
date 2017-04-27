@@ -1,0 +1,104 @@
+extends ../layout/index.pug
+
+mixin newsArticleThumb(article)
+  .news-article.thumb-article(data-lazy-bg-image=article.imageSrc)
+    .details
+      .date
+        =article.shortDate
+      .title
+        a(href='/uutiset/' + article.slug)
+          !=article.title
+      
+mixin banner(banner)
+  .header-banner-item(data-lazy-bg-image=banner.imageSrc,data-lazy-bg-size='.carousel-inner')
+    .row
+     .col-md-10.col-xs-24.banner-content-container(style='background-color: '+banner.bgcolor)
+      if banner.link
+        a.banner-link(href=banner.link,target="_blank")
+      h1(style=banner.style)
+        =banner.title
+      .banner-text-container
+        .banner-text(style=banner.style)
+          !=banner.contents
+      
+mixin banners-slider(banners) 
+  .header-banner
+    #banner-slide.carousel.slide(data-ride='carousel')
+      .banner-carousel-indicators
+        ol.carousel-indicators
+          each banner, bannerIndex in banners
+            li(data-target='#banner-slide', data-slide-to='#{bannerIndex}')
+      .banner-carousel-items
+        .carousel-inner(role='listbox')
+          each banner, bannerIndex in banners
+            - var itemClass=bannerIndex == 0 ? "carousel-item active" : 'carousel-item'
+            div(class=itemClass)
+              +banner(banner)
+      
+block styles
+  link(rel="stylesheet", href="/css/index.min.css")
+
+block scripts
+  script(defer="defer", type="text/javascript", src="//cdn.metatavu.io/libs/bigtext/0.1.8/bigtext.js")
+  script(defer="defer", type="text/javascript", src="//cdn.metatavu.io/libs/masonry/4.1.1/masonry.pkgd.min.js")
+  script(defer="defer", type="text/javascript", src="//cdn.metatavu.io/libs/jquery.imagesloaded/4.1.1/imagesloaded.pkgd.min.js")
+  script(defer="defer", type="text/javascript", src="/js/index.js")
+
+block content
+  .container.no-gutters
+    .row
+      .col-xs-24
+        +banners-slider(banners)
+        
+  .container.no-gutters
+    .row
+      .col-xs
+        .row
+          .col-lg-17
+            .row
+              .col-lg-12.no-gutter-right
+                .index-box.most-wanted-container
+                  .box-banner.banner-most-wanted
+                    h3
+                      |Etsityimmät
+                  if menus['etsityimmat'] 
+                    ul
+                      each item in menus['etsityimmat'].items
+                        li.nav-item
+                          a.nav-link(href=item.url)
+                            =item.label
+              .col-md-12
+                .index-box.shortcuts-container
+                  .box-banner.banner-shortcuts
+                    h3
+                      |Oikopolut
+                  if menus['oikopolut']     
+                    ul
+                      each item in menus['oikopolut'].items
+                        li.nav-item
+                          a.nav-link(href=item.url)
+                            =item.label
+            .row
+              .col-lg-12.no-gutter-right
+                .index-box.contacts-container
+                  .box-banner.banner-contacts
+                    h3
+                      |Yhteystiedot   
+              .col-lg-12
+                .index-box.tilannehuone-container
+                  .box-banner.banner-tilannehuone
+                    h3
+                      |Tilannehuone
+          .col-lg-7.thumb-articles-container
+            .row
+              .col-xs
+                h3.news-articles-header
+                  | Ajankohtaista
+            each newsArticle in news
+              .row
+                .col-xs
+                  +newsArticleThumb(newsArticle)
+            .row
+              .col-xs
+                a.all-news-link(href="#")
+                  | > Katso kaikki uutiset

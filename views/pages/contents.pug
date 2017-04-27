@@ -1,0 +1,51 @@
+extends ../layout/contents.pug
+
+include ../includes/mixins.pug
+
+block scripts
+  script(defer="defer",type="text/javascript", src="//cdn.metatavu.io/libs/jquery-lazyload/1.9.7/jquery.lazyload.min.js")
+  script(defer="defer",type="text/javascript", src="/js/contents.js")
+
+block styles
+  link(rel="stylesheet", href="/css/contents-common.min.css")
+  link(rel="stylesheet", href="/css/contents.min.css")
+
+block content
+  .container-fluid.no-gutters
+    .row
+      .col-xs.banner-container
+        .banner-border-top
+        .banner(data-lazy-bg-image=bannerSrc)
+        .banner-border-bottom
+        
+  .container.page-container
+    .row
+      +breadcrumbs(breadcrumbs)
+      
+  .container.page-container
+    .row
+      .col-lg-5.page-nav.no-gutters.hidden-md-down
+        h3
+          =rootFolderTitle
+        each child in children
+          +pageMenuItem(child)
+                  
+      .col-xs-24.hidden-lg-up
+        a.btn.btn-primary(title='Näytä valikko', data-toggle='collapse', href='#collapse-menu', aria-expanded='false', aria-controls='collapse-menu')
+          i.fa.fa-bars
+        .collapse#collapse-menu
+          .col-xs-24.page-nav.no-gutters
+            each child in children
+              +pageMenuItem(child)
+      .col-xs-24.col-lg-14
+        .page-content
+          h1
+            !=title
+          if featuredImageSrc
+            .featured-image(data-lazy-bg-image=featuredImageSrc)
+          !=contents
+      if sidebarContents
+        .col-xs-24.col-lg-5.sidebar
+          .sidebar-block
+            !=sidebarContents
+    input.rootPath(type="hidden", value=rootPath)

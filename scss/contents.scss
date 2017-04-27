@@ -1,0 +1,62 @@
+@charset "UTF-8";
+
+@import "vars";
+
+.child-pages {
+  padding-left: 10px;
+  margin-left: -10px;
+  
+  > li {
+    display: none;
+  }
+}
+
+.page-nav-item {
+  margin-left: 15px;
+  padding-right: 20px; 
+}
+
+.open-folder,
+.leaf-page {
+  padding-right: 10px;
+  position: absolute;
+  margin-left: -15px;
+  
+  &:hover, 
+  &:focus {
+    text-decoration: none;
+  }
+}
+
+.open-folder::before {
+  content: "+";
+}
+
+.open>.open-folder::before {
+  content: "-";
+}
+
+.loading>.open-folder::before {
+  content: " ";
+  background-image: url("/gfx/load-2.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  display: inline-block;
+  width: 14px;
+  height: 25px;
+  margin-left:-4px;
+}
+
+.open>.child-pages>li {
+  display: block;
+}
+
+.subpage-list {
+  padding-left: 0;
+  margin-top: 20px;
+ 
+  li {
+    list-style: none;
+  }
+}

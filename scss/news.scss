@@ -1,0 +1,26 @@
+@charset "UTF-8";
+
+@import "vars";
+
+.image-container {
+  margin-bottom: 15px;
+  
+  .featured-image {
+    margin-bottom: 0;
+  }
+  
+}
+
+.tags {
+  
+  margin-bottom: 15px;
+   
+  .tag {
+    border-radius: 10px;
+    background: #000;
+    color: #fff;
+    padding: 5px 8px;
+    margin-right: 5px;
+  }
+  
+}

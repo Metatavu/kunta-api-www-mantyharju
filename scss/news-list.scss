@@ -1,0 +1,36 @@
+@charset "UTF-8";
+
+@import "vars";
+
+.news-article {
+  
+  border-bottom: 1px solid #aaa;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  
+  .article-image-container {
+    min-height: 120px;
+  }
+  
+  .article-image {
+    min-width: 120px;
+    max-width: 100%;
+    background-size: cover;
+    padding-top: 5px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+  }
+  
+  .date::after {
+    content: " - ";
+  }
+  
+  .date {
+    @include font-std(16px);  
+  }  
+  
+  .title {
+    @include font-std(18px);
+  }
+  
+}

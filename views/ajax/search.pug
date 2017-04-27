@@ -1,0 +1,24 @@
+if !pages.length && !files.length
+  .no-results
+    |Haulla ei löytynyt tuloksia
+else
+  if pages.length
+    h3
+      |Sivut
+    ul
+      each page in pages
+        li
+          i.fa.fa-file-text-o(aria-hidden="true")
+          a(href='/redirect/page/' + page.id)
+            =page.title
+  if files.length
+    h3
+      |Tiedostot
+    ul
+      each file in files
+        li
+          i.fa.fa-paperclip(aria-hidden="true")
+          a(href='/redirect/file/' + file.id)
+            =file.title
+          a.file-page-link(href='/redirect/page/' + file.pageId)
+            i.fa.fa-external-link(aria-hidden="true")

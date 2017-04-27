@@ -1,0 +1,67 @@
+extends ../layout/contents.pug
+
+include ../includes/mixins.pug
+
+block styles
+  link(rel="stylesheet", href="/css/contents-common.min.css")
+  link(rel="stylesheet", href="/css/news.min.css")
+
+block content
+  .container-fluid.no-gutters
+    .row
+      .col-xs.banner-container
+        .banner-border-top
+        .banner(data-lazy-bg-image=bannerSrc)
+        .banner-border-bottom
+      
+  .container.page-container
+    .row
+      +breadcrumbs(breadcrumbs)
+        
+  .container.page-container
+    .row
+      .col-lg-5.page-nav.no-gutters.hidden-md-down
+        h3
+          =folderTitle
+        each sibling in siblings
+          if sibling.id == id
+            .page-nav-item.active
+              a(href=sibling.slug)
+                =sibling.title
+          else
+            a.page-nav-item(href=sibling.slug)
+              =sibling.title
+      .col-xs-24.hidden-lg-up
+        a.btn.btn-primary(title='Näytä valikko', data-toggle='collapse', href='#collapse-menu', aria-expanded='false', aria-controls='collapse-menu')
+          i.fa.fa-bars
+        .collapse#collapse-menu
+          .col-xs-24.col-lg-5.page-nav.no-gutters
+            each sibling in siblings
+              if sibling.id == id
+                .page-nav-item.active
+                  a(href=sibling.slug)
+                    =sibling.title
+              else
+                a.page-nav-item(href=sibling.slug)
+                  =sibling.title
+      .col-xs-24.col-lg-14
+        .page-content
+          .row
+            .col-xs-24.title-container
+              h1
+                !=title
+          .row
+            .col-xs-24.image-container
+              .featured-image(data-lazy-bg-image=imageSrc)
+          .row
+            .col-xs-24
+              !=contents
+          .row
+            .col-xs-24.tags
+               each tag in tags
+                a.tag(href='/uutiset/?tag=' + tag)
+                  =tag
+          
+      if sidebarContents
+        .col-xs-24.col-lg-5.sidebar
+          !=sidebarContents

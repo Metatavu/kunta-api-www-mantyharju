@@ -1,0 +1,33 @@
+extends ../layout/contents.pug
+
+include ../includes/mixins.pug
+
+block styles
+  link(rel="stylesheet", href="/css/contents-common.min.css")
+  link(rel="stylesheet", href="/css/error.min.css")
+
+block content
+  .container-fluid.no-gutters
+    .row
+      .col-xs.banner-container
+        .banner-border-top
+        .banner(data-lazy-bg-image=bannerSrc)
+        .banner-border-bottom
+      
+  .container.page-container
+    .row
+      +breadcrumbs()
+        
+  .container.page-container
+    .row
+      .col-xs-24
+        .page-content
+          h1
+            |Sivua ei löytynyt
+          p
+            |Saatoit kirjoittaa osoitteen väärin. Ole hyvä ja tarkista osoite. 
+          p
+            |Etsimäsi sivu saattaa olla myös poistettu tai siirretty. Voit etsiä sivua yläpalkin hausta tai siirtyä takaisin 
+            b
+              a(href="/")
+                |etusivulle
