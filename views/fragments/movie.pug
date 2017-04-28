@@ -1,7 +1,7 @@
 .movie
   div
     .image-container
-      .movie-image(data-lazy-bg-image=imageUrl)
+      .movie-image(data-lazy-bg-image=imageUrl,data-lity data-lity-target=trailerUrl)
   div
     .title
       h3
@@ -40,8 +40,8 @@
           =classification.name
   div
     .trailer-url
-     a.show-trailer-button(href=trailerUrl)
-       |Katso traileri
+     a.show-trailer-button(data-lity data-lity-target=trailerUrl,href=trailerUrl)
+       |Katso traileri »
   div
     .description(style="display: none")
       =description

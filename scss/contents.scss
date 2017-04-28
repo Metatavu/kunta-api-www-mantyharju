@@ -62,35 +62,19 @@
   }
 }
 
-.movie, 
-.movie-list-grid-sizer {
-  width: calc(25% - 10px);
-  display: inline-block;
-  margin: 5px;
-}
-
-@media screen and (min-width: 768px) {
-  .movie, 
-  .movie-list-grid-sizer {
-    width: calc(50% - 10px);
-    display: inline-block;
-  }
-}
-
-@media screen and (min-width: 992px) {
-  .movie, 
-  .movie-list-grid-sizer {
-    width: calc(25% - 10px);
-    display: inline-block;
-  }
-}
-
 .kunta-api-movie-list {
   
   .movie {
-    background: $movie-background;
-    margin: -5px;
+    background-color: $movie-background;
+    background-position: center;
     padding: 20px;
+    margin-left: -5px;
+    margin-right: -5px;
+    
+    .title h3 {
+      text-transform: uppercase;
+      @include font-std-bold(29px);
+    }
   }
   
   .movie-image {
@@ -98,6 +82,7 @@
     height: 363px;
     background-size: cover;
     background-repeat: no-repeat;
+    cursor: pointer;
   }
   
   .show-trailer-button {
@@ -112,11 +97,12 @@
   .movie-field {
     
     label {
-      font-weight: bold;
+      @include font-std-bold(16px);
       margin-bottom: 0px;
     }
     
     span {
+      @include font-std(16px);
       padding-left: 5px;
     }
     
@@ -156,6 +142,50 @@
       
       margin-bottom: 20px;
     }
+    
+    &.price {
+      
+      span::after {
+        content: ' €';
+      }
+      
+    }
+    
   }
   
+}
+
+.kunta-api-movie-list {
+  .movie, 
+  .movie-list-grid-sizer {
+    width: calc(25% - 20px);
+    display: inline-block;
+      margin-left: 10px;
+      margin-right: 10px;
+      margin-bottom: 20px;
+  }
+}
+
+@media screen and (max-width: $break-medium) {
+  .kunta-api-movie-list {
+    .movie, 
+    .movie-list-grid-sizer {
+      width: calc(50% - 20px);
+      display: inline-block;
+      margin-left: 10px;
+      margin-right: 10px;
+      margin-bottom: 20px;
+    }
+  }
+}
+
+@media screen and (max-width: $break-small) {
+  .kunta-api-movie-list {
+    .movie, 
+    .movie-list-grid-sizer {
+      width: calc(100%);
+      display: inline-block;
+      margin-left: 0px;
+    }
+  }
 }
