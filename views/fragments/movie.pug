@@ -1,0 +1,47 @@
+.movie
+  div
+    .image-container
+      .movie-image(data-lazy-bg-image=imageUrl)
+  div
+    .title
+      h3
+        =title
+  div
+      .movie-field.showtimes
+        label
+          |Näytösajat:
+        for showtime in showtimes
+          span
+            =showtime
+  div
+    .movie-field.age-limit
+      label
+        |Ikäraja:
+      span
+        =ageLimit
+  div
+    .movie-field.runtime
+      label
+        |Kesto:
+      span
+        =runtime
+  div
+    .movie-field.price
+      label
+        |Lippu:
+      span
+        =price
+  div
+    .movie-field.classification
+      label
+        |Luokitus:
+      for classification in classifications
+        span
+          =classification.name
+  div
+    .trailer-url
+     a.show-trailer-button(href=trailerUrl)
+       |Katso traileri
+  div
+    .description(style="display: none")
+      =description

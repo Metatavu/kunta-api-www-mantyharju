@@ -77,6 +77,22 @@
       rootPath: $('.rootPath').val()
     });
     
+    $('.kunta-api-movie-list').css('opacity', '0');
+
+    $('.kunta-api-movie-list').imagesLoaded(function () {
+      $('<div>')
+        .addClass('movie-list-grid-sizer')
+        .appendTo($('.kunta-api-movie-list'));
+      
+      $('.kunta-api-movie-list')
+        .css('opacity', '1')
+        .masonry({
+          itemSelector: '.movie',
+          columnWidth: '.movie-list-grid-sizer',
+          percentPosition: true
+        });
+    });
+    
     $("img.lazy").lazyload();
   });
   

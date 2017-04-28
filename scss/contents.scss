@@ -1,6 +1,7 @@
 @charset "UTF-8";
 
 @import "vars";
+@import "colors";
 
 .child-pages {
   padding-left: 10px;
@@ -59,4 +60,102 @@
   li {
     list-style: none;
   }
+}
+
+.movie, 
+.movie-list-grid-sizer {
+  width: calc(25% - 10px);
+  display: inline-block;
+  margin: 5px;
+}
+
+@media screen and (min-width: 768px) {
+  .movie, 
+  .movie-list-grid-sizer {
+    width: calc(50% - 10px);
+    display: inline-block;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .movie, 
+  .movie-list-grid-sizer {
+    width: calc(25% - 10px);
+    display: inline-block;
+  }
+}
+
+.kunta-api-movie-list {
+  
+  .movie {
+    background: $movie-background;
+    margin: -5px;
+    padding: 20px;
+  }
+  
+  .movie-image {
+    margin: -20px;
+    height: 363px;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+  
+  .show-trailer-button {
+    display: inline-block;
+    width: 100%;
+    background: $movie-trailer-background;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .movie-field {
+    
+    label {
+      font-weight: bold;
+      margin-bottom: 0px;
+    }
+    
+    span {
+      padding-left: 5px;
+    }
+    
+    &.showtimes,
+    &.classification {
+      
+      margin-bottom: 5px;
+      
+      label {
+        display: block;
+        margin: 0px;
+      }
+      
+      span {
+        padding: 0px;
+      }
+    }
+    
+    &.classification {
+      span::after {
+        content: ' / ';
+      }
+      
+      span:last-of-type::after {
+        content: '';
+      }
+    }  
+    
+    &.showtimes {
+      label {
+        text-transform: uppercase;   
+      }
+      
+      span {
+        display: block;
+      }
+      
+      margin-bottom: 20px;
+    }
+  }
+  
 }

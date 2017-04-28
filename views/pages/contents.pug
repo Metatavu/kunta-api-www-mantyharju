@@ -4,6 +4,8 @@ include ../includes/mixins.pug
 
 block scripts
   script(defer="defer",type="text/javascript", src="//cdn.metatavu.io/libs/jquery-lazyload/1.9.7/jquery.lazyload.min.js")
+  script(defer="defer", type="text/javascript", src="https://cdnjs.cloudflare.com/ajax/libs/masonry/4.1.1/masonry.pkgd.min.js")
+  script(defer="defer", type="text/javascript", src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.1/imagesloaded.pkgd.min.js")
   script(defer="defer",type="text/javascript", src="/js/contents.js")
 
 block styles
@@ -24,12 +26,12 @@ block content
       
   .container.page-container
     .row
-      .col-lg-5.page-nav.no-gutters.hidden-md-down
-        h3
-          =rootFolderTitle
-        each child in children
-          +pageMenuItem(child)
-                  
+      if !extraWide
+        .col-lg-5.page-nav.no-gutters.hidden-md-down
+          h3
+            =rootFolderTitle
+          each child in children
+            +pageMenuItem(child)                  
       .col-xs-24.hidden-lg-up
         a.btn.btn-primary(title='Näytä valikko', data-toggle='collapse', href='#collapse-menu', aria-expanded='false', aria-controls='collapse-menu')
           i.fa.fa-bars
@@ -37,7 +39,7 @@ block content
           .col-xs-24.page-nav.no-gutters
             each child in children
               +pageMenuItem(child)
-      .col-xs-24.col-lg-14
+      .col-xs-24(class=extraWide ? '' : 'col-lg-14')
         .page-content
           h1
             !=title

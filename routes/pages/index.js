@@ -6,8 +6,11 @@
 
   const util = require('util');
   const _ = require('lodash');
+  const cheerio = require('cheerio');
+  const moment = require('moment');
+  const pug = require('pug');
   const Common = require(__dirname + '/../common');
-
+  
   module.exports = (app, config, ModulesClass) => {
 
     function loadChildPages(pages, preferLanguages, callback) {
@@ -115,17 +118,17 @@
             .pages.readMenuTree(rootPage.id, page.id, preferLanguages)
             .pages.listImages(page.id)
             .callback(function(pageData) {
-              var contents = pageData[0];
-              var breadcrumbs = pageData[1];
-              var rootFolderTitle = rootPage.title;
-              var openTreeNodes = pageData[3];
-              var images = pageData[4];
-              var activeIds = _.map(breadcrumbs, (breadcrumb) => {
+              let contents = Common.processPageContent(path, pageData[0]);
+              let breadcrumbs = pageData[1];
+              let rootFolderTitle = rootPage.title;
+              let openTreeNodes = pageData[3];
+              let images = pageData[4];
+              let activeIds = _.map(breadcrumbs, (breadcrumb) => {
                 return breadcrumb.id;
               });
               
-              var featuredImageId = null;
-              var bannerImageId = null;
+              let featuredImageId = null;
+              let bannerImageId = null;
               (images||[]).forEach((image) => {
                 if (image.type === 'featured') {
                   featuredImageId = image.id;
@@ -134,8 +137,37 @@
                 }
               });
               
-              var featuredImageSrc = featuredImageId ? util.format('/pageImages/%s/%s', page.id, featuredImageId) : null;
-              var bannerSrc = bannerImageId ? util.format('/pageImages/%s/%s', page.id, bannerImageId) : '/gfx/layout/default_banner.jpg';
+              const movieTemplate = pug.compileFile(__dirname + '/../../views/fragments/movie.pug');
+              let $ = cheerio.load(contents);
+              let movies = $('.kunta-api-movie');
+              
+              movies.each((index, movie) => {
+                let result = {};
+                const simpleAttributes = ['title', 'age-limit', 'runtime', 'price', 'description', 'trailer-url'];
+                const jsonAttributes = ['showtimes', 'classifications'];
+                
+                for (let i = 0; i < simpleAttributes.length; i++) {
+                  result[_.camelCase(simpleAttributes[i])] = $(movie).attr(util.format('data-%s', simpleAttributes[i]));
+                }
+                
+                for (let i = 0; i < jsonAttributes.length; i++) {
+                  result[_.camelCase(jsonAttributes[i])] = JSON.parse($(movie).attr(util.format('data-%s', jsonAttributes[i])));
+                }
+                
+                result['showtimes'] = _.map(result['showtimes'], (showtime) => {
+                  moment.locale('fi');
+                  return moment(showtime).format('llll');
+                });
+                
+                result['imageUrl'] = $(movie).find('img').attr('data-original');
+                
+                let rendered = $(movieTemplate(result));
+                $(movie).replaceWith(rendered);
+              });
+              
+              let extraWide = movies.length > 0;
+              let featuredImageSrc = featuredImageId ? util.format('/pageImages/%s/%s', page.id, featuredImageId) : null;
+              let bannerSrc = bannerImageId ? util.format('/pageImages/%s/%s', page.id, bannerImageId) : '/gfx/layout/default_banner.jpg';
               
               loadChildPages(pageData[2], preferLanguages, (children) => {
                 res.render('pages/contents.pug', Object.assign(req.kuntaApi.data, {
@@ -144,14 +176,15 @@
                   rootPath: util.format("%s/%s", Common.CONTENT_FOLDER, rootPath),
                   title: page.title,
                   rootFolderTitle: rootFolderTitle,
-                  contents: Common.processPageContent(path, contents),
+                  contents: $.html(),
                   sidebarContents: Common.getSidebarContent(contents),
                   breadcrumbs: breadcrumbs,
                   featuredImageSrc: featuredImageSrc,
                   activeIds: activeIds,
                   children: mapOpenChildren(children, activeIds, openTreeNodes),
                   openTreeNodes: openTreeNodes,
-                  bannerSrc: bannerSrc
+                  bannerSrc: bannerSrc,
+                  extraWide: extraWide
                 }));
               });
 
