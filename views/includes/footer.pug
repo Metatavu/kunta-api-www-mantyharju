@@ -4,34 +4,45 @@ mixin footerTile(tile)
     if tile.contents
       .footer-tile-contents
         !=tile.contents
-.container.no-gutters
+.container.no-gutters.hidden-md-down
   .row
     .col-md-12.col-xs-24.no-gutter-right
       +footerTile(tileMap['footer-1'])
     .col-md-12.col-xs-24
       +footerTile(tileMap['footer-2'])
-footer.container-fluid.no-gutters
+.container.mobile-footer.hidden-lg-up
+  .row
+    .col-xs-10.no-gutters.mobile-footer-item
+      a(href="#")
+        h4 Briefly in english
+    .col-xs-10.no-gutters.mobile-footer-item
+      a(href="#")
+        h4 Yhteystiedot
+    .col-xs-4.no-gutters.mobile-footer-item.up-link
+      a(href="#")
+        h4 Ylös
+footer.container-fluid.no-gutters.hidden-md-down
   .container
     .row
       .col-xs-24.col-lg-6
         !=fragmentMap['footer-1']
       .col-xs-24.col-lg-18
         .row
-          .col-xs-24.col-lg-8
+          .col-md-8
             ul.footer-nav
               if menus['footer-1']
                 each item in menus['footer-1'].items
                   li.footer-nav-item
                     a.footer-nav-link(href=item.url)
                       = item.label
-          .col-xs-24.col-lg-8
+          .col-md-8
             ul.footer-nav
               if menus['footer-2']
                 each item in menus['footer-2'].items
                   li.footer-nav-item
                     a.footer-nav-link(href=item.url)
                       = item.label
-          .col-xs-24.col-lg-8
+          .col-md-8
             ul.footer-nav
               if menus['footer-3']
                 each item in menus['footer-3'].items

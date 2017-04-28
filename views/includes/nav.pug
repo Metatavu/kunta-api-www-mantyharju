@@ -1,39 +1,44 @@
 nav.navbar.navbar-light.top-nav-container
   .container
-    .row.hidden-sm-up
-      .col-xs-6
-        button.navbar-toggler.hidden-sm-up(type='button', data-toggle='collapse', data-target='#exCollapsingNavbar', aria-controls='exCollapsingNavbar', aria-expanded='false', aria-label='Toggle navigation')
-          i.fa.fa-bars
+    .row.hidden-lg-up
       .col-xs-18.logo-container
         a(href="/")
-          img.logo(src="/gfx/layout/mantyharju_logo_mobile.jpg")
-    .collapse.navbar-toggleable-xs#exCollapsingNavbar  
+          img.logo.img-responsive(src="/gfx/layout/mantyharju_logo_mobile.jpg")
+      .col-xs-6.no-gutters
+        button.navbar-toggler(type='button', data-toggle='collapse', data-target='#exCollapsingNavbar', aria-controls='exCollapsingNavbar', aria-expanded='false', aria-label='Toggle navigation')
+          i.fa.fa-bars
+    .collapse.navbar-toggleable-md#exCollapsingNavbar  
       .row
-        .col-md-7.logo-container.hidden-sm-down
+        .col-md-7.logo-container.hidden-md-down
           a(href="/")
             img.logo(src="/gfx/layout/mantyharju_logo_desktop.png")
-        .col-xs-24.col-md-6
+        .col-xs-24.col-lg-6
           .nav-search-container
             input(placeholder="Hae sivustolta")
             i.fa.fa-search(aria-hidden="true")
-        .col-xs-24.col-md-11
+        .col-xs-24.hidden-lg-up
+          ul.nav.navbar-nav.nav-bar-mobile
+            if menus['paavalikko']
+              each item in menus['paavalikko'].items
+                li.mobile-nav-item
+                  a.mobile-nav-link(href=item.url)
+                    = item.label
+            if menus['sisalto']
+              each item in menus['sisalto'].items
+                li.mobile-nav-item
+                  a.mobile-nav-link(href=item.url)
+                    = item.label
+        .col-lg-11.hidden-md-down
           ul.nav.navbar-nav.nav-bar-secondary
             if menus['sisalto']
               each item in menus['sisalto'].items
                 li.nav-item
                   a.nav-link(href=item.url)
                     = item.label
-        .col-xs-24.hidden-sm-up
-          ul.nav.navbar-nav.nav-bar-primary
-            if menus['paavalikko']
-              each item in menus['paavalikko'].items
-                li.nav-item
-                  a.nav-link(href=item.url)
-                    = item.label 
-  .container-fluid.no-gutters.navbar-primary-container.hidden-sm-down
+  .container-fluid.no-gutters.navbar-primary-container.hidden-md-down
     .container
       nav.navbar.navbar-light.row
-        .col-xs-24.col-lg-14.no-gutter-left.primary-navbar
+        .col-xs-24.col-lg-16.no-gutter-left.primary-navbar
           ul.nav.navbar-nav.nav-bar-primary
             if menus['paavalikko']
               each item in menus['paavalikko'].items

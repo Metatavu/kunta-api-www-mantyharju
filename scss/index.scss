@@ -12,16 +12,24 @@
     background-repeat: no-repeat;
     position: relative;
     padding-top: 55px;
-    
-    @media (max-width: $break-small) { 
-      height: 300px;
-    }
 
     .banner-content-container {
       padding: 35px;
       margin-left: 35px;
       
+      @media (max-width: $break-medium) {
+        margin: 0;
+      }
 
+      @media (max-width: $break-medium) {
+        position: absolute;
+        left: 15px;
+        bottom: 20px;
+        width: calc(100% - 30px);
+        padding-left: 35px;
+        padding-right: 35px;
+      }
+      
       a.banner-link {
         position: absolute;
         top: 0;
@@ -63,10 +71,25 @@
   right: -15px;
   top: 12px;
   
+  @media (max-width: $break-x-large) {
+    right: 12px;
+  }
+  
+  @media (max-width: $break-medium) {
+    position: relative;
+    right: 0;
+    top: -3px;
+  }
+  
   .quick-nav-button-container {
     padding-left: 3px;
     padding-right: 3px;
     max-width: 146px;
+    
+    @media (max-width: $break-medium) {
+      max-width: 25%;
+    }
+    
   }
   
   .quick-nav-container {
@@ -78,6 +101,11 @@
     padding-top: 25px;
     padding-bottom: 15px;
     text-align: center;
+
+    @media (max-width: $break-small) {
+      height: 110px;
+      padding-top: 10px;
+    }
     
     .quick-nav-title {
       padding-top: 10px;
@@ -85,7 +113,12 @@
       h4 {
         color: $quick-nav-text-color;
         text-transform: uppercase;
-        @include font-std-bold(16px);   
+        @include font-std-bold(16px);  
+        
+        @media (max-width: $break-small) {
+          @include font-std-bold(12px);
+        }
+        
       }
     }
   } 
@@ -137,9 +170,12 @@
       .nav-link {
         border: none;
         padding-bottom: 25px;
+        padding-left: 0;
+        padding-right: 10px;
       }
       
       .nav-link.events-tab {
+        padding-left: 25px;
         padding-bottom: 48px;
         text-align: left;
       }
@@ -174,6 +210,10 @@
       max-height: 30px;
       letter-spacing: 1.2px;
       @include font-std-bold(18px);
+      
+      @media (max-width: $break-medium) {
+        letter-spacing: 0px;
+      }
       
       img {
         margin-right: 10px;

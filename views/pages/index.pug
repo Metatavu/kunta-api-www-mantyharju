@@ -43,7 +43,7 @@ mixin renderAnnouncement(announcement)
 mixin banner(banner)
   .header-banner-item(data-lazy-bg-image=banner.imageSrc,data-lazy-bg-size='.carousel-inner')
     .row
-     .col-md-10.col-xs-24.banner-content-container(style='background-color: '+banner.bgcolor)
+     .col-lg-10.col-xs-24.banner-content-container(style='background-color: '+banner.bgcolor)
       if banner.link
         a.banner-link(href=banner.link,target="_blank")
       h1(style=banner.style)
@@ -65,30 +65,30 @@ mixin events-slider(events)
 mixin banners-slider(banners) 
   .header-banner
     #banner-slide.carousel.slide(data-ride='carousel')
-      .col-xs-24.col-md-6.quick-nav-buttons-container
+      .col-xs-24.col-lg-6.quick-nav-buttons-container
         .row
-          .col-xs-6.col-md-12.pull-md-right.no-gutters.quick-nav-button-container
+          .col-xs-6.col-lg-12.pull-lg-right.no-gutters.quick-nav-button-container
             .quick-nav-container
               a(href="#")
                 .quick-nav-icon-container
                   img.quick-nav-icon.img-responsive(src="/gfx/layout/aukioloajat.png")
                 .quick-nav-title
                   h4 Palveluiden aukioloajat
-          .col-xs-6.col-md-12.pull-md-right.no-gutters.quick-nav-button-container
+          .col-xs-6.col-lg-12.pull-lg-right.no-gutters.quick-nav-button-container
             .quick-nav-container
               a(href="#")
                 .quick-nav-icon-container
                   img.quick-nav-icon.img-responsive(src="/gfx/layout/osallistu.png")
                 .quick-nav-title
                   h4 Osallistu ja vaikuta
-          .col-xs-6.col-md-12.pull-md-right.no-gutters.quick-nav-button-container
+          .col-xs-6.col-lg-12.pull-lg-right.no-gutters.quick-nav-button-container
             .quick-nav-container
               a(href="#")
                 .quick-nav-icon-container
                   img.quick-nav-icon.img-responsive(src="/gfx/layout/tapahtumat.png")
                 .quick-nav-title
                   h4 Tapahtumat
-          .col-xs-6.col-md-12.pull-md-right.no-gutters.quick-nav-button-container
+          .col-xs-6.col-lg-12.pull-lg-right.no-gutters.quick-nav-button-container
             .quick-nav-container
               a(href="#")
                 .quick-nav-icon-container
@@ -126,7 +126,7 @@ block content
         
   .container.no-gutters
     .row
-      .col-xs-24.col-md-12.no-gutter-right
+      .col-xs-24.col-lg-12.no-gutter-right
         .row
           .col-xs
             .index-box
@@ -157,7 +157,7 @@ block content
         .row
           .col-xs
             +tile(tileMap['etusivu-mainos'])
-      .col-xs-24.col-md-12
+      .col-xs-24.col-lg-12
         .row
           .col-xs
             +events-slider(events)
@@ -177,6 +177,3 @@ block content
                   a.read-more(href="#")
                     | Lisää tapahtumia
                     i.fa.fa-chevron-right
-    .row
-      .col-xs-24.col-md-12
-      .col-xs-24.col-md-12
