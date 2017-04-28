@@ -62,8 +62,7 @@
 
   h1 {
     color: $common-title-color;
-    text-transform: uppercase;
-    @include font-ultra(40px);
+    @include font-std-bold(47.5px);
     
     @media (max-width: $break-small) {
       font-size: 26px;
