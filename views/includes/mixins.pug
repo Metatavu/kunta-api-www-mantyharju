@@ -16,7 +16,7 @@ mixin pageMenuItem(item)
     span.page-nav-item(class=[item.id == id ? 'active' : '', item.children && item.children.length ? 'open' : ''].join(' '))
       a.open-folder(href="#", data-page-id=item.id, data-slug=item.slug)
       a.page-nav-link(href='#')
-        =item.title
+        !=item.title
       ul.child-pages
         if item.children
           each child in item.children
@@ -27,4 +27,4 @@ mixin pageMenuItem(item)
       span.leaf-page(data-page-id=item.id, data-slug=item.slug)
         |&nbsp;
       a.page-nav-link(href='#')
-        =item.title
+        !=item.title

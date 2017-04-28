@@ -297,6 +297,32 @@ ul.nav-bar-mobile {
   }
 }
 
+.btn-primary {
+  background-color: $primary-menu-bg-color;
+  border-color: $primary-menu-bg-color;
+  border-radius: 0px;
+
+  &:focus {
+    background-color: $primary-menu-bg-color;
+    border-color: $primary-menu-bg-color;
+  }
+  
+  &:active {
+    background-color: $primary-menu-bg-color;
+    border-color: $primary-menu-bg-color;
+  }
+
+  &:active:hover {
+    background-color: $primary-menu-bg-color;
+    border-color: $primary-menu-bg-color;
+  }
+  
+  &:hover {
+    background-color: $primary-menu-bg-color;
+    border-color: $primary-menu-bg-color;
+  }
+}
+
 .mobile-footer {
   background: $footer-bg-color;
   margin-top: 25px;

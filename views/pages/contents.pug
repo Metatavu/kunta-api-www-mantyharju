@@ -15,13 +15,6 @@ block styles
   link(rel="stylesheet", href="//cdn.metatavu.io/libs/lity/2.2.2/lity.min.css")
 
 block content
-  .container-fluid.no-gutters
-    .row
-      .col-xs.banner-container
-        .banner-border-top
-        .banner(data-lazy-bg-image=bannerSrc)
-        .banner-border-bottom
-        
   .container.page-container
     .row
       +breadcrumbs(breadcrumbs)
@@ -29,7 +22,7 @@ block content
   .container.page-container
     .row
       if !extraWide
-        .col-lg-5.page-nav.no-gutters.hidden-md-down
+        .col-lg-5.page-nav.no-gutter-left.hidden-md-down
           h3
             =rootFolderTitle
           each child in children
@@ -41,15 +34,11 @@ block content
           .col-xs-24.page-nav.no-gutters
             each child in children
               +pageMenuItem(child)
-      .col-xs-24(class=extraWide ? '' : 'col-lg-14')
+      .col-xs-24(class=extraWide ? '' : 'col-lg-19')
         .page-content
           h1
             !=title
           if featuredImageSrc
             .featured-image(data-lazy-bg-image=featuredImageSrc)
           !=contents
-      if sidebarContents
-        .col-xs-24.col-lg-5.sidebar
-          .sidebar-block
-            !=sidebarContents
     input.rootPath(type="hidden", value=rootPath)
