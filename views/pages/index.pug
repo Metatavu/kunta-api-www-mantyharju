@@ -1,13 +1,44 @@
 extends ../layout/index.pug
 
-mixin newsArticleThumb(article)
-  .news-article.thumb-article(data-lazy-bg-image=article.imageSrc)
-    .details
-      .date
-        =article.shortDate
-      .title
-        a(href='/uutiset/' + article.slug)
-          !=article.title
+mixin renderTextEvent(event)
+  .index-box-item
+    a(href=event.originalUrl,target="_blank")
+      .index-box-item-header
+        span
+          =event.shortDate
+      .index-box-item-content
+        !=event.name
+        i.fa.fa-chevron-right
+
+mixin event(event)
+  .event-banner-item(data-lazy-bg-image=event.imageSrc,data-lazy-bg-size='.carousel-inner')
+    .row
+      a.banner-link(href=event.originalUrl, target="_blank")
+        .event-banner-content-container
+          .event-banner-text-container
+            h3
+              =event.name + " " + event.startHumanReadable
+
+mixin newsArticle(article)
+  .index-box-item
+    a(href='/uutiset/' + article.slug)
+      .index-box-item-header
+        span
+          =article.shortDate
+      .index-box-item-content
+        !=article.abstract
+        i.fa.fa-chevron-right
+      
+mixin renderAnnouncement(announcement)
+  .index-box-item
+    a(href='/kuulutukset/' + announcement.slug)
+      .index-box-item-header
+        span
+          =announcement.shortDate
+      .index-box-item-content
+        p 
+          =announcement.title
+        i.fa.fa-chevron-right
       
 mixin banner(banner)
   .header-banner-item(data-lazy-bg-image=banner.imageSrc,data-lazy-bg-size='.carousel-inner')
@@ -20,21 +51,64 @@ mixin banner(banner)
       .banner-text-container
         .banner-text(style=banner.style)
           !=banner.contents
-      
+
+mixin events-slider(events)
+  .events-banner
+    #event-slide.carousel.slide(data-ride='carousel')
+      .banner-carousel-items
+        .carousel-inner(role='listbox')
+          each event, eventIndex in events
+            - var itemClass=eventIndex == 0 ? "carousel-item active" : 'carousel-item'
+            div(class=itemClass)
+              +event(event)
+  
 mixin banners-slider(banners) 
   .header-banner
     #banner-slide.carousel.slide(data-ride='carousel')
-      .banner-carousel-indicators
-        ol.carousel-indicators
-          each banner, bannerIndex in banners
-            li(data-target='#banner-slide', data-slide-to='#{bannerIndex}')
+      .col-xs-24.col-md-6.quick-nav-buttons-container
+        .row
+          .col-xs-6.col-md-12.pull-md-right.no-gutters.quick-nav-button-container
+            .quick-nav-container
+              a(href="#")
+                .quick-nav-icon-container
+                  img.quick-nav-icon.img-responsive(src="/gfx/layout/aukioloajat.png")
+                .quick-nav-title
+                  h4 Palveluiden aukioloajat
+          .col-xs-6.col-md-12.pull-md-right.no-gutters.quick-nav-button-container
+            .quick-nav-container
+              a(href="#")
+                .quick-nav-icon-container
+                  img.quick-nav-icon.img-responsive(src="/gfx/layout/osallistu.png")
+                .quick-nav-title
+                  h4 Osallistu ja vaikuta
+          .col-xs-6.col-md-12.pull-md-right.no-gutters.quick-nav-button-container
+            .quick-nav-container
+              a(href="#")
+                .quick-nav-icon-container
+                  img.quick-nav-icon.img-responsive(src="/gfx/layout/tapahtumat.png")
+                .quick-nav-title
+                  h4 Tapahtumat
+          .col-xs-6.col-md-12.pull-md-right.no-gutters.quick-nav-button-container
+            .quick-nav-container
+              a(href="#")
+                .quick-nav-icon-container
+                  img.quick-nav-icon.img-responsive(src="/gfx/layout/kartat.png")
+                .quick-nav-title
+                  h4 Kartat
       .banner-carousel-items
         .carousel-inner(role='listbox')
           each banner, bannerIndex in banners
             - var itemClass=bannerIndex == 0 ? "carousel-item active" : 'carousel-item'
             div(class=itemClass)
               +banner(banner)
-      
+
+mixin tile(tile)
+  a.tile-link(href=tile.link,target="_blank")
+    .tile(data-lazy-bg-image=tile.imageSrc)
+    if tile.contents
+      p
+        !=tile.contents
+
 block styles
   link(rel="stylesheet", href="/css/index.min.css")
 
@@ -52,53 +126,57 @@ block content
         
   .container.no-gutters
     .row
-      .col-xs
+      .col-xs-24.col-md-12.no-gutter-right
         .row
-          .col-lg-17
-            .row
-              .col-lg-12.no-gutter-right
-                .index-box.most-wanted-container
-                  .box-banner.banner-most-wanted
-                    h3
-                      |Etsityimmät
-                  if menus['etsityimmat'] 
-                    ul
-                      each item in menus['etsityimmat'].items
-                        li.nav-item
-                          a.nav-link(href=item.url)
-                            =item.label
-              .col-md-12
-                .index-box.shortcuts-container
-                  .box-banner.banner-shortcuts
-                    h3
-                      |Oikopolut
-                  if menus['oikopolut']     
-                    ul
-                      each item in menus['oikopolut'].items
-                        li.nav-item
-                          a.nav-link(href=item.url)
-                            =item.label
-            .row
-              .col-lg-12.no-gutter-right
-                .index-box.contacts-container
-                  .box-banner.banner-contacts
-                    h3
-                      |Yhteystiedot   
-              .col-lg-12
-                .index-box.tilannehuone-container
-                  .box-banner.banner-tilannehuone
-                    h3
-                      |Tilannehuone
-          .col-lg-7.thumb-articles-container
-            .row
-              .col-xs
-                h3.news-articles-header
-                  | Ajankohtaista
-            each newsArticle in news
-              .row
-                .col-xs
-                  +newsArticleThumb(newsArticle)
-            .row
-              .col-xs
-                a.all-news-link(href="#")
-                  | > Katso kaikki uutiset
+          .col-xs
+            .index-box
+              ul.index-box-banner.nav.nav-tabs
+                li.nav-item
+                  a.nav-link.news-tab.active(data-toggle="tab", href="#news-tab", role="tab")
+                    h4
+                      img(src="/gfx/layout/news_logo_temp.jpg")
+                      | Ajankohtaista
+                li.nav-item
+                  a.nav-link.announcements-tab(data-toggle="tab", href="#announcements-tab", role="tab")
+                    h4
+                      img(src="/gfx/layout/announcements_logo_temp.jpg")
+                      | Kuulutukset
+              .index-box-content.tab-content
+                .tab-pane.active#news-tab(role="tabpanel")
+                  each newsArticle in news
+                    +newsArticle(newsArticle)
+                  a.read-more(href="#") 
+                    | Lisää uutisia
+                    i.fa.fa-chevron-right
+                .tab-pane#announcements-tab(role="tabpanel")
+                  each announcement in announcements
+                    +renderAnnouncement(announcement)
+                  a.read-more(href="#") 
+                    | Lisää kuulutuksia
+                    i.fa.fa-chevron-right
+        .row
+          .col-xs
+            +tile(tileMap['etusivu-mainos'])
+      .col-xs-24.col-md-12
+        .row
+          .col-xs
+            +events-slider(events)
+        .row
+          .col-xs
+            .index-box
+              ul.index-box-banner.nav.nav-tabs
+                li.nav-item
+                  a.nav-link.events-tab.active(data-toggle="tab", href="#events-tab", role="tab")
+                    h4
+                      img(src="/gfx/layout/tapahtumat_small.png")
+                      | Tapahtumat
+              .index-box-content.tab-content
+                .tab-pane.active#events-tab(role="tabpanel")
+                  each event in events
+                    +renderTextEvent(event)
+                  a.read-more(href="#")
+                    | Lisää tapahtumia
+                    i.fa.fa-chevron-right
+    .row
+      .col-xs-24.col-md-12
+      .col-xs-24.col-md-12

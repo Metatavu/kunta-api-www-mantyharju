@@ -19,7 +19,11 @@
     static get SOCIAL_MEDIA_POSTS() { 
       return 3 * 3;
     }
-    
+
+    static get EVENT_COUNT() { 
+      return 5;
+    }
+ 
     static get FILES_FOLDER() { 
       return '/tiedostot';
     }
@@ -28,6 +32,13 @@
       return '/uutiset';
     }
     
+    static get ANNOUNCEMENTS_FOLDER() { 
+      return '/kuulutukset';
+    }
+    
+    static get ANNOUNCEMENT_COUNT() { 
+      return 5;
+    }
     
     static get SEARCH_RESULTS_PER_TYPE() {
       return 5;

@@ -13,9 +13,10 @@
     
     app.get('/', (req, res, next) => {
       new ModulesClass(config)
-        .news.latest(0, 3)
+        .news.latest(0, 5)
         .banners.list()
-        .socialMedia.latest(Common.SOCIAL_MEDIA_POSTS)
+        .announcements.list(Common.ANNOUNCEMENT_COUNT, 'PUBLICATION_DATE', 'DESCENDING')
+        .events.latest(Common.EVENT_COUNT, 'START_DATE', 'DESCENDING')
         .callback(function(data) {
 
           var news = _.clone(data[0]).map(newsArticle => {
@@ -24,7 +25,7 @@
               "imageSrc": newsArticle.imageId ? util.format('/newsArticleImages/%s/%s', newsArticle.id, newsArticle.imageId) : null
             });
           });
-          
+
           var banners = _.clone(data[1] || []).map(banner => {
             var styles = [];
             
@@ -41,17 +42,26 @@
               bgcolor: banner.backgroundColor ? banner.backgroundColor : 'rgba(255, 255, 255, 0.3)'
             });
           });
-
-          var socialMediaItems = _.clone(data[2] || []).map(socialMediaItem => {
-            return Object.assign(socialMediaItem, {
-              "shortDate": moment(socialMediaItem.created).format("D.M.YYYY hh:mm")
+          
+          var announcements = _.clone(data[2] || []).map(announcement => {
+            return Object.assign(announcement, {
+              "shortDate": moment(announcement.published).format("D.M.YYYY")
+            });
+          });
+          
+          var events = _.clone(data[3] || []).map(event => {
+            return Object.assign(event, {
+              "imageSrc": event.imageId ? util.format('/eventImages/%s/%s', event.id, event.imageId) : null,
+              "shortDate": moment(event.start).format('D.M.YYYY'),
+              "startHumanReadable": util.format('%s KLO %s ALK.', moment(event.start).format('D.M.YYYY'), moment(event.start).format('H'))
             });
           });
           
           res.render('pages/index.pug', Object.assign(req.kuntaApi.data, {
             banners: banners,
-            socialMediaItems: socialMediaItems,
-            news: news
+            announcements: announcements,
+            news: news,
+            events: events
           }));
 
         }, (err) => {
