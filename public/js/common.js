@@ -102,8 +102,6 @@
     });
     
     $('.nav-search-container').menuSearch();
-    
-    $('.page-nav-item.active').parents('.page-nav-item.open').addClass('active');
   });
   
 }).call(this);

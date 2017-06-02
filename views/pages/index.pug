@@ -2,7 +2,7 @@ extends ../layout/index.pug
 
 mixin renderTextEvent(event)
   .index-box-item
-    a(href=event.originalUrl,target="_blank")
+    a(href='/tapahtumat/' + event.id)
       .index-box-item-header
         span
           =event.shortDate
@@ -83,14 +83,14 @@ mixin banners-slider(banners)
                   h4 Osallistu ja vaikuta
           .col-xs-6.col-lg-12.pull-lg-right.no-gutters.quick-nav-button-container
             .quick-nav-container
-              a(href="#")
+              a(href="/tapahtumat")
                 .quick-nav-icon-container
                   img.quick-nav-icon.img-responsive(src="/gfx/layout/tapahtumat.png")
                 .quick-nav-title
                   h4 Tapahtumat
           .col-xs-6.col-lg-12.pull-lg-right.no-gutters.quick-nav-button-container
             .quick-nav-container
-              a(href="#")
+              a(href="http://mantyharju.karttatiimi.fi/",target="_blank")
                 .quick-nav-icon-container
                   img.quick-nav-icon.img-responsive(src="/gfx/layout/kartat.png")
                 .quick-nav-title
@@ -98,7 +98,7 @@ mixin banners-slider(banners)
       .banner-carousel-items
         .carousel-inner(role='listbox')
           each banner, bannerIndex in banners
-            - var itemClass=bannerIndex == 0 ? "carousel-item active" : 'carousel-item'
+            - var itemClass=bannerIndex === 0 ? "carousel-item active" : 'carousel-item'
             div(class=itemClass)
               +banner(banner)
 
@@ -107,6 +107,13 @@ mixin tile(tile)
     .tile(data-lazy-bg-image=tile.imageSrc)
     if tile.contents
       p
+        !=tile.contents
+
+mixin footerTile(tile)
+  a(href=tile.link,target="_blank")
+    .footer-tile(data-lazy-bg-image=tile.imageSrc)
+    if tile.contents
+      .footer-tile-contents
         !=tile.contents
 
 block styles
@@ -174,6 +181,12 @@ block content
                 .tab-pane.active#events-tab(role="tabpanel")
                   each event in events
                     +renderTextEvent(event)
-                  a.read-more(href="#")
+                  a.read-more(href="/tapahtumat")
                     | Lisää tapahtumia
                     i.fa.fa-chevron-right
+  .container.no-gutters.hidden-md-down
+    .row
+      .col-md-12.col-xs-24.no-gutter-right
+        +footerTile(tileMap['footer-1'])
+      .col-md-12.col-xs-24
+        +footerTile(tileMap['footer-2'])

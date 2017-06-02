@@ -1,15 +1,3 @@
-mixin footerTile(tile)
-  a(href=tile.link,target="_blank")
-    .footer-tile(data-lazy-bg-image=tile.imageSrc)
-    if tile.contents
-      .footer-tile-contents
-        !=tile.contents
-.container.no-gutters.hidden-md-down
-  .row
-    .col-md-12.col-xs-24.no-gutter-right
-      +footerTile(tileMap['footer-1'])
-    .col-md-12.col-xs-24
-      +footerTile(tileMap['footer-2'])
 .container.mobile-footer.hidden-lg-up
   .row
     .col-xs-10.no-gutters.mobile-footer-item

@@ -1,0 +1,56 @@
+extends ../layout/contents.pug
+
+include ../includes/mixins.pug
+
+block styles
+  link(rel="stylesheet", href="/css/contents-common.min.css")
+  link(rel="stylesheet", href="/css/event-list.min.css")
+
+block content
+  .container.page-container
+    .row
+      +breadcrumbs(breadcrumbs)
+        
+  .container.page-container
+    .row
+      .col-xs-24
+        .page-content
+          .col-xs-24
+            .row
+              h1
+                |Tapahtumat
+          .col-xs-24.events-container
+            .row
+              each event in events
+                .col-xs-24
+                  .row.event
+                    .col-xs-24.col-md-6.col-lg-3
+                      .event-image-container
+                        .event-image(data-lazy-bg-image=event.imageSrc)
+                    .col-xs-24.col-md-18.col-lg-21
+                      .row
+                        .col-xs-24
+                          span.date
+                            =event.shortDate
+                          a.title(href='/tapahtumat/' + event.id)
+                            !=event.name
+                      .row
+                        .col-xs-24
+                          !=event.shortDescription
+          if page !== undefined
+            .col-xs-24.pages-container.no-gutters
+              if page > 0
+                a.page-prev(href="?page=" + (page - 1))
+                  |Edellinen sivu
+              else
+                span.page-prev
+                  |Edellinen sivu
+              span.page-number
+                |Sivu 
+                =page + 1
+              if !lastPage
+                a.page-next(href="?page=" + (page + 1))
+                  |Seuraava sivu
+              else
+                span.page-next
+                  |Seuraava sivu
