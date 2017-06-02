@@ -1,0 +1,59 @@
+@charset "UTF-8";
+
+@import "vars";
+
+.event {
+  
+  border-bottom: 1px solid #aaa;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  
+  .event-image-container {
+    min-height: 120px;
+  }
+  
+  .event-image {
+    min-width: 120px;
+    max-width: 100%;
+    background-size: cover;
+    padding-top: 5px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    height: 100px;
+  }
+  
+  .date::after {
+    content: " - ";
+  }
+  
+  .date {
+    @include font-std(16px);  
+  }  
+  
+  .title {
+    @include font-std(18px);
+  }
+  
+}
+
+.pages-container {
+  text-align: center;
+  padding-top: 20px;
+  white-space: nowrap;
+  
+  .page-prev {
+    padding-right: 15px;
+    
+    &::before {
+      content: "< ";
+    }
+  }
+
+  .page-next {
+    padding-left: 15px;
+    
+    &::after {
+      content: " >";
+    }
+  }
+}

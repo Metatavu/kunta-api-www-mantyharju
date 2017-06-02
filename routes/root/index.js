@@ -51,7 +51,7 @@
           
           var events = _.clone(data[3] || []).map(event => {
             return Object.assign(event, {
-              "imageSrc": event.imageId ? util.format('/eventImages/%s/%s', event.id, event.imageId) : null,
+              "imageSrc": event.imageId ? util.format('/eventImages/%s/%s', event.id, event.imageId) : '/gfx/layout/tapahtuma_default_625x350.jpg',
               "shortDate": moment(event.start).format('D.M.YYYY'),
               "startHumanReadable": util.format('%s KLO %s ALK.', moment(event.start).format('D.M.YYYY'), moment(event.start).format('H'))
             });

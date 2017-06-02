@@ -36,11 +36,19 @@
       return '/kuulutukset';
     }
     
+    static get EVENTS_FOLDER() { 
+      return '/tapahtumat';
+    }
+    
     static get ANNOUNCEMENT_COUNT() { 
       return 5;
     }
     
     static get SEARCH_RESULTS_PER_TYPE() {
+      return 5;
+    }
+    
+    static get EVENTS_COUNT_PAGE() {
       return 5;
     }
     
