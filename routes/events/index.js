@@ -83,10 +83,10 @@
 
     app.get(util.format('%s/:id', Common.EVENTS_FOLDER), (req, res, next) => {
       const id = req.params.id;
-      const module = new ModulesClass(config);
         
-      module.events.find(id)
-      module.events.list(0, 50, 'START_DATE', 'DESCENDING')
+      new ModulesClass(config)
+        .events.find(id)
+        .events.list(0, 50, 'START_DATE', 'DESCENDING')
         .callback((data) => {
           const event = data[0];
           const latestEvents = data[1];

@@ -1,12 +1,13 @@
 @charset "UTF-8";
 
+@import "colors";
 @import "vars";
 
 .event {
 
-  border-bottom: 1px solid #aaa;
-  padding-top: 7px;
+  border-bottom: 1px solid $eventlist-separator-line-color;
   padding-bottom: 7px;
+  padding-top: 7px;
 
   .event-image-container {
     min-height: 120px;
@@ -43,7 +44,7 @@
   
   .page-prev {
     padding-right: 15px;
-    
+
     &::before {
       content: "< ";
     }
@@ -51,7 +52,7 @@
 
   .page-next {
     padding-left: 15px;
-    
+
     &::after {
       content: " >";
     }
