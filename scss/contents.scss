@@ -8,9 +8,9 @@
   margin-left: -10px;
   
   .page-nav-link {
-    padding-left: 35px
+    padding-left: 35px;
   }
-  
+
   > li {
     display: none;
   }
@@ -23,11 +23,11 @@
 
 .open-folder,
 .leaf-page {
-  padding-top: 5px;
-  padding-right: 10px;
-  position: absolute;
   margin-left: -20px;
-  
+  padding-right: 10px;
+  padding-top: 5px;
+  position: absolute;
+
   &:hover, 
   &:focus {
     text-decoration: none;

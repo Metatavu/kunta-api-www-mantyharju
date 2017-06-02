@@ -106,10 +106,10 @@
   margin-bottom: 15px;
   
   h3 {
-    @include font-std-bold(32px);    
+    @include font-std-bold(32px);
     color: $menu-header-color;
-    margin-top: 20px;
     margin-bottom: 30px;
+    margin-top: 20px;
   }
   
   ul {
@@ -121,7 +121,7 @@
       background-color: $menu-active-bg-color;
     }
   }
-  
+
   .page-nav-link {
     display: block;
     padding-top: 5px;
