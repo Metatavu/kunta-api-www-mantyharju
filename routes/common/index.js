@@ -100,9 +100,13 @@
       });
 
       $('.kunta-api-image[data-image-type="content-image"]').each((index, img) => {
-        var pageId = $(img).attr('data-page-id');
-        var imageId = $(img).attr('data-attachment-id');
-        var src = util.format('/pageImages/%s/%s', pageId, imageId);
+        const pageId = $(img).attr('data-page-id');
+        const imageId = $(img).attr('data-attachment-id');
+        const width = parseInt($(img).attr('width'));
+        const height = parseInt($(img).attr('height'));
+        const size = width && height ? Math.min(width, height) : width || height || null;
+        const src = util.format('/pageImages/%s/%s%s', pageId, imageId, size ? util.format('?size=%s', size) : '');
+        
         $(img)
           .removeAttr('data-page-id')
           .removeAttr('data-attachment-id')
