@@ -7,22 +7,27 @@
   padding-left: 10px;
   margin-left: -10px;
   
+  .page-nav-link {
+    padding-left: 35px;
+  }
+
   > li {
     display: none;
   }
 }
 
-.page-nav-item {
+.page-nav-link {
   padding-left: 20px;
   padding-right: 20px; 
 }
 
 .open-folder,
 .leaf-page {
+  margin-left: -20px;
   padding-right: 10px;
+  padding-top: 5px;
   position: absolute;
-  margin-left: -15px;
-  
+
   &:hover, 
   &:focus {
     text-decoration: none;
@@ -33,11 +38,11 @@
   content: "+";
 }
 
-.open>.open-folder::before {
+.open > .open-folder::before {
   content: "-";
 }
 
-.loading>.open-folder::before {
+.loading > .open-folder::before {
   content: " ";
   background-image: url("/gfx/load-2.svg");
   background-position: center;
