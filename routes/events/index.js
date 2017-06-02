@@ -8,13 +8,13 @@
   
   function formatDate(date) {
     const momentDate = moment(date);
-    const midnight = momentDate.startOf('day');
+    const midnight = momentDate.clone().startOf('day');
     
     if (momentDate.diff(midnight) === 0) {
       return momentDate.format("D.M.YYYY");
     }
-      
-    return momentDate.format("D.M.YYYY hh:mm");
+    
+    return util.format('%s klo %s alkaen', moment(date).format('D.M.YYYY'), moment(date).format('H'));
   }
   
   module.exports = (app, config, ModulesClass) => {

@@ -8,6 +8,17 @@
   const moment = require('moment');
   const _ = require('lodash');
   const Common = require(__dirname + '/../common');
+  
+  function formatEventStart(date) {
+    const momentDate = moment(date);
+    const midnight = momentDate.clone().startOf('day');
+    
+    if (momentDate.diff(midnight) === 0) {
+      return momentDate.format("D.M.YYYY");
+    }
+    
+    return util.format('%s KLO %s ALK.', moment(date).format('D.M.YYYY'), moment(date).format('H'));
+  }
 
   module.exports = (app, config, ModulesClass) => {
     
@@ -53,7 +64,7 @@
             return Object.assign(event, {
               "imageSrc": event.imageId ? util.format('/eventImages/%s/%s', event.id, event.imageId) : '/gfx/layout/tapahtuma_default_625x350.jpg',
               "shortDate": moment(event.start).format('D.M.YYYY'),
-              "startHumanReadable": util.format('%s KLO %s ALK.', moment(event.start).format('D.M.YYYY'), moment(event.start).format('H'))
+              "startHumanReadable": formatEventStart(event.start)
             });
           });
           
