@@ -23,8 +23,9 @@ block content
     .row
       if !extraWide
         .col-lg-5.page-nav.no-gutter-left.hidden-md-down
-          h3
-            =rootFolderTitle
+          if rootFolderTitle != title
+            h3.root-title
+              =rootFolderTitle
           each child in children
             +pageMenuItem(child)                  
       .col-xs-24.hidden-lg-up
