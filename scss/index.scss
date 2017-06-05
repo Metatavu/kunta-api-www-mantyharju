@@ -212,6 +212,7 @@
       @include font-std-bold(18px);
       
       @media (max-width: $break-medium) {
+        @include font-std-bold(15px);
         letter-spacing: 0px;
       }
       
