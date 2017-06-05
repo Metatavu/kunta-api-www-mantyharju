@@ -143,9 +143,9 @@
 }
 
 .child-pages {
-  padding-left: 10px;
   margin-left: -10px;
-  
+  padding-left: 10px;
+
   .page-nav-link {
     padding-left: 35px;
   }
@@ -157,7 +157,7 @@
 
 .page-nav-link {
   padding-left: 20px;
-  padding-right: 20px; 
+  padding-right: 20px;
 }
 
 .open-folder,
@@ -167,7 +167,7 @@
   padding-top: 5px;
   position: absolute;
 
-  &:hover, 
+  &:hover,
   &:focus {
     text-decoration: none;
   }
@@ -182,15 +182,15 @@
 }
 
 .loading > .open-folder::before {
-  content: " ";
   background-image: url("/gfx/load-2.svg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: 100%;
+  content: " ";
   display: inline-block;
-  width: 14px;
   height: 25px;
-  margin-left:-4px;
+  margin-left: -4px;
+  width: 14px;
 }
 
 .open>.child-pages>li {
@@ -198,9 +198,9 @@
 }
 
 .subpage-list {
-  padding-left: 0;
   margin-top: 20px;
- 
+  padding-left: 0;
+
   li {
     list-style: none;
   }
