@@ -10,7 +10,12 @@ mixin breadcrumbs(breadcrumbs)
         else 
           a.breadcrumb-item(href=breadcrumb.path)
             =breadcrumb.title
-            
+
+mixin commonMenuItem(item)
+  span.page-nav-item(class=item.id == id ? 'active' : '')
+    a.page-nav-link(href=item.slug)
+      !=item.title
+
 mixin pageMenuItem(item)
   if (item.meta && !item.meta.hideMenuChildren) && ((item.children && item.children.length) || item.hasChildren)
     span.page-nav-item(class=[item.id == id ? 'active' : '', item.children && item.children.length ? 'open' : ''].join(' '))

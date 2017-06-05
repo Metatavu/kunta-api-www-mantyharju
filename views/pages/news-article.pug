@@ -17,26 +17,14 @@ block content
         h3
           =folderTitle
         each sibling in siblings
-          if sibling.id == id
-            .page-nav-item.active
-              a(href=sibling.slug)
-                =sibling.title
-          else
-            a.page-nav-item(href=sibling.slug)
-              =sibling.title
+          +commonMenuItem(sibling)
       .col-xs-24.hidden-lg-up
         a.btn.btn-primary(title='Näytä valikko', data-toggle='collapse', href='#collapse-menu', aria-expanded='false', aria-controls='collapse-menu')
           i.fa.fa-bars
         .collapse#collapse-menu
           .col-xs-24.col-lg-5.page-nav.no-gutters
             each sibling in siblings
-              if sibling.id == id
-                .page-nav-item.active
-                  a(href=sibling.slug)
-                    =sibling.title
-              else
-                a.page-nav-item(href=sibling.slug)
-                  =sibling.title
+              +commonMenuItem(sibling)
       .col-xs-24.col-lg-19
         .page-content
           .row
