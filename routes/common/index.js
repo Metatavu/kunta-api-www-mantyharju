@@ -94,6 +94,8 @@
 
       const $ = cheerio.load(content);
 
+      $('table').addClass('table table-responsive');
+
       $('a[href]').each((index, link) => {
         var href = $(link).attr('href');
         $(link).attr('href', Common.processLink(currentPage, href));
