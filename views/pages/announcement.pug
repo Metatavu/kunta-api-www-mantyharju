@@ -1,0 +1,35 @@
+extends ../layout/contents.pug
+
+include ../includes/mixins.pug
+
+block styles
+  link(rel="stylesheet", href="/css/contents-common.min.css")
+
+block content
+  .container.page-container
+    .row
+      +breadcrumbs(breadcrumbs)
+        
+  .container.page-container
+    .row
+      .col-lg-5.page-nav.no-gutter-left.hidden-md-down
+        h3
+          =folderTitle
+        each sibling in siblings
+          +commonMenuItem(sibling)
+      .col-xs-24.hidden-lg-up
+        a.btn.btn-primary(title='Näytä valikko', data-toggle='collapse', href='#collapse-menu', aria-expanded='false', aria-controls='collapse-menu')
+          i.fa.fa-bars
+        .collapse#collapse-menu
+          .col-xs-24.col-lg-5.page-nav.no-gutters
+            each sibling in siblings
+              +commonMenuItem(sibling)
+      .col-xs-24.col-lg-19
+        .page-content
+          .row
+            .col-xs-24.title-container
+              h1
+                !=title
+          .row
+            .col-xs-24
+              !=contents
