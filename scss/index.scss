@@ -277,6 +277,7 @@
   background-position: center center;
   position: relative;
   margin-bottom: 10px;
+  padding: 10px;
 
   a.tile-link {
     position: absolute;
@@ -292,7 +293,6 @@
   h3 {
     @include font-std-bold(16px);
     text-transform: uppercase;
-    color: #fff;
     max-height: 60px;
     position: relative;
     overflow: hidden;
@@ -301,15 +301,14 @@
   }
 
   p {
-    color: #fff;
-    @include font-std(14px);
+    @include font-std(16px);
     overflow: hidden;
     text-overflow: ellipsis;
 
     a {
       position: relative;
       z-index: 2;
-      color: #fff;
+      color: #000;
       text-decoration: underline;
     }
   }
