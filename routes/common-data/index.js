@@ -45,7 +45,6 @@
           
           var tileMap = {};
           tiles.forEach((tile) => {
-            console.log(tile);
             tileMap[tile.title] = tile;
           });
 
