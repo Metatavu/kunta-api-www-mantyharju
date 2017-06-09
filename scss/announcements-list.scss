@@ -3,11 +3,11 @@
 @import "vars";
 
 .announcement-row {
-  
+
   border-bottom: 1px solid #aaa;
-  padding-top: 7px;
   padding-bottom: 7px;
-  
+  padding-top: 7px;
+
   .date::after {
     content: " - ";
   }
