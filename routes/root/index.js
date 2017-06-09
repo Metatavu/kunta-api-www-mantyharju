@@ -7,6 +7,7 @@
   const util = require('util');
   const moment = require('moment');
   const _ = require('lodash');
+  const $ = require('cheerio');
   const Common = require(__dirname + '/../common');
   
   function formatEventStart(date) {
@@ -32,6 +33,9 @@
 
           var news = _.clone(data[0]).map(newsArticle => {
             return Object.assign(newsArticle, {
+              "shortAbstract": _.truncate($.load(newsArticle.abstract).text(), {
+                'length': 160,
+              }),
               "shortDate": moment(newsArticle.published).format("D.M.YYYY"),
               "imageSrc": newsArticle.imageId ? util.format('/newsArticleImages/%s/%s', newsArticle.id, newsArticle.imageId) : null
             });

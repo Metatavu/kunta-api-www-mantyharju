@@ -9,19 +9,22 @@
   module.exports = (app, config, ModulesClass) => {
 
     app.get('/ajax/search', (req, res) => {
-      var search = req.query.search;
-      var preferLanguages = req.headers['accept-language'];
+      const search = req.query.search;
+      const preferLanguages = req.headers['accept-language'];
       
       new ModulesClass(config)
-        .pages.search(search, preferLanguages, Common.SEARCH_RESULTS_PER_TYPE)
-        .files.search(search, Common.SEARCH_RESULTS_PER_TYPE)
-        .callback(function(data) {
-          var pages = data[0];
-          var files = data[1];
+        .pages.search(search, preferLanguages, 0, Common.SEARCH_RESULTS_PER_TYPE)
+        .files.search(search, 0, Common.SEARCH_RESULTS_PER_TYPE)
+        .news.search(search, 0, Common.SEARCH_RESULTS_PER_TYPE)
+        .callback((data) => {
+          const pages = data[0];
+          const files = data[1];
+          const newsArticles = data[2];
           
           res.render('ajax/search.pug', {
             pages: pages,
-            files: files
+            files: files,
+            newsArticles: newsArticles
           });
         });
     });

@@ -22,3 +22,12 @@ else
             =file.title
           a.file-page-link(href='/redirect/page/' + file.pageId)
             i.fa.fa-external-link(aria-hidden="true")
+  if newsArticles.length
+    h3
+      |Uutiset
+    ul
+      each newsArticle in newsArticles
+        li
+          i.fa.fa-newspaper-o(aria-hidden="true")
+          a(href='/uutiset/' + newsArticle.slug)
+            =newsArticle.title
