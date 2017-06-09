@@ -11,20 +11,20 @@
   .date::after {
     content: " - ";
   }
-  
+
   .date {
-    @include font-std(16px);  
-  }  
-  
+    @include font-std(16px);
+  }
+
   .title {
     @include font-std(18px);
   }
-  
+
   .article-image-placeholder {
     h1 {
-      text-align: center;
       padding-top: 15px;
+      text-align: center;
     }
   }
-  
+
 }

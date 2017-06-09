@@ -250,14 +250,14 @@
         @include font-std(14px);
         color: $index-box-text-header-color;
       }
-      
+
       .index-box-item-title {
         h6 {
           @include font-std(15px);
           color: $read-more-text-color;
         }
       }
-      
+
       .index-box-item-content {
         padding-bottom: 15px;
         @include font-std(14px);
