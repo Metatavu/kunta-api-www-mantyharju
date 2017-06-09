@@ -22,7 +22,7 @@ block content
   .container.page-container
     .row
       if !extraWide
-        .col-lg-5.page-nav.no-gutter-left.hidden-md-down
+        .col-lg-6.page-nav.no-gutter-left.hidden-md-down
           if rootFolderTitle != title
             h3.root-title
               =rootFolderTitle
@@ -35,7 +35,7 @@ block content
           .col-xs-24.page-nav.no-gutters
             each child in children
               +pageMenuItem(child)
-      .col-xs-24(class=extraWide ? '' : 'col-lg-19')
+      .col-xs-24(class=extraWide ? '' : 'col-lg-18')
         .page-content
           h1
             !=title
