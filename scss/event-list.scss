@@ -36,25 +36,3 @@
   }
 
 }
-
-.pages-container {
-  padding-top: 20px;
-  text-align: center;
-  white-space: nowrap;
-
-  .page-prev {
-    padding-right: 15px;
-
-    &::before {
-      content: "< ";
-    }
-  }
-
-  .page-next {
-    padding-left: 15px;
-
-    &::after {
-      content: " >";
-    }
-  }
-}

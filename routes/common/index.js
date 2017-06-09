@@ -32,6 +32,10 @@
       return '/uutiset';
     }
     
+    static get NEWS_COUNT_PAGE() { 
+      return 10;
+    }
+    
     static get ANNOUNCEMENTS_FOLDER() { 
       return '/kuulutukset';
     }
@@ -42,6 +46,10 @@
     
     static get ANNOUNCEMENT_COUNT() { 
       return 5;
+    }
+
+    static get ANNOUNCEMENT_COUNT_PAGE() { 
+      return 10;
     }
     
     static get SEARCH_RESULTS_PER_TYPE() {

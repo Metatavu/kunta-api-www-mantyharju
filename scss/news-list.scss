@@ -33,4 +33,11 @@
     @include font-std(18px);
   }
   
+  .article-image-placeholder {
+    h1 {
+      padding-top: 15px;
+      text-align: center;
+    }
+  }
+
 }

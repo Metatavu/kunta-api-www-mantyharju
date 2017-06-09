@@ -9,7 +9,7 @@ block scripts
 block styles
   link(rel="stylesheet", href="/css/contents-common.min.css")
   link(rel="stylesheet", href="/css/common-list.min.css")
-  link(rel="stylesheet", href="/css/news-list.min.css")
+  link(rel="stylesheet", href="/css/announcements-list.min.css")
 
 block content      
   .container.page-container
@@ -22,36 +22,25 @@ block content
         .page-content
           .col-xs-24
             .row
-              h1
-                if tag
-                  |Ajankohtaista tagilla '
-                  =tag
-                  |'
-                else
-                  |Ajankohtaista
+              h1 Ajankohtaista
           .col-xs-24.articles-container
             .row
-              each newsArticle in newsArticles
-                .col-xs-24
-                  .row.news-article
+              each announcement in announcements
+                  .row.announcement-row
                     .col-xs-24.col-md-6.col-lg-3
-                      if (newsArticle.imageSrc)
-                        .article-image-container
-                          img.lazy.article-image(data-original=newsArticle.imageSrc)
-                      else
-                        .article-image-placeholder
-                          h1
-                            i.fa.fa-newspaper-o
+                      .article-image-placeholder
+                        h1
+                          i.fa.fa-bullhorn
                     .col-xs-24.col-md-18.col-lg-21
                       .row
                         .col-xs-24
                           span.date
-                            =newsArticle.shortDate
-                          a.title(href='/uutiset/' + newsArticle.slug)
-                            !=newsArticle.title
+                            =announcement.shortDate
+                          a.title(href='/kuulutukset/' + announcement.slug)
+                            !=announcement.title
                       .row
                         .col-xs-24
-                          !=newsArticle.abstract
+                          !=announcement.shortContent
           if page !== undefined
             .col-xs-24.pages-container.no-gutters
               if page > 0

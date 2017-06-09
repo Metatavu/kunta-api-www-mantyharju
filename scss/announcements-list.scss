@@ -1,0 +1,30 @@
+@charset "UTF-8";
+
+@import "vars";
+
+.announcement-row {
+
+  border-bottom: 1px solid #aaa;
+  padding-bottom: 7px;
+  padding-top: 7px;
+
+  .date::after {
+    content: " - ";
+  }
+
+  .date {
+    @include font-std(16px);
+  }
+
+  .title {
+    @include font-std(18px);
+  }
+
+  .article-image-placeholder {
+    h1 {
+      padding-top: 15px;
+      text-align: center;
+    }
+  }
+
+}

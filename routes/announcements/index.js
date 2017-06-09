@@ -5,6 +5,9 @@
   'use strict';
 
   const util = require('util');
+  const $ = require('cheerio');
+  const moment = require('moment');
+  const _ = require('lodash');
   const Common = require(__dirname + '/../common');
 
   module.exports = (app, config, ModulesClass) => {
@@ -32,7 +35,7 @@
             return;
           }
 
-           res.render('pages/announcement.pug', Object.assign(req.kuntaApi.data, {
+          res.render('pages/announcement.pug', Object.assign(req.kuntaApi.data, {
             id: announcement.id,
             slug: announcement.slug,
             title: announcement.title,
@@ -49,6 +52,38 @@
           });
         });
     });
+    
+    app.get(Common.ANNOUNCEMENTS_FOLDER + '/', (req, res, next) => {
+      const perPage = Common.ANNOUNCEMENT_COUNT_PAGE;
+      let page = parseInt(req.query.page) || 0;
+        
+      new ModulesClass(config)
+        .announcements.listFrom(page * perPage, perPage + 1, 'PUBLICATION_DATE', 'DESCENDING')
+        .callback((data) => {
+          let lastPage = data[0].length < perPage + 1;
+          let announcements = data[0].splice(0, perPage).map(announcement => {
+            return Object.assign(announcement, {
+              "shortDate": moment(announcement.published).format("D.M.YYYY"),
+              "shortContent": _.truncate($.load(announcement.contents).text(), {
+                'length': 200,
+              })
+            });
+          });
+         
+          res.render('pages/announcements-list.pug', Object.assign(req.kuntaApi.data, {
+            page: page,
+            lastPage: lastPage,
+            announcements: announcements,
+            breadcrumbs : [{path: util.format('%s/', Common.ANNOUNCEMENTS_FOLDER), title: 'Kuulutukset'}]
+          }));
+        }, (err) => {
+          next({
+            status: 500,
+            error: err
+          });
+        });
+    });
+    
   };
 
 }).call(this);
