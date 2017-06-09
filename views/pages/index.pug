@@ -103,11 +103,11 @@ mixin banners-slider(banners)
               +banner(banner)
 
 mixin tile(tile)
-  a.tile-link(href=tile.link,target="_blank")
-    .tile(data-lazy-bg-image=tile.imageSrc)
-    if tile.contents
-      p
-        !=tile.contents
+  if tile
+    a.tile-link(href=tile.link,target="_blank")
+      .tile(data-lazy-bg-image=tile.imageSrc)
+        if tile.contents
+          !=tile.contents
 
 mixin footerTile(tile)
   a(href=tile.link,target="_blank")
@@ -184,6 +184,9 @@ block content
                   a.read-more(href="/tapahtumat")
                     | Lisää tapahtumia
                     i.fa.fa-chevron-right
+        .row
+          .col-xs
+            +tile(tileMap['etusivu-mainos-2'])
   .container.no-gutters.hidden-md-down
     .row
       .col-md-12.col-xs-24.no-gutter-right
