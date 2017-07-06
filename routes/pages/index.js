@@ -154,9 +154,17 @@
                   result[_.camelCase(jsonAttributes[i])] = JSON.parse($(movie).attr(util.format('data-%s', jsonAttributes[i])));
                 }
                 
-                result['showtimes'] = _.map(result['showtimes'], (showtime) => {
-                  moment.locale('fi');
-                  return moment(showtime).format('llll');
+                let showtimes = _.map(result['showtimes'], (showtime) => {
+                  return moment(showtime);
+                });
+                
+                showtimes = _.filter(showtimes, (showtime) => {
+                  return showtime.isAfter(moment());
+                });
+                
+                result['showtimes'] = _.map(showtimes, (showtime) => {
+                  showtime.locale('fi');
+                  return showtime.format('llll');
                 });
                 
                 result['imageUrl'] = $(movie).find('img').attr('data-original');
