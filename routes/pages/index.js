@@ -154,7 +154,7 @@
                   result[_.camelCase(jsonAttributes[i])] = JSON.parse($(movie).attr(util.format('data-%s', jsonAttributes[i])));
                 }
                 
-                let showtimes = _.map(result['showtimes'], (showtime) => {
+                let showtimes = _.map(result.showtimes, (showtime) => {
                   return moment(showtime);
                 });
                 
@@ -162,7 +162,7 @@
                   return showtime.isAfter(moment());
                 });
                 
-                result['showtimes'] = _.map(showtimes, (showtime) => {
+                result.showtimes = _.map(showtimes, (showtime) => {
                   showtime.locale('fi');
                   return showtime.format('llll');
                 });
