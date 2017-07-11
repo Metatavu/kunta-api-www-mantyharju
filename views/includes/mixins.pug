@@ -16,6 +16,11 @@ mixin commonMenuItem(item)
     a.page-nav-link(href=item.slug)
       !=item.title
 
+mixin eventMenuItem(item)
+  span.page-nav-item(class=item.id == event.id ? 'active' : '')
+    a.page-nav-link(href=item.id)
+      !=item.name
+
 mixin pageMenuItem(item)
   if (item.meta && !item.meta.hideMenuChildren) && ((item.children && item.children.length) || item.hasChildren)
     span.page-nav-item(class=[item.id == id ? 'active' : '', item.children && item.children.length ? 'open' : ''].join(' '))
