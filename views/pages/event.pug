@@ -10,31 +10,18 @@ block content
   .container.page-container
     .row
       +breadcrumbs(breadcrumbs)
-        
   .container.page-container
     .row
       .col-lg-5.page-nav.no-gutter-left.hidden-md-down
         each latestEvent in latestEvents
-          if latestEvent.id === event.id
-            .page-nav-item.active
-              a(href=latestEvent.id)
-                =latestEvent.name
-          else
-            a.page-nav-item(href=latestEvent.id)
-              =latestEvent.name
+          +eventMenuItem(latestEvent)
       .col-xs-24.hidden-lg-up
         a.btn.btn-primary(title='Näytä valikko', data-toggle='collapse', href='#collapse-menu', aria-expanded='false', aria-controls='collapse-menu')
           i.fa.fa-bars
         .collapse#collapse-menu
           .col-xs-24.col-lg-5.page-nav.no-gutters
             each latestEvent in latestEvents
-              if latestEvent.id === event.id
-                .page-nav-item.active
-                  a(href=latestEvent.id)
-                    =latestEvent.name
-              else
-                a.page-nav-item(href=latestEvent.id)
-                  =latestEvent.name
+              +eventMenuItem(latestEvent)
       .col-xs-24.col-lg-19
         .page-content
           .row
