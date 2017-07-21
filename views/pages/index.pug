@@ -119,6 +119,18 @@ mixin footerTile(tile)
       .footer-tile-contents
         !=tile.contents
 
+mixin footerTileMovies(tile)
+  #myCarousel.carousel.slide(data-ride='carousel')
+    .carousel-inner
+      each url,index in imageUrls
+        - var itemClass=index == 0 ? "carousel-item active" : 'carousel-item'
+        div(class=itemClass)
+          a(href=tile.link,target="_blank")
+            .footer-tile(data-lazy-bg-image=url)
+            if tile.contents
+              .footer-tile-contents
+                !=tile.contents
+    
 block styles
   link(rel="stylesheet", href="/css/index.min.css")
 
@@ -169,7 +181,7 @@ block content
             +tile(tileMap['etusivu-mainos'])
         .row
           .col-xs
-            +footerTile(tileMap['footer-1'])
+            +footerTileMovies(tileMap['footer-1'])
       .col-xs-24.col-lg-12
         .row
           .col-xs
