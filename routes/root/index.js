@@ -29,7 +29,9 @@
         .banners.list()
         .announcements.list(Common.ANNOUNCEMENT_COUNT, 'PUBLICATION_DATE', 'DESCENDING')
         .events.latest(Common.EVENT_COUNT, 'START_DATE', 'DESCENDING')
+        .pages.listImages('d72577dc-7507-4422-a042-c70bd12a5b3a')
         .callback(function(data) {
+          const images = data[4];
 
           var news = _.clone(data[0]).map(newsArticle => {
             return Object.assign(newsArticle, {
@@ -40,8 +42,16 @@
               "imageSrc": newsArticle.imageId ? util.format('/newsArticleImages/%s/%s', newsArticle.id, newsArticle.imageId) : null
             });
           });
+          
+          const movieBanner = data[1].filter((banner) => {
+            return banner.title == "elokuva-banneri";
+          });
+          
+          const bannersWithoutMovies = data[1].filter((banner) => {
+            return banner.title !== "elokuva-banneri";
+          });
 
-          var banners = _.clone(data[1] || []).map(banner => {
+          var banners = _.clone(bannersWithoutMovies || []).map(banner => {
             var styles = [];
             
             if (banner.textColor) {
@@ -72,11 +82,17 @@
             });
           });
           
+          const imageUrls = _.uniq(images.map((image) => {
+            return util.format('/pageImages/%s/%s', 'd72577dc-7507-4422-a042-c70bd12a5b3a', image.id);
+          }));
+          
           res.render('pages/index.pug', Object.assign(req.kuntaApi.data, {
             banners: banners,
             announcements: announcements,
             news: news,
-            events: events
+            events: events,
+            imageUrls: imageUrls,
+            movieBanner: movieBanner[0]
           }));
 
         }, (err) => {

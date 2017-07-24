@@ -459,3 +459,44 @@ footer {
   margin-left: -30px;
   max-width: 300px;
 }
+
+.movies-tile {
+  height: 695px;
+}
+
+.movie-banner {
+  box-sizing: border-box;
+  height: 98%;
+  padding-top: 160px;
+  position: absolute;
+  width: 100%;
+  z-index: 40;
+
+  h1,
+  h2,
+  h3,
+  p {
+    text-align: center;
+  }
+
+  h1 {
+    margin-bottom: 50px;
+  }
+
+  h1 span {
+    font-size: 55px;
+  }
+
+  h2 {
+    margin-bottom: 15px;
+  }
+
+  h2 span {
+    font-size: 45px;
+  }
+
+  h3 span {
+    font-size: 30px;
+    letter-spacing: 3px;
+  }
+}
