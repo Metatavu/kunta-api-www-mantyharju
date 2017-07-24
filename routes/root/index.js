@@ -92,7 +92,7 @@
             news: news,
             events: events,
             imageUrls: imageUrls,
-            movieBanner: movieBanner[0]
+            movieBanner: movieBanner[0] ? movieBanner[0] : null
           }));
 
         }, (err) => {
