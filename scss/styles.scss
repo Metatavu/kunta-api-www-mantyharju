@@ -481,24 +481,22 @@ footer {
 
   h1 {
     margin-bottom: 50px;
+  }
 
-    span {
-      font-size: 55px;
-    }
+  h1 span {
+    font-size: 55px;
   }
 
   h2 {
     margin-bottom: 15px;
-
-    span {
-      font-size: 45px;
-    }
   }
 
-  h3 {
-    span {
-      font-size: 30px;
-      letter-spacing: 3px;
-    }
+  h2 span {
+    font-size: 45px;
+  }
+
+  h3 span {
+    font-size: 30px;
+    letter-spacing: 3px;
   }
 }
