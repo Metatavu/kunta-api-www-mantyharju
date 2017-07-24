@@ -122,8 +122,9 @@ mixin footerTile(tile)
 mixin footerTileMovies(tile)
   #myCarousel.carousel.slide(data-ride='carousel')
     .carousel-inner
-      .movie-banner(style='background-color:'+ movieBanner.backgroundColor)
-        if movieBanner.contents
+      - var backgroundColor= moviebanner && movieBanner.backgroundColor ? movieBanner.backgroundColor : ''
+      .movie-banner(style='background-color:'+ backgroundColor)
+        if moviebanner && movieBanner.contents
           .footer-tile-contents
             !=movieBanner.contents
       each url,index in imageUrls
