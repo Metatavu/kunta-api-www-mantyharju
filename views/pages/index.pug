@@ -122,14 +122,15 @@ mixin footerTile(tile)
 mixin footerTileMovies(tile)
   #myCarousel.carousel.slide(data-ride='carousel')
     .carousel-inner
+      .movie-banner(style='background-color:'+ movieBanner.backgroundColor)
+        if movieBanner.contents
+          .footer-tile-contents
+            !=movieBanner.contents
       each url,index in imageUrls
         - var itemClass=index == 0 ? "carousel-item active" : 'carousel-item'
         div(class=itemClass)
           a(href=tile.link,target="_blank")
-            .footer-tile(data-lazy-bg-image=url)
-            if tile.contents
-              .footer-tile-contents
-                !=tile.contents
+              .footer-tile.movies-tile(data-lazy-bg-image=url, style="background-size:cover;")
     
 block styles
   link(rel="stylesheet", href="/css/index.min.css")
