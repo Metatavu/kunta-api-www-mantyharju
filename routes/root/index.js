@@ -42,8 +42,16 @@
               "imageSrc": newsArticle.imageId ? util.format('/newsArticleImages/%s/%s', newsArticle.id, newsArticle.imageId) : null
             });
           });
+          
+          const movieBanner = data[1].filter((banner) => {
+            return banner.title == "elokuva-banneri";
+          });
+          
+          const bannersWithoutMovies = data[1].filter((banner) => {
+            return banner.title !== "elokuva-banneri";
+          });
 
-          var banners = _.clone(data[1] || []).map(banner => {
+          var banners = _.clone(bannersWithoutMovies || []).map(banner => {
             var styles = [];
             
             if (banner.textColor) {
@@ -83,7 +91,8 @@
             announcements: announcements,
             news: news,
             events: events,
-            imageUrls: imageUrls
+            imageUrls: imageUrls,
+            movieBanner: movieBanner[0]
           }));
 
         }, (err) => {
