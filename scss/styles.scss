@@ -421,7 +421,6 @@ footer {
   background-repeat: no-repeat;
   background-position: center center;
   position: relative;
-  margin-bottom: 10px;
 
   h3 {
     @include font-std-bold(16px);
@@ -466,7 +465,7 @@ footer {
 
 .movie-banner {
   box-sizing: border-box;
-  height: 98%;
+  height: 100%;
   padding-top: 160px;
   position: absolute;
   width: 100%;
