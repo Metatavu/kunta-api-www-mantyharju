@@ -42,6 +42,12 @@
   @media (min-width: $break-large) { 
     max-width: 1200px;
   }
+
+  &.movies-container {
+    @media (min-width: 1500px) { 
+      max-width: 1500px;
+    } 
+  }
   
 }
 
