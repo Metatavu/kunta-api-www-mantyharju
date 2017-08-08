@@ -107,7 +107,12 @@ mixin banners-slider(banners)
 
 mixin tile(tile)
   if tile
-    a.tile-link(href=tile.link,target="_blank")
+    if tile.link
+      a.tile-link(href=tile.link,target="_blank")
+        .tile(data-lazy-bg-image=tile.imageSrc)
+          if tile.contents
+            !=tile.contents
+    else
       .tile(data-lazy-bg-image=tile.imageSrc)
         if tile.contents
           !=tile.contents
@@ -119,8 +124,8 @@ mixin footerTile(tile)
       .footer-tile-contents
         !=tile.contents
 
-mixin footerTileMovies(tile)
-  a(href=tile.link,target="_blank")
+mixin footerTileMovies()
+  a(href=movieBanner.link)
     #myCarousel.carousel.slide(data-ride='carousel')
       .carousel-inner
         - var backgroundColor= movieBanner && movieBanner.backgroundColor ? movieBanner.backgroundColor : ''
@@ -183,7 +188,7 @@ block content
             +tile(tileMap['etusivu-mainos'])
         .row
           .col-xs
-            +footerTileMovies(tileMap['footer-1'])
+            +footerTileMovies()
       .col-xs-24.col-lg-12
         .row
           .col-xs
