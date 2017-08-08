@@ -72,6 +72,42 @@
 
   });
   
+  $(document).on('click', '.show-description-link', function (event) {
+    event.preventDefault();
+    var movie = $(event.target).closest('.movie');
+    movie.find('.show-description-link').hide();
+    movie.find('.hide-description-link').show();
+    
+    movie.find('.description').slideDown({
+      progress: function () {
+        $('.kunta-api-movie-list').masonry();
+      },
+      complete: function () {
+        $('.kunta-api-movie-list').masonry();
+      }
+    });
+    
+    
+    movie.find('.description').show();
+    $('.kunta-api-movie-list').masonry();
+  });
+  
+  $(document).on('click', '.hide-description-link', function (event) {
+    event.preventDefault();
+    var movie = $(event.target).closest('.movie');
+    movie.find('.show-description-link').show();
+    movie.find('.hide-description-link').hide();
+    
+    movie.find('.description').slideUp({
+      progress: function () {
+        $('.kunta-api-movie-list').masonry();
+      },
+      complete: function () {
+        $('.kunta-api-movie-list').masonry();
+      }
+    });
+  });
+  
   $(document).ready(function () {
     $(document.body).contentsNav({
       rootPath: $('.rootPath').val()
@@ -89,7 +125,8 @@
         .masonry({
           itemSelector: '.movie',
           columnWidth: '.movie-list-grid-sizer',
-          percentPosition: true
+          percentPosition: true,
+          transitionDuration: 0
         });
     });
     
