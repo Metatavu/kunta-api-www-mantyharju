@@ -42,7 +42,9 @@
           fragments.forEach((fragment) => {
             fragmentMap[fragment.slug] = fragment.contents;
           });
-          
+
+          const googleAnalytics = config.get('googleAnalytics:code');
+
           var tileMap = {};
           tiles.forEach((tile) => {
             tileMap[tile.title] = tile;
@@ -52,6 +54,7 @@
             data: {
               menus: menus,
               fragmentMap: fragmentMap,
+              googleAnalytics: googleAnalytics,
               tileMap: tileMap
             }
           };
