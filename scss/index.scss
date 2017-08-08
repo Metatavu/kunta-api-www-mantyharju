@@ -3,18 +3,6 @@
 @import "vars";
 @import "colors";
 
-.fa-twitter {
-  color: #1DA1F2;
-}
-
-.fa-facebook-official {
-  color: #3b5998;
-}
-
-.fa-instagram {
- color: #9b6954;
-}
-
 .header-banner {
   position: relative;
   
@@ -298,7 +286,7 @@
   position: relative;
   margin-bottom: 10px;
   padding: 10px;
-  background: #f2f2f2;
+  background-color: $index-box-bg-color;
 
   a.tile-link {
     position: absolute;
