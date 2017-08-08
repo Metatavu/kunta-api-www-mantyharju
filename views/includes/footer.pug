@@ -1,11 +1,11 @@
 .container.mobile-footer.hidden-lg-up
   .row
-    .col-xs-10.no-gutters.mobile-footer-item
-      a(href="#")
-        h4 Briefly in english
-    .col-xs-10.no-gutters.mobile-footer-item
-      a(href="/sisalto/yhteystiedot")
-        h4 Yhteystiedot
+    if menus['mobile-footer']
+      each item in menus['mobile-footer'].items   
+        .col-xs-10.no-gutters.mobile-footer-item
+          a(href=item.url)
+            h4
+              =item.label
     .col-xs-4.no-gutters.mobile-footer-item.up-link
       a(href="#")
         h4 Ylös
@@ -32,8 +32,15 @@ footer.container-fluid.no-gutters.hidden-md-down
                       = item.label
           .col-md-8
             ul.footer-nav
-              if menus['footer-3']
-                each item in menus['footer-3'].items
-                  li.footer-nav-item
-                    a.footer-nav-link(href=item.url)
-                      = item.label
+              li.footer-nav-item
+                a.footer-nav-link(href='https://www.facebook.com/mantyharjussa/')
+                  i.fa.fa-facebook-official(aria-hidden="true")
+                  |&nbsp;&nbsp;Facebook
+              li.footer-nav-item
+                a.footer-nav-link(href='https://www.instagram.com/visitmantyharju/')
+                  i.fa.fa-instagram(aria-hidden="true")
+                  |&nbsp;&nbsp;Instagram
+              li.footer-nav-item
+                a.footer-nav-link(href='https://twitter.com/mju_kunta')
+                  i.fa.fa-twitter(aria-hidden="true")
+                  |&nbsp;&nbsp;Twitter
