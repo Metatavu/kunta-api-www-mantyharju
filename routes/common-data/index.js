@@ -22,7 +22,7 @@
           var fragments = data[1];
           var tiles = _.clone(data[2] || []).map(tile => {
             return Object.assign(tile, {
-              imageSrc: tile.imageId ? util.format('/tileImages/%s/%s', tile.id, tile.imageId) : '/gfx/layout/tile-default.jpg'
+              imageSrc: tile.imageId ? util.format('/tileImages/%s/%s', tile.id, tile.imageId) : null
             });
           });
           
