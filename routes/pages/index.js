@@ -140,7 +140,7 @@
               const movieTemplate = pug.compileFile(__dirname + '/../../views/fragments/movie.pug');
               let $ = cheerio.load(contents);
               let movies = $('.kunta-api-movie');
-              
+              let isMoviePage = movies.length > 0;
               movies.each((index, movie) => {
                 let result = {};
                 const simpleAttributes = ['title', 'age-limit', 'runtime', 'price', 'description', 'trailer-url'];
@@ -173,7 +173,6 @@
                 $(movie).replaceWith(rendered);
               });
               
-              let extraWide = movies.length > 0;
               let featuredImageSrc = featuredImageId ? util.format('/pageImages/%s/%s', page.id, featuredImageId) : null;
               let bannerSrc = bannerImageId ? util.format('/pageImages/%s/%s', page.id, bannerImageId) : '/gfx/layout/default_banner.jpg';
               
@@ -192,7 +191,7 @@
                   children: mapOpenChildren(children, activeIds, openTreeNodes),
                   openTreeNodes: openTreeNodes,
                   bannerSrc: bannerSrc,
-                  extraWide: extraWide
+                  isMoviePage: isMoviePage
                 }));
               });
 

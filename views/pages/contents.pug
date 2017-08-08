@@ -19,15 +19,14 @@ block content
     .row
       +breadcrumbs(breadcrumbs)
       
-  .container.page-container
+  .container.page-container(class=isMoviePage ? 'movies-container' : '')
     .row
-      if !extraWide
-        .col-lg-6.page-nav.no-gutter-left.hidden-md-down
-          if rootFolderTitle != title
-            h3.root-title
-              =rootFolderTitle
-          each child in children
-            +pageMenuItem(child)                  
+      div.page-nav.no-gutter-left.hidden-md-down(class=isMoviePage ? 'col-lg-4' : 'col-lg-6')
+        if rootFolderTitle != title
+          h3.root-title
+            =rootFolderTitle
+        each child in children
+          +pageMenuItem(child)                  
       .col-xs-24.hidden-lg-up
         a.btn.btn-primary(title='Näytä valikko', data-toggle='collapse', href='#collapse-menu', aria-expanded='false', aria-controls='collapse-menu')
           i.fa.fa-bars
@@ -35,7 +34,7 @@ block content
           .col-xs-24.page-nav.no-gutters
             each child in children
               +pageMenuItem(child)
-      .col-xs-24(class=extraWide ? '' : 'col-lg-18')
+      .col-xs-24.col-lg-18
         .page-content
           h1
             !=title

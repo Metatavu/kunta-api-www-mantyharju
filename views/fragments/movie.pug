@@ -38,10 +38,15 @@
       for classification in classifications
         span
           =classification.name
+  if description
+    div.movie-field.description-container
+      a.show-description-link(href='#')
+        |Näytä kuvaus
+      a.hide-description-link(href='#',style="display: none")
+        |Piilota kuvaus
+    .description(style="display: none")
+      !=description
   div
     .trailer-url
      a.show-trailer-button(data-lity data-lity-target=trailerUrl,href=trailerUrl)
        |Katso traileri »
-  div
-    .description(style="display: none")
-      =description
