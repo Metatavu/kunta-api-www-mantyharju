@@ -80,11 +80,25 @@
         }
       }
       
-      return Math.round(Math.max(this.element.width(), this.element.height()));
+      var width = this.element.width();
+      var height = this.element.height();
+      
+      if (width && height) {
+        return Math.round(Math.max(width, height));
+      }
+      
+      return null;
     },
   
     _resolveUrl: function () {
-      return this.element.attr('data-lazy-bg-image') + '?size=' + this._resolveSize();
+      var size = this._resolveSize();
+      var url = this.element.attr('data-lazy-bg-image');
+      
+      if (size) {
+        return url + '?size=' + size;
+      } else {
+        return url;
+      }
     },
     
     _onPreloadImageLoad: function () {

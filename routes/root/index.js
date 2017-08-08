@@ -31,7 +31,7 @@
         .events.latest(Common.EVENT_COUNT, 'START_DATE', 'DESCENDING')
         .pages.listImages('d72577dc-7507-4422-a042-c70bd12a5b3a')
         .callback(function(data) {
-          const images = data[4];
+          const movieImages = data[4];
 
           var news = _.clone(data[0]).map(newsArticle => {
             return Object.assign(newsArticle, {
@@ -82,7 +82,7 @@
             });
           });
           
-          const imageUrls = _.uniq(images.map((image) => {
+          const movieImageUrls = _.uniq(movieImages.map((image) => {
             return util.format('/pageImages/%s/%s', 'd72577dc-7507-4422-a042-c70bd12a5b3a', image.id);
           }));
           
@@ -91,7 +91,7 @@
             announcements: announcements,
             news: news,
             events: events,
-            imageUrls: imageUrls,
+            movieImageUrls: movieImageUrls,
             movieBanner: movieBanner[0] ? movieBanner[0] : null
           }));
 
