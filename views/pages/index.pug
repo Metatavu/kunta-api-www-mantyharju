@@ -133,10 +133,10 @@ mixin footerTileMovies()
           if movieBanner && movieBanner.contents
             .footer-tile-contents
               !=movieBanner.contents
-        each url,index in imageUrls
+        each url,index in movieImageUrls
           - var itemClass=index == 0 ? "carousel-item active" : 'carousel-item'
           div(class=itemClass)
-              .footer-tile.movies-tile(data-lazy-bg-image=url, style="background-size:cover;")
+            .footer-tile.movies-tile(data-lazy-bg-image=url, data-lazy-bg-size="750", style="background-size:cover;")
     
 block styles
   link(rel="stylesheet", href="/css/index.min.css")
