@@ -1,11 +1,11 @@
 .container.mobile-footer.hidden-lg-up
   .row
-    .col-xs-10.no-gutters.mobile-footer-item
-      a(href="#")
-        h4 Briefly in english
-    .col-xs-10.no-gutters.mobile-footer-item
-      a(href="/sisalto/yhteystiedot")
-        h4 Yhteystiedot
+    if menus['mobile-footer']
+      each item in menus['mobile-footer'].items   
+        .col-xs-10.no-gutters.mobile-footer-item
+          a(href=item.url)
+            h4
+              =item.label
     .col-xs-4.no-gutters.mobile-footer-item.up-link
       a(href="#")
         h4 Ylös
