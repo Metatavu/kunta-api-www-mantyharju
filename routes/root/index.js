@@ -6,6 +6,7 @@
 
   const util = require('util');
   const moment = require('moment');
+  const cheerio = require('cheerio');
   const _ = require('lodash');
   const $ = require('cheerio');
   const Common = require(__dirname + '/../common');
@@ -30,9 +31,50 @@
         .announcements.list(Common.ANNOUNCEMENT_COUNT, 'PUBLICATION_DATE', 'DESCENDING')
         .events.latest(Common.EVENT_COUNT, 'START_DATE', 'DESCENDING')
         .pages.listImages('d72577dc-7507-4422-a042-c70bd12a5b3a')
+        .pages.getContent('d72577dc-7507-4422-a042-c70bd12a5b3a')
         .callback(function(data) {
+          var path = req.path.substring(9);
           const movieImages = data[4];
+          let contents = Common.processPageContent(path, data[5]);
+          let $ = cheerio.load(contents);
+          let movies = $('.kunta-api-movie');
+          let allMovies = [];
+          
+          movies.each((index, movie) => {
+            let result = {};
+            const simpleAttributes = ['title', 'age-limit', 'runtime', 'price', 'description', 'trailer-url'];
+            const jsonAttributes = ['showtimes', 'classifications'];
 
+            for (let i = 0; i < simpleAttributes.length; i++) {
+              result[_.camelCase(simpleAttributes[i])] = $(movie).attr(util.format('data-%s', simpleAttributes[i]));
+            }
+
+            for (let i = 0; i < jsonAttributes.length; i++) {
+              result[_.camelCase(jsonAttributes[i])] = JSON.parse($(movie).attr(util.format('data-%s', jsonAttributes[i])));
+            }
+
+            let showtimes = _.map(result.showtimes, (showtime) => {
+              return moment(showtime);
+            });
+
+            showtimes = _.filter(showtimes, (showtime) => {
+              return showtime.isAfter(moment());
+            });
+
+            result.showtimes = _.map(showtimes, (showtime) => {
+              showtime.locale('fi');
+              return showtime.format('llll');
+            });
+
+            result['imageUrl'] = $(movie).find('img').attr('data-original');
+            
+            allMovies.push({
+              "showtimes": result.showtimes,
+              "imageUrl": result.imageUrl
+            });
+
+          });
+          
           var news = _.clone(data[0]).map(newsArticle => {
             return Object.assign(newsArticle, {
               "shortAbstract": _.truncate($.load(newsArticle.abstract).text(), {
@@ -82,8 +124,8 @@
             });
           });
           
-          const movieImageUrls = _.uniq(movieImages.map((image) => {
-            return util.format('/pageImages/%s/%s', 'd72577dc-7507-4422-a042-c70bd12a5b3a', image.id);
+          const movieImageUrls = _.uniq(allMovies.map((movie) => {
+            return movie.showtimes.length > 0 ? movie.imageUrl : null;
           }));
           
           res.render('pages/index.pug', Object.assign(req.kuntaApi.data, {
@@ -91,7 +133,7 @@
             announcements: announcements,
             news: news,
             events: events,
-            movieImageUrls: movieImageUrls,
+            movieImageUrls: movieImageUrls.filter(Boolean),
             movieBanner: movieBanner[0] ? movieBanner[0] : null
           }));
 
