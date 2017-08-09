@@ -422,6 +422,10 @@ footer {
   background-position: center center;
   position: relative;
 
+  @media (max-width: $break-x-small) {
+    height: 297px;
+  }
+
   h3 {
     @include font-std-bold(16px);
     text-transform: uppercase;
