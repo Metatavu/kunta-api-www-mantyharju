@@ -6,6 +6,7 @@
 
   const util = require('util');
   const moment = require('moment');
+  const cheerio = require('cheerio');
   const _ = require('lodash');
   const $ = require('cheerio');
   const Common = require(__dirname + '/../common');
@@ -29,14 +30,14 @@
         .banners.list()
         .announcements.list(Common.ANNOUNCEMENT_COUNT, 'PUBLICATION_DATE', 'DESCENDING')
         .events.latest(Common.EVENT_COUNT, 'START_DATE', 'DESCENDING')
-        .pages.listImages('d72577dc-7507-4422-a042-c70bd12a5b3a')
+        .pages.getContent(Common.MOVIES_PAGE_ID)
         .callback(function(data) {
-          const movieImages = data[4];
-
-          var news = _.clone(data[0]).map(newsArticle => {
+          const path = req.path.substring(9);
+          const activeMovies = Common.parseActiveMovies(Common.processPageContent(path, data[4]));
+          const news = _.clone(data[0]).map(newsArticle => {
             return Object.assign(newsArticle, {
               "shortAbstract": _.truncate($.load(newsArticle.abstract).text(), {
-                'length': 160,
+                'length': 160
               }),
               "shortDate": moment(newsArticle.published).format("D.M.YYYY"),
               "imageSrc": newsArticle.imageId ? util.format('/newsArticleImages/%s/%s', newsArticle.id, newsArticle.imageId) : null
@@ -44,7 +45,7 @@
           });
           
           const movieBanner = data[1].filter((banner) => {
-            return banner.title == "elokuva-banneri";
+            return banner.title === "elokuva-banneri";
           });
           
           const bannersWithoutMovies = data[1].filter((banner) => {
@@ -82,8 +83,8 @@
             });
           });
           
-          const movieImageUrls = _.uniq(movieImages.map((image) => {
-            return util.format('/pageImages/%s/%s', 'd72577dc-7507-4422-a042-c70bd12a5b3a', image.id);
+          const movieImageUrls = _.uniq(activeMovies.map((movie) => {
+            return movie.imageUrl;
           }));
           
           res.render('pages/index.pug', Object.assign(req.kuntaApi.data, {
@@ -91,7 +92,7 @@
             announcements: announcements,
             news: news,
             events: events,
-            movieImageUrls: movieImageUrls,
+            movieImageUrls: movieImageUrls.filter(Boolean),
             movieBanner: movieBanner[0] ? movieBanner[0] : null
           }));
 
