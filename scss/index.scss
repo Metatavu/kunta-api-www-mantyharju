@@ -172,6 +172,7 @@
         padding-bottom: 25px;
         padding-left: 0;
         padding-right: 10px;
+        white-space: nowrap;
       }
       
       .nav-link.events-tab {
@@ -287,6 +288,10 @@
   margin-bottom: 10px;
   padding: 10px;
   background-color: $index-box-bg-color;
+
+  @media (max-width: $break-x-small) {
+    min-height: 126px;
+  }
 
   a.tile-link {
     position: absolute;
