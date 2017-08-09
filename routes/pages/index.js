@@ -139,38 +139,17 @@
               
               const movieTemplate = pug.compileFile(__dirname + '/../../views/fragments/movie.pug');
               let $ = cheerio.load(contents);
-              let movies = $('.kunta-api-movie');
-              let isMoviePage = movies.length > 0;
+              
+              const movies = $('.kunta-api-movie');
+              const isMoviePage = movies.length > 0;
               movies.each((index, movie) => {
-                let result = {};
-                const simpleAttributes = ['title', 'age-limit', 'runtime', 'price', 'description', 'trailer-url'];
-                const jsonAttributes = ['showtimes', 'classifications'];
-                
-                for (let i = 0; i < simpleAttributes.length; i++) {
-                  result[_.camelCase(simpleAttributes[i])] = $(movie).attr(util.format('data-%s', simpleAttributes[i]));
+                const movieData = Common.parseMovieData($, movie);
+                if (Common.isActiveMovie(movieData)) {
+                  const rendered = $(movieTemplate(movieData));
+                  $(movie).replaceWith(rendered);
+                } else {
+                  $(movie).remove();
                 }
-                
-                for (let i = 0; i < jsonAttributes.length; i++) {
-                  result[_.camelCase(jsonAttributes[i])] = JSON.parse($(movie).attr(util.format('data-%s', jsonAttributes[i])));
-                }
-                
-                let showtimes = _.map(result.showtimes, (showtime) => {
-                  return moment(showtime);
-                });
-                
-                showtimes = _.filter(showtimes, (showtime) => {
-                  return showtime.isAfter(moment());
-                });
-                
-                result.showtimes = _.map(showtimes, (showtime) => {
-                  showtime.locale('fi');
-                  return showtime.format('llll');
-                });
-                
-                result['imageUrl'] = $(movie).find('img').attr('data-original');
-                
-                let rendered = $(movieTemplate(result));
-                $(movie).replaceWith(rendered);
               });
               
               let featuredImageSrc = featuredImageId ? util.format('/pageImages/%s/%s', page.id, featuredImageId) : null;

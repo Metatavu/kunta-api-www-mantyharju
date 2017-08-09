@@ -5,6 +5,7 @@
   const util = require('util');
   const _ = require('lodash');
   const cheerio = require('cheerio');
+  const moment = require('moment'); 
   
   class Common {
     
@@ -40,11 +41,11 @@
       return '/kuulutukset';
     }
     
-    static get EVENTS_FOLDER() { 
+    static get EVENTS_FOLDER() {
       return '/tapahtumat';
     }
     
-    static get ANNOUNCEMENT_COUNT() { 
+    static get ANNOUNCEMENT_COUNT() {
       return 5;
     }
 
@@ -58,6 +59,60 @@
     
     static get EVENTS_COUNT_PAGE() {
       return 5;
+    }
+    
+    static get MOVIES_PAGE_ID() {
+      return 'd72577dc-7507-4422-a042-c70bd12a5b3a';
+    }
+    
+    static parseMovieData($, movieElement) {
+      const result = {};
+      const simpleAttributes = ['title', 'age-limit', 'runtime', 'price', 'description', 'trailer-url'];
+      const jsonAttributes = ['showtimes', 'classifications'];
+
+      for (let i = 0; i < simpleAttributes.length; i++) {
+        result[_.camelCase(simpleAttributes[i])] = $(movieElement).attr(util.format('data-%s', simpleAttributes[i]));
+      }
+
+      for (let i = 0; i < jsonAttributes.length; i++) {
+        result[_.camelCase(jsonAttributes[i])] = JSON.parse($(movieElement).attr(util.format('data-%s', jsonAttributes[i])));
+      }
+
+      let showtimes = _.map(result.showtimes, (showtime) => {
+        return moment(showtime);
+      });
+
+      showtimes = _.filter(showtimes, (showtime) => {
+        return showtime.isAfter(moment());
+      });
+
+      result.showtimes = _.map(showtimes, (showtime) => {
+        showtime.locale('fi');
+        return showtime.format('llll');
+      });
+
+      result['imageUrl'] = $(movieElement).find('img').attr('data-original');
+
+      return result;
+    }
+    
+    static isActiveMovie(movieData) {
+      return movieData.showtimes && movieData.showtimes.length > 0; 
+    }
+    
+    static parseActiveMovies(pageContents) {
+      const $ = cheerio.load(pageContents);
+      const movies = $('.kunta-api-movie');
+      const activeMovies = [];
+      
+      movies.each((index, movie) => {
+        const movieData = Common.parseMovieData($, movie);
+        if (Common.isActiveMovie(movieData)) {
+          activeMovies.push(movieData);
+        }
+      });
+      
+      return activeMovies;
     }
     
     static resolveLinkType(link) {
