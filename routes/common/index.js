@@ -67,7 +67,7 @@
     
     static parseMovieData($, movieElement) {
       const result = {};
-      const simpleAttributes = ['title', 'age-limit', 'runtime', 'price', 'description', 'trailer-url'];
+      const simpleAttributes = ['title', 'age-limit', 'runtime', 'price', 'description', 'trailer-url', 'director', 'cast'];
       const jsonAttributes = ['showtimes', 'classifications'];
 
       for (let i = 0; i < simpleAttributes.length; i++) {
