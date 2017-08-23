@@ -32,6 +32,20 @@ if showtimes && showtimes.length
           |Lippu:
         span
           =price
+    if director
+      div
+        .movie-field.director
+          label
+            |Ohjaaja:
+          span
+            =director
+    if cast
+      div
+        .movie-field.cast
+          label
+            |Näyttelijät:
+          span
+            =cast
     div
       .movie-field.classification
         label
