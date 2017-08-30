@@ -1,10 +1,17 @@
 extends ../layout/contents.pug
 
 include ../includes/mixins.pug
+include metaform/mixins/form
+
+block scripts
+  +metaformScripts()
 
 block styles
   link(rel="stylesheet", href="/css/contents-common.min.css")
   link(rel="stylesheet", href="/css/event.min.css")
+  link(rel="stylesheet", href="/css/metaform.min.css")
+  link(rel="stylesheet", href="//cdn.metatavu.io/libs/jquery-ui/1.11.4/themes/smoothness/jquery-ui.min.css")
+  +metaformStyles()
 
 block content
   .container.page-container
@@ -14,28 +21,18 @@ block content
     .row
       .col-lg-5.page-nav.no-gutter-left.hidden-md-down
         each latestEvent in latestEvents
-          +eventMenuItem(latestEvent, event)
+          +eventMenuItem(latestEvent)
       .col-xs-24.hidden-lg-up
         a.btn.btn-primary(title='Näytä valikko', data-toggle='collapse', href='#collapse-menu', aria-expanded='false', aria-controls='collapse-menu')
           i.fa.fa-bars
         .collapse#collapse-menu
           .col-xs-24.col-lg-5.page-nav.no-gutters
             each latestEvent in latestEvents
-              +eventMenuItem(latestEvent, event)
+              +eventMenuItem(latestEvent)
       .col-xs-24.col-lg-19
         .page-content
           .row
             .col-xs-24.title-container
               h1
-                !=event.name
-          if event.imageSrc
-            .row
-              .col-xs-24.image-container
-                .featured-image(data-lazy-bg-image=event.imageSrc)
-          .row
-            .col-xs-24.date-container
-              label
-                =event.start
-          .row
-            .col-xs-24
-              !=event.description
+                |Uusi tapahtuma
+          +metaform(viewModel, "/linkedevents/event/create")
