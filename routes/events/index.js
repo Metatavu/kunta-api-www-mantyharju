@@ -1,10 +1,13 @@
 /*jshint esversion: 6 */
+/* global __dirname */
+
 (function() {
   'use strict';
   
   const _ = require('lodash');
   const util = require('util');
   const moment = require('moment');
+  const metaformFields = require('metaform-fields');
   
   function formatDate(date) {
     const momentDate = moment(date);
@@ -80,6 +83,29 @@
           });
         });
     });
+    
+    app.get(util.format('%s/uusi', Common.EVENTS_FOLDER), (req, res, next) => {
+      new ModulesClass(config)
+        .events.list(0, 50, 'START_DATE', 'DESCENDING')
+        .callback((data) => {
+          const latestEvents = data[0];
+  
+          res.render('pages/event-new', Object.assign(req.kuntaApi.data, {
+            viewModel: require(`${__dirname}/forms/create-event`),
+            plugins: [ metaformFields.templates() ],
+            latestEvents: latestEvents,
+            breadcrumbs : [
+              { path: Common.EVENTS_FOLDER, title: 'Tapahtumat' }, 
+              { path: util.format('%s/uusi', Common.EVENTS_FOLDER), title: 'Uusi' }
+            ]
+          }));
+        }, (err) => {
+          next({
+            status: 500,
+            error: err
+          });
+        });
+    });
 
     app.get(util.format('%s/:id', Common.EVENTS_FOLDER), (req, res, next) => {
       const id = req.params.id;
@@ -107,6 +133,109 @@
             status: 500,
             error: err
           });
+        });
+    });
+    
+    app.get('/linkedevents/places/search', (req, res, next) => {
+      const text = req.query.q;
+      const page = req.query.page || 1;
+      const pageSize = Common.LINKEDEVENTS_MAX_PLACES;
+      
+      new ModulesClass(config)
+        .linkedevents.searchPlaces(text, page, pageSize)
+        .callback((data) => {
+          const places = data[0].data||[];
+          res.send(_.map(places, (place) => {
+            return {
+              value: place.id,
+              label: place.name ? place.name.fi : ''
+            };
+          }));
+        });
+    });
+    
+    app.get('/linkedevents/keywords/search', (req, res, next) => {
+      const text = req.query.text;
+      const page = req.query.page || 1;
+      const pageSize = Common.LINKEDEVENTS_MAX_PLACES;
+      
+      new ModulesClass(config)
+        .linkedevents.searchKeywords(text, page, pageSize)
+        .callback((data) => {
+          const keywords = data[0].data||[];
+          res.send(_.map(keywords, (keyword) => {
+            return {
+              value: keyword.id,
+              label: keyword.name ? keyword.name.fi : ''
+            };
+          }));
+        });
+    });
+    
+    app.post('/linkedevents/event/create', (req, res, next) => {
+      const linkedEventsURL = config.get('linkedevents:api-url');
+      
+      const keywords = _.map(req.body['keywords'].split(','), (keyword) => {
+        return {
+          "@id": `${linkedEventsURL}/keyword/${keyword}/`
+        };
+      });
+      
+      const location = {
+        "@id": `${linkedEventsURL}/place/${req.body['place']}/`
+      };
+      
+      const image = [];
+    
+      if (req.body['image']) {
+        image.push({
+          "@id": `${linkedEventsURL}/image/${req.body['image']}/`
+        });
+      }
+      
+      const eventData = {
+        "publication_status": "public",
+        "name": {
+          "fi": req.body['name-fi'],
+          "sv": req.body['name-sv'],
+          "en": req.body['name-en']
+        },
+        "description": {
+          "fi": req.body['description-fi'],
+          "sv": req.body['description-sv'],
+          "en": req.body['description-en']
+        },
+        "short_description": {
+          "fi": req.body['short-description-fi'],
+          "sv": req.body['short-description-sv'],
+          "en": req.body['short-description-en']
+        },
+        "place": req.body['place'],
+        "image": image,
+        "keywords": keywords,
+        "location": location,
+        "offers": [{
+          is_free: true,
+          price: null,
+          info_url: null,
+          description: null
+        }]
+      };
+      
+      if (req.body['start']) {
+        eventData["start_time"] = req.body['start'];
+      }
+      
+      if (req.body['end']) {
+        eventData["end_time"] = req.body['end'];
+      }
+      
+      new ModulesClass(config)
+        .linkedevents.createEvent(eventData)
+        .callback((data) => {
+          res.send(200);
+        }, (err) => {
+          res.status(err.response.status).send(err.response.text);
         });
     });
     
