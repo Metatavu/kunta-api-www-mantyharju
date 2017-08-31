@@ -173,24 +173,9 @@
     });
     
     app.post('/linkedevents/event/create', (req, res, next) => {
-      const linkedEventsURL = config.get('linkedevents:api-url');
-      
-      const keywords = _.map(req.body['keywords'].split(','), (keyword) => {
-        return {
-          "@id": `${linkedEventsURL}/keyword/${keyword}/`
-        };
-      });
-      
-      const location = {
-        "@id": `${linkedEventsURL}/place/${req.body['place']}/`
-      };
-      
-      const image = [];
-    
-      if (req.body['image']) {
-        image.push({
-          "@id": `${linkedEventsURL}/image/${req.body['image']}/`
-        });
+      const imageUrls = [];
+      if (req.body['image-url']) {
+        imageUrls.push(req.body['image-url']);
       }
       
       const eventData = {
@@ -210,10 +195,9 @@
           "sv": req.body['short-description-sv'],
           "en": req.body['short-description-en']
         },
-        "place": req.body['place'],
-        "image": image,
-        "keywords": keywords,
-        "location": location,
+        "image-urls": imageUrls,
+        "keywords": req.body['keywords'].split(','),
+        "location": req.body['location'],
         "offers": [{
           is_free: true,
           price: null,
@@ -229,6 +213,8 @@
       if (req.body['end']) {
         eventData["end_time"] = req.body['end'];
       }
+      
+      console.log(eventData, "eventData");
       
       new ModulesClass(config)
         .linkedevents.createEvent(eventData)
