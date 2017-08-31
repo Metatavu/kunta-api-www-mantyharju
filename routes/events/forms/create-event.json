@@ -43,7 +43,14 @@
     }, {
       "name": "image-url",
       "type": "text",
-      "title": "Kuva",
+      "title": "Ulkoisen kuvan url osoite",
+      "required": false
+    }, {
+      "name": "image",
+      "type": "files",
+      "title": "Lisää kuva",
+      "upload-url": "/linkedevents/image/",
+      "single-file": true,
       "required": false
     }, {
       "name": "description-fi",

@@ -8,7 +8,10 @@
   const util = require('util');
   const moment = require('moment');
   const metaformFields = require('metaform-fields');
-  
+  const multer  = require('multer');
+  const fs = require('fs');
+  const uuidv4 = require('uuid/v4');
+
   function formatDate(date) {
     const momentDate = moment(date);
     const midnight = momentDate.clone().startOf('day');
@@ -21,6 +24,35 @@
   }
   
   module.exports = (app, config, ModulesClass) => {
+    
+    const storage = multer.diskStorage({
+      destination: (req, file, cb) => {
+        cb(null, config.get('uploads:path'));
+      },
+      filename: (req, file, cb) => {
+        let uploadFolder = config.get('uploads:path');
+        let fileName = file.originalname;
+        let fileCount = 0;
+        let filePath = uploadFolder + fileName;
+        let nameWithoutExtension = fileName;
+        let extension = '';
+
+        if (fileName.lastIndexOf(".") > -1 ){
+          nameWithoutExtension = fileName.substring(0, fileName.lastIndexOf("."));
+          extension = fileName.substring(fileName.lastIndexOf("."));
+        }
+
+        while (fs.existsSync(filePath)) {
+          fileCount++;
+          fileName = nameWithoutExtension + '_' + fileCount + extension;
+          filePath = uploadFolder + fileName;
+        }
+
+        cb(null, fileName);
+      }
+    });
+
+    const upload = multer({ storage: storage });
     const Common = require(__dirname + '/../common');
 
     app.get('/eventImages/:eventId/:imageId', (req, res, next) => {
@@ -171,11 +203,48 @@
           }));
         });
     });
+
+    app.post('/linkedevents/image', upload.single('file'), (req, res, next) => {
+      const deleteKey = uuidv4();
+      const deleteKeyFilePath = config.get('uploads:path') + req.file.filename + '.' + deleteKey;
+      
+      fs.closeSync(fs.openSync(deleteKeyFilePath, 'w'));
+      
+      res.send([{
+        filename: req.file.filename,
+        originalname: req.file.filename,
+        deleteKey: deleteKey,
+        url: config.get('uploads:baseUrl') + req.file.filename
+      }]);
+    });
+    
+    app.delete('/linkedevents/image/:filename', (req, res) => {
+      const filename = req.params.filename;
+      const fileDeleteKey = req.query.c;
+      const uploadFolder = config.get('uploads:path') || 'uploads/';
+      const keyFilePath = uploadFolder + filename + '.' + fileDeleteKey;
+      
+      if (fs.existsSync(keyFilePath)) {
+        fs.unlinkSync(keyFilePath);
+        fs.unlinkSync(uploadFolder + filename);
+        res.status(204).send(); 
+      } else {
+        res.status(401).send();
+      }
+    });
     
     app.post('/linkedevents/event/create', (req, res, next) => {
-      const imageUrls = [];
+      let imageUrls = [];
       if (req.body['image-url']) {
         imageUrls.push(req.body['image-url']);
+      }
+      
+      if (req.body['image']) {
+        if (Array.isArray(req.body['image'])) {
+          imageUrls = imageUrls.concat(req.body['image']);
+        } else {
+          imageUrls.push(req.body['image']);
+        }
       }
       
       const eventData = {
@@ -213,8 +282,6 @@
       if (req.body['end']) {
         eventData["end_time"] = req.body['end'];
       }
-      
-      console.log(eventData, "eventData");
       
       new ModulesClass(config)
         .linkedevents.createEvent(eventData)
