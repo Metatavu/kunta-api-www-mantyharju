@@ -11,6 +11,7 @@
   const multer  = require('multer');
   const fs = require('fs');
   const uuidv4 = require('uuid/v4');
+  const path = require('path');
 
   function formatDate(date) {
     const momentDate = moment(date);
@@ -52,7 +53,21 @@
       }
     });
 
-    const upload = multer({ storage: storage });
+    const upload = multer({
+      storage: storage, 
+      fileFilter: function (req, file, callback) {
+        const ext = path.extname(file.originalname);
+        if(ext == '.png' || ext == '.jpg' || ext == '.gif' || ext == '.jpeg') {
+          return callback(null, true);
+        }
+
+        callback(new Error('Only images are allowed'));
+      },
+      limits: {
+        fileSize: 2097152,
+        files: 1
+      } 
+    });
     const Common = require(__dirname + '/../common');
 
     app.get('/eventImages/:eventId/:imageId', (req, res, next) => {

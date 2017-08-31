@@ -50,6 +50,8 @@
       "type": "files",
       "title": "Lisää kuva",
       "upload-url": "/linkedevents/image/",
+      "max-file-size": 2097152,
+      "only-images": true,
       "single-file": true,
       "required": false
     }, {
