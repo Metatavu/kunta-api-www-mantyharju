@@ -4,14 +4,15 @@
 (function() {
   'use strict';
   
-  var path = require('path');
-  var routes = require('./routes');
+  const path = require('path');
+  const routes = require('./routes');
+  const metaformFields = require('metaform-fields');
   
   module.exports = function() {
     
     return {
       'views': path.join(__dirname, 'views'),
-      'static': path.join(__dirname, 'public'),
+      'static': [ path.join(__dirname, 'public'),  metaformFields.public() ],
       'routes': routes
     };
     

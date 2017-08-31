@@ -65,6 +65,10 @@
       return 'd72577dc-7507-4422-a042-c70bd12a5b3a';
     }
     
+    static get LINKEDEVENTS_MAX_PLACES() {
+      return 20;
+    }
+    
     static parseMovieData($, movieElement) {
       const result = {};
       const simpleAttributes = ['title', 'age-limit', 'runtime', 'price', 'description', 'trailer-url', 'director', 'cast'];
