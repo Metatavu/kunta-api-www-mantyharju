@@ -18,8 +18,12 @@ block content
         .page-content
           .col-xs-24
             .row
-              h1
-                |Tapahtumat
+              .col-xs-12
+                h1
+                  |Tapahtumat
+              .col-xs-12
+                a.pull-right.btn.btn-success(href="/tapahtumat/uusi")
+                  |Lisää uusi tapahtuma
           .col-xs-24.events-container
             .row
               each event in events

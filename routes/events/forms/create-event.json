@@ -1,0 +1,93 @@
+{
+  "title": "Uusi tapahtuma",
+  "sections": [{
+    "fields": [{
+      "name": "name-fi",
+      "type": "text",
+      "title": "Nimi (Suomi)",
+      "required": true
+    }, {
+      "name": "name-sv",
+      "type": "text",
+      "title": "Nimi (Ruotsi)",
+      "required": false
+    }, {
+      "name": "name-en",
+      "type": "text",
+      "title": "Nimi (Englanti)",
+      "required": false
+    }, {
+      "name": "start",
+      "type": "date-time",
+      "time": true,
+      "title": "Alkamisaika",
+      "required": true
+    }, {
+      "name": "end",
+      "type": "date-time",
+      "time": true,
+      "title": "Loppumisaika",
+      "required": false
+    }, {
+      "name": "location",
+      "type": "autocomplete",
+      "title": "Paikka",
+      "required": true,
+      "source-url": "/linkedevents/places/search"
+    }, {
+      "name": "keywords",
+      "type": "autocomplete-multiple",
+      "title": "Avainsanat",
+      "required": true,
+      "source-url": "/linkedevents/keywords/search"
+    }, {
+      "name": "image-url",
+      "type": "text",
+      "title": "Ulkoisen kuvan url osoite",
+      "required": false
+    }, {
+      "name": "image",
+      "type": "files",
+      "title": "Lisää kuva",
+      "upload-url": "/linkedevents/image/",
+      "max-file-size": 2097152,
+      "only-images": true,
+      "single-file": true,
+      "required": false
+    }, {
+      "name": "description-fi",
+      "type": "memo",
+      "title": "Kuvaus (Suomi)",
+      "required": true
+    }, {
+      "name": "description-sv",
+      "type": "memo",
+      "title": "Kuvaus (Ruotsi)",
+      "required": false
+    }, {
+      "name": "description-en",
+      "type": "memo",
+      "title": "Kuvaus (Englanti)",
+      "required": false
+    }, {
+      "name": "short-description-fi",
+      "type": "memo",
+      "title": "Lyhyt kuvaus (Suomi)",
+      "required": true
+    }, {
+      "name": "short-description-sv",
+      "type": "memo",
+      "title": "Lyhyt kuvaus (Ruotsi)",
+      "required": false
+    }, {
+      "name": "short-description-en",
+      "type": "memo",
+      "title": "Lyhyt kuvaus (Englanti)",
+      "required": false
+    }, {
+      "name": "submit",
+      "type": "submit",
+      "text": "Luo"
+    }]
+  }]
+}
