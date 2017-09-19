@@ -87,6 +87,10 @@
             return movie.imageUrl;
           }));
           
+          if (movieImageUrls.length < 1) {
+            movieImageUrls.push('/gfx/layout/default_movie_banner.jpg');
+          }
+          
           res.render('pages/index.pug', Object.assign(req.kuntaApi.data, {
             banners: banners,
             announcements: announcements,
