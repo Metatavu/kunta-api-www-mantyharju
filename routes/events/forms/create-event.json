@@ -35,6 +35,10 @@
       "required": true,
       "source-url": "/linkedevents/places/search"
     }, {
+      "name": "location-help",
+      "type": "html",
+      "html": "Mikäli paikkaa ei löydy haulla voit lisätä uuden klikkaamalla <a href=\"#\" class=\"new-place-link\">tästä</a>"
+    }, {
       "name": "keywords",
       "type": "autocomplete-multiple",
       "title": "Avainsanat",
