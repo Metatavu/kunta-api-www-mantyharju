@@ -17,15 +17,23 @@
       "title": "Nimi (Englanti)",
       "required": false
     }, {
-      "name": "start",
-      "type": "date-time",
-      "time": true,
-      "title": "Alkamisaika",
+      "name": "start-date",
+      "type": "date",
+      "title": "Alkamispäivämäärä",
       "required": true
     }, {
-      "name": "end",
-      "type": "date-time",
-      "time": true,
+      "name": "start-time",
+      "type": "time",
+      "title": "Alkamisaika",
+      "required": false
+    }, {
+      "name": "end-date",
+      "type": "date",
+      "title": "Loppumispäivämäärä",
+      "required": false
+    }, {
+      "name": "end-time",
+      "type": "time",
       "title": "Loppumisaika",
       "required": false
     }, {
