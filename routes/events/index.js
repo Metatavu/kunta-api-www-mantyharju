@@ -6,7 +6,7 @@
   
   const _ = require('lodash');
   const util = require('util');
-  const moment = require('moment');
+  const moment = require('moment-timezone');
   const metaformFields = require('metaform-fields');
   const multer  = require('multer');
   const fs = require('fs');
@@ -201,6 +201,32 @@
         });
     });
     
+    app.get('/ajax/linkedevents/places/new', (req, res, next) => {
+      res.render('ajax/place-new', Object.assign(req.kuntaApi.data, {
+        viewModel: require(`${__dirname}/forms/create-place`),
+        plugins: [ metaformFields.templates() ]
+      }));
+    });
+    
+    app.post('/linkedevents/places/create', (req, res, next) => {
+      const placeData = {
+        "publication_status": "public",
+        "name": {
+          "fi": req.body['name-fi'],
+          "sv": req.body['name-sv'],
+          "en": req.body['name-en']
+        }
+      };
+      
+      new ModulesClass(config)
+        .linkedevents.createPlace(placeData)
+        .callback((data) => {
+          res.send(data[0]);
+        }, (err) => {
+          res.status(err.response.status).send(err.response.text);
+        });
+    });
+    
     app.get('/linkedevents/keywords/search', (req, res, next) => {
       const text = req.query.text;
       const page = req.query.page || 1;
@@ -290,12 +316,23 @@
         }]
       };
       
-      if (req.body['start']) {
-        eventData["start_time"] = req.body['start'];
+      const startDate = req.body['start-date'];
+      const startTime = req.body['start-time'];
+      const endDate = req.body['end-date'];
+      const endTime = req.body['end-time'];
+      const timezone = 'Europe/Helsinki';
+      
+      if (!startDate) {
+        res.status(400).send('Alkamispäivämäärä on pakollinen');
+        return;
       }
       
-      if (req.body['end']) {
-        eventData["end_time"] = req.body['end'];
+      eventData["start_time"] = startTime ? moment.tz(`${startDate}T${startTime}`, 'Europe/Helsinki').format() : startDate;
+      eventData["has_start_time"] = !!startTime;
+      
+      if (endDate) {
+        eventData["end_time"] = endTime ? moment.tz(`${endDate}T${endTime}`, 'Europe/Helsinki').format() : endDate; 
+        eventData["has_end_time"] = !!endTime;
       }
       
       new ModulesClass(config)

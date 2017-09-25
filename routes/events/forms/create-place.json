@@ -1,0 +1,25 @@
+{
+  "title": "Uusi tapahtumapaikka",
+  "sections": [{
+    "fields": [{
+      "name": "name-fi",
+      "type": "text",
+      "title": "Nimi (Suomi)",
+      "required": true
+    }, {
+      "name": "name-sv",
+      "type": "text",
+      "title": "Nimi (Ruotsi)",
+      "required": false
+    }, {
+      "name": "name-en",
+      "type": "text",
+      "title": "Nimi (Englanti)",
+      "required": false
+    }, {
+      "name": "submit",
+      "type": "submit",
+      "text": "Luo"
+    }]
+  }]
+}
