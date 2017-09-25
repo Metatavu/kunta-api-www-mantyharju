@@ -6,7 +6,7 @@
   
   const _ = require('lodash');
   const util = require('util');
-  const moment = require('moment');
+  const moment = require('moment-timezone');
   const metaformFields = require('metaform-fields');
   const multer  = require('multer');
   const fs = require('fs');
@@ -316,12 +316,23 @@
         }]
       };
       
-      if (req.body['start']) {
-        eventData["start_time"] = req.body['start'];
+      const startDate = req.body['start-date'];
+      const startTime = req.body['start-time'];
+      const endDate = req.body['end-date'];
+      const endTime = req.body['end-time'];
+      const timezone = 'Europe/Helsinki';
+      
+      if (!startDate) {
+        res.status(400).send('Alkamispäivämäärä on pakollinen');
+        return;
       }
       
-      if (req.body['end']) {
-        eventData["end_time"] = req.body['end'];
+      eventData["start_time"] = startTime ? moment.tz(`${startDate}T${startTime}`, 'Europe/Helsinki').format() : startDate;
+      eventData["has_start_time"] = !!startTime;
+      
+      if (endDate) {
+        eventData["end_time"] = endTime ? moment.tz(`${endDate}T${endTime}`, 'Europe/Helsinki').format() : endDate; 
+        eventData["has_end_time"] = !!endTime;
       }
       
       new ModulesClass(config)
