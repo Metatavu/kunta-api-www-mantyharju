@@ -201,6 +201,32 @@
         });
     });
     
+    app.get('/ajax/linkedevents/places/new', (req, res, next) => {
+      res.render('ajax/place-new', Object.assign(req.kuntaApi.data, {
+        viewModel: require(`${__dirname}/forms/create-place`),
+        plugins: [ metaformFields.templates() ]
+      }));
+    });
+    
+    app.post('/linkedevents/places/create', (req, res, next) => {
+      const placeData = {
+        "publication_status": "public",
+        "name": {
+          "fi": req.body['name-fi'],
+          "sv": req.body['name-sv'],
+          "en": req.body['name-en']
+        }
+      };
+      
+      new ModulesClass(config)
+        .linkedevents.createPlace(placeData)
+        .callback((data) => {
+          res.send(data[0]);
+        }, (err) => {
+          res.status(err.response.status).send(err.response.text);
+        });
+    });
+    
     app.get('/linkedevents/keywords/search', (req, res, next) => {
       const text = req.query.text;
       const page = req.query.page || 1;
