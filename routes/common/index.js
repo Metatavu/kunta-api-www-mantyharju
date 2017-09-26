@@ -69,6 +69,10 @@
       return 20;
     }
     
+    static get DEFAULT_EVENT_KEYWORD_ID() {
+      return 'mantyharju:afpl3ytsey';
+    }
+    
     static parseMovieData($, movieElement) {
       const result = {};
       const simpleAttributes = ['title', 'age-limit', 'runtime', 'price', 'description', 'trailer-url', 'director', 'cast'];

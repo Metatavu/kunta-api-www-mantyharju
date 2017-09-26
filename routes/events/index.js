@@ -301,12 +301,15 @@
           "en": req.body['description-en']
         },
         "short_description": {
-          "fi": req.body['short-description-fi'],
-          "sv": req.body['short-description-sv'],
-          "en": req.body['short-description-en']
+          "fi": req.body['short-description-fi'] || req.body['description-fi'],
+          "sv": req.body['short-description-sv'] || req.body['description-sv'],
+          "en": req.body['short-description-en'] || req.body['description-en']
+        },
+        "provider": {
+          "fi": req.body['provider']
         },
         "image-urls": imageUrls,
-        "keywords": req.body['keywords'].split(','),
+        "keywords": [Common.DEFAULT_EVENT_KEYWORD_ID],
         "location": req.body['location'],
         "offers": [{
           is_free: true,
