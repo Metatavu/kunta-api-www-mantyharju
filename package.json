@@ -20,7 +20,7 @@
   "dependencies": {
     "cheerio": "^0.22.0",
     "lodash": "^4.17.4",
-    "metaform-fields": "0.6.1",
+    "metaform-fields": "0.6.2",
     "moment": "^2.17.1",
     "moment-timezone": "^0.5.13",
     "multer": "^1.3.0",
