@@ -47,12 +47,6 @@
       "type": "html",
       "html": "Mikäli paikkaa ei löydy haulla voit lisätä uuden klikkaamalla <a href=\"#\" class=\"new-place-link\">tästä</a>"
     }, {
-      "name": "keywords",
-      "type": "autocomplete-multiple",
-      "title": "Avainsanat",
-      "required": true,
-      "source-url": "/linkedevents/keywords/search"
-    }, {
       "name": "image-url",
       "type": "text",
       "title": "Ulkoisen kuvan url osoite",
@@ -85,7 +79,7 @@
       "name": "short-description-fi",
       "type": "memo",
       "title": "Lyhyt kuvaus (Suomi)",
-      "required": true
+      "required": false
     }, {
       "name": "short-description-sv",
       "type": "memo",
@@ -95,6 +89,11 @@
       "name": "short-description-en",
       "type": "memo",
       "title": "Lyhyt kuvaus (Englanti)",
+      "required": false
+    }, {
+      "name": "provider",
+      "type": "text",
+      "title": "Tapahtuman järjestäjä / yhteystieto",
       "required": false
     }, {
       "name": "submit",
