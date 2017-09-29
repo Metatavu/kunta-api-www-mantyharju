@@ -30,4 +30,16 @@
     
   });
   
+  $(document).ready(function () {
+    $('.metaform').metaform('option', 'onPostSuccess', function (response) {
+      bootbox.alert({
+        message: '<i class="fa fa-check" /><h3>Tapahtuma  on lähetetty ylläpidolle arvioitavaksi.</h3>',
+        backdrop: true,
+        callback: function(){
+          window.location.reload(true);
+        }
+      });
+    });
+  });
+  
 }).call(this);
