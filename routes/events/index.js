@@ -289,7 +289,7 @@
       }
       
       const eventData = {
-        "publication_status": "public",
+        "publication_status": "draft",
         "name": {
           "fi": req.body['name-fi'],
           "sv": req.body['name-sv'],
@@ -336,6 +336,9 @@
       if (endDate) {
         eventData["end_time"] = endTime ? moment.tz(`${endDate}T${endTime}`, 'Europe/Helsinki').format() : endDate; 
         eventData["has_end_time"] = !!endTime;
+      } else {
+        eventData["end_time"] = eventData["start_time"];
+        eventData["has_end_time"] = eventData["has_start_time"];
       }
       
       new ModulesClass(config)
