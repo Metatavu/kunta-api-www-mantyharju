@@ -23,6 +23,8 @@
     require(__dirname + '/pages')(app, config, ModulesClass);
     require(__dirname + '/announcements')(app, config, ModulesClass);
     require(__dirname + '/tiles')(app, config, ModulesClass);
+    require(__dirname + '/incidents')(app, config, ModulesClass);
+    
     /**
     require(__dirname + '/files')(app, config, ModulesClass);
     require(__dirname + '/publictransport')(app, config, ModulesClass);

@@ -44,18 +44,36 @@
           });
 
           const googleAnalytics = config.get('googleAnalytics:code');
-
+          
           var tileMap = {};
           tiles.forEach((tile) => {
             tileMap[tile.title] = tile;
           });
 
+          const incidentUrls = [];
+          const incidentsConfig = config.get('incidents:urls');
+          const incidentsPollInterval = config.get('incidents:pollInterval') || 30000;
+          const incidentScriptVersion = config.get('incidents:scriptVersion');
+          
+          if (Array.isArray(incidentsConfig)) {
+            for (let i = 0; i < incidentsConfig.length; i++) {
+              let incidentUrl = incidentsConfig[i].url;
+              if (incidentsConfig[i].area) {
+                incidentUrl += util.format('?area=%s', encodeURIComponent(incidentsConfig[i].area));
+              }
+              incidentUrls.push(incidentUrl);
+            }
+          }
+          
           req.kuntaApi = {
             data: {
               menus: menus,
               fragmentMap: fragmentMap,
               googleAnalytics: googleAnalytics,
-              tileMap: tileMap
+              tileMap: tileMap,
+              incidentUrls: incidentUrls.join(','),
+              incidentsPollInterval: incidentsPollInterval,
+              incidentScriptVersion: incidentScriptVersion
             }
           };
 
