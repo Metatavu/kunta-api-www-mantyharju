@@ -1,30 +1,45 @@
 @charset "UTF-8";
 
+@import "colors";
 @import "vars";
 
-.announcement-row {
 
-  border-bottom: 1px solid #aaa;
+.announcement {
+
+  border-bottom: 1px solid $announcementlist-separator-line-color;
   padding-bottom: 7px;
   padding-top: 7px;
+
+  .announcement-image-container {
+    min-height: 80px;
+    .announcement-image-placeholder {
+      h1 {
+        padding-top: 15px;
+        text-align: center;
+      }
+    }
+  }
+
+  .announcement-image {
+    background-size: cover;
+    height: 100px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    max-width: 100%;
+    min-width: 120px;
+    padding-top: 5px;
+  }
 
   .date::after {
     content: " - ";
   }
 
   .date {
-    @include font-std(16px);
-  }
+    @include font-std(16px);  
+  }  
 
   .title {
     @include font-std(18px);
-  }
-
-  .article-image-placeholder {
-    h1 {
-      padding-top: 15px;
-      text-align: center;
-    }
   }
 
 }
