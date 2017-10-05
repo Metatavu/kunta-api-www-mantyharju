@@ -12,6 +12,7 @@
 
   .announcement-image-container {
     min-height: 80px;
+
     .announcement-image-placeholder {
       h1 {
         padding-top: 15px;
@@ -35,8 +36,8 @@
   }
 
   .date {
-    @include font-std(16px);  
-  }  
+    @include font-std(16px);
+  }
 
   .title {
     @include font-std(18px);
