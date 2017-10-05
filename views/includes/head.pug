@@ -31,6 +31,9 @@ head
   script(defer="defer",type="text/javascript", src="//cdn.metatavu.io/libs/tether/1.3.3/js/tether.min.js")
   script(defer="defer",type="text/javascript", src="/bootstrap/js/bootstrap.min.js")
   script(defer="defer",type="text/javascript", src="/js/common.js")
+  if incidentUrls
+    script(defer="defer",type="text/javascript", src="//cdn.metatavu.io/libs/kunta-api-incidents/" + incidentScriptVersion + "/incidents.min.js", id="incidents-script", data-urls=incidentUrls, data-interval=incidentsPollInterval)
+    link(rel="stylesheet", href="//cdn.metatavu.io/libs/kunta-api-incidents/" + incidentScriptVersion + "/incidents.min.css")
   if googleAnalytics
     script.
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
