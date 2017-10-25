@@ -24,6 +24,12 @@
     return util.format('%s klo %s alkaen', moment(date).format('D.M.YYYY'), moment(date).format('H'));
   }
   
+  function truncateDescription(description) {
+    return _.truncate(description, {
+    "length": 150
+   });
+  }
+  
   module.exports = (app, config, ModulesClass) => {
     
     const storage = multer.diskStorage({
@@ -287,7 +293,7 @@
           imageUrls.push(req.body['image']);
         }
       }
-      
+
       const eventData = {
         "publication_status": "draft",
         "name": {
@@ -301,9 +307,9 @@
           "en": req.body['description-en']
         },
         "short_description": {
-          "fi": req.body['short-description-fi'] || req.body['description-fi'],
-          "sv": req.body['short-description-sv'] || req.body['description-sv'],
-          "en": req.body['short-description-en'] || req.body['description-en']
+          "fi": truncateDescription(req.body['description-fi']),
+          "sv": truncateDescription(req.body['description-sv']),
+          "en": truncateDescription(req.body['description-en'])
         },
         "provider": {
           "fi": req.body['provider']

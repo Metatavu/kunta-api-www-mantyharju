@@ -76,21 +76,6 @@
       "title": "Kuvaus (Englanti)",
       "required": false
     }, {
-      "name": "short-description-fi",
-      "type": "memo",
-      "title": "Lyhyt kuvaus (Suomi)",
-      "required": false
-    }, {
-      "name": "short-description-sv",
-      "type": "memo",
-      "title": "Lyhyt kuvaus (Ruotsi)",
-      "required": false
-    }, {
-      "name": "short-description-en",
-      "type": "memo",
-      "title": "Lyhyt kuvaus (Englanti)",
-      "required": false
-    }, {
       "name": "provider",
       "type": "text",
       "title": "Tapahtuman järjestäjä / yhteystieto",
