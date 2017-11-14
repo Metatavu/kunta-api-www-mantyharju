@@ -38,4 +38,17 @@ block content
                 =event.start
           .row
             .col-xs-24
-              !=event.description
+              p
+                !=event.description
+          if event.place
+            .row
+              .col-xs-24 
+                p Paikka: 
+                  =event.place
+          if event.address 
+            - var city = event.city || '';
+            - var zip = event.zip || '';
+            .row
+              .col-xs-24 
+                p Osoite: 
+                  =event.address + ' ' + zip + ' ' + city
