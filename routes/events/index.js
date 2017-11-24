@@ -21,7 +21,7 @@
       return momentDate.format("D.M.YYYY");
     }
     
-    return util.format('%s klo %s alkaen', moment(date).format('D.M.YYYY'), moment(date).format('H'));
+    return util.format('%s klo %s alkaen', moment(date).format('D.M.YYYY'), moment(date).format('H:mm'));
   }
   
   function truncateDescription(description) {
