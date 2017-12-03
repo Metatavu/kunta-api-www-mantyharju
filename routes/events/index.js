@@ -300,7 +300,7 @@
         return;
       }
       
-      const location = req.body['location'];
+      const location = req.body.location;
       if (!location) {
         res.status(400).send('Paikka on pakollinen');
         return;
