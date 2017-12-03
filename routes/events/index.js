@@ -293,11 +293,23 @@
           imageUrls.push(req.body['image']);
         }
       }
+      
+      const nameFi = (req.body['name-fi'] || '').trim();
+      if (!nameFi) {
+        res.status(400).send('Nimi (Suomi) on pakollinen');
+        return;
+      }
+      
+      const location = req.body.location;
+      if (!location) {
+        res.status(400).send('Paikka on pakollinen');
+        return;
+      }
 
       const eventData = {
         "publication_status": "draft",
         "name": {
-          "fi": req.body['name-fi'],
+          "fi": nameFi,
           "sv": req.body['name-sv'],
           "en": req.body['name-en']
         },
@@ -316,7 +328,7 @@
         },
         "image-urls": imageUrls,
         "keywords": [Common.DEFAULT_EVENT_KEYWORD_ID],
-        "location": req.body['location'],
+        "location": location,
         "offers": [{
           is_free: true,
           price: null,
