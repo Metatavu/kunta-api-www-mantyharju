@@ -36,3 +36,16 @@
   }
 
 }
+
+.events-container.loading {
+  background-image: url('/gfx/load.svg');
+  background-size: 64px auto;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 500px;
+  
+  * {
+    display: none;
+  }
+  
+}
