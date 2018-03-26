@@ -12,6 +12,7 @@
   const fs = require('fs');
   const uuidv4 = require('uuid/v4');
   const path = require('path');
+  const validator = require('validator');
 
   function formatDate(date) {
     const momentDate = moment(date);
@@ -294,6 +295,13 @@
         }
       }
       
+      for (let i = 0; i < imageUrls.length; i++) {
+        if (!validator.isURL(imageUrls[i])) {
+          res.status(400).send('Kuvan osoitteen pitää olla URL-osoite. Mikäli olet lataamassa kuvaa omalta tietokoneeltasi, klikkaa lisää tiedosto - painiketta.');
+          return;
+        }
+      }
+
       const nameFi = (req.body['name-fi'] || '').trim();
       if (!nameFi) {
         res.status(400).send('Nimi (Suomi) on pakollinen');
