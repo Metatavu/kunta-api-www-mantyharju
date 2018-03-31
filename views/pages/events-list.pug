@@ -38,10 +38,10 @@ block content
                           span.date
                             =event.shortDate
                           a.title(href='/tapahtumat/' + event.id)
-                            !=event.name
+                            =event.name
                       .row
                         .col-xs-24
-                          !=event.shortDescription
+                          =event.shortDescription
           if page !== undefined
             .col-xs-24.pages-container.no-gutters
               if page > 0

@@ -13,6 +13,7 @@
   const uuidv4 = require('uuid/v4');
   const path = require('path');
   const validator = require('validator');
+  const striptags = require("striptags");
 
   function formatDate(date) {
     const momentDate = moment(date);
@@ -117,7 +118,7 @@
             return Object.assign(event, {
               "shortDate": moment(event.start).format("D.M.YYYY"),
               "imageSrc": event.imageId ? util.format('/eventImages/%s/%s', event.id, event.imageId) : '/gfx/layout/tapahtuma_default_120_95.jpg',
-              "shortDescription": _.truncate(event.description, {length: 200})
+              "shortDescription": _.truncate(striptags(event.description), {length: 200})
             });
           });
           
