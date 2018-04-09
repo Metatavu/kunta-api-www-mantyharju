@@ -283,6 +283,8 @@
     });
     
     app.post('/linkedevents/event/create', (req, res, next) => {
+      const module = new ModulesClass(config);
+
       let imageUrls = [];
       if (req.body['image-url']) {
         imageUrls.push(req.body['image-url']);
@@ -315,66 +317,95 @@
         return;
       }
 
-      const eventData = {
-        "publication_status": "draft",
-        "name": {
-          "fi": nameFi,
-          "sv": req.body['name-sv'],
-          "en": req.body['name-en']
-        },
-        "description": {
-          "fi": req.body['description-fi'],
-          "sv": req.body['description-sv'],
-          "en": req.body['description-en']
-        },
-        "short_description": {
-          "fi": truncateDescription(req.body['description-fi']),
-          "sv": truncateDescription(req.body['description-sv']),
-          "en": truncateDescription(req.body['description-en'])
-        },
-        "provider": {
-          "fi": req.body['provider']
-        },
-        "image-urls": imageUrls,
-        "keywords": [Common.DEFAULT_EVENT_KEYWORD_ID],
-        "location": location,
-        "offers": [{
-          is_free: true,
-          price: null,
-          info_url: null,
-          description: null
-        }]
-      };
-      
-      const startDate = req.body['start-date'];
-      const startTime = req.body['start-time'];
-      const endDate = req.body['end-date'];
-      const endTime = req.body['end-time'];
-      const timezone = 'Europe/Helsinki';
-      
-      if (!startDate) {
-        res.status(400).send('Alkamispäivämäärä on pakollinen');
+      module.linkedevents.findPlace(location).callback((linkedEventsLocation) => {
+        if (!linkedEventsLocation) {
+          res.status(400).send('Tapahtumapaikka on virheellinen. Ole hyvä ja valitse tapahtumapaikka listasta.');
+          return;
+        }
+
+        const eventData = {
+          "publication_status": "draft",
+          "name": {
+            "fi": nameFi,
+            "sv": req.body['name-sv'],
+            "en": req.body['name-en']
+          },
+          "description": {
+            "fi": req.body['description-fi'],
+            "sv": req.body['description-sv'],
+            "en": req.body['description-en']
+          },
+          "short_description": {
+            "fi": truncateDescription(req.body['description-fi']),
+            "sv": truncateDescription(req.body['description-sv']),
+            "en": truncateDescription(req.body['description-en'])
+          },
+          "provider": {
+            "fi": req.body['provider']
+          },
+          "image-urls": imageUrls,
+          "keywords": [Common.DEFAULT_EVENT_KEYWORD_ID],
+          "location": location,
+          "offers": [{
+            is_free: true,
+            price: null,
+            info_url: null,
+            description: null
+          }]
+        };
+        
+        const startDate = req.body['start-date'];
+        const startTime = req.body['start-time'];
+        const endDate = req.body['end-date'];
+        const endTime = req.body['end-time'];
+        const timezone = 'Europe/Helsinki';
+        
+        if (!startDate) {
+          res.status(400).send('Alkamispäivämäärä on pakollinen');
+          return;
+        }
+        
+        const eventStart = startTime ? moment.tz(`${startDate}T${startTime}`,  moment.ISO_8601, 'Europe/Helsinki') : moment(startDate, moment.ISO_8601);
+        if (!eventStart.isValid()) {
+          res.status(400).send('Alkamispäivämäärä tai aika on virheellisen muotoinen. Ole hyvä ja käytä muotoa VVVV-MM-DD (esim. 2019-12-24) ja muotoa HH:MM (esim 10:30)');
+          return;
+        }
+
+        let eventEnd = null;
+        if (endDate || endTime) {
+          eventEnd = endTime ? moment.tz(`${endDate}T${endTime}`,  moment.ISO_8601, 'Europe/Helsinki') : moment(endDate, moment.ISO_8601);
+          if (!eventEnd.isValid()) {
+            res.status(400).send('Loppumispäivämäärä tai aika on virheellisen muotoinen. Ole hyvä ja käytä muotoa VVVV-MM-DD (esim. 2019-12-24) ja muotoa HH:MM (esim 10:30)');
+            return;
+          }
+
+          if (eventStart.isAfter(eventEnd)) {
+            res.status(400).send('Alkamisaika ei voi olla loppumisajan jälkeen');
+            return;
+          }
+        }
+
+        eventData["start_time"] = eventStart.format();
+        eventData["has_start_time"] = !!startTime;
+        
+        if (eventEnd) {
+          eventData["end_time"] = eventEnd.format();
+          eventData["has_end_time"] = !!endTime;
+        } else {
+          eventData["end_time"] = eventData["start_time"];
+          eventData["has_end_time"] = eventData["has_start_time"];
+        }
+
+        module.linkedevents.createEvent(eventData)
+          .callback((data) => {
+            res.send(200);
+          }, (err) => {
+            res.status(err.response.status).send(err.response.text);
+          });
+      }, (err) => {
+        res.status(400).send('Tapahtumapaikka on virheellinen. Ole hyvä ja valitse tapahtumapaikka listasta.');
         return;
-      }
-      
-      eventData["start_time"] = startTime ? moment.tz(`${startDate}T${startTime}`, 'Europe/Helsinki').format() : startDate;
-      eventData["has_start_time"] = !!startTime;
-      
-      if (endDate) {
-        eventData["end_time"] = endTime ? moment.tz(`${endDate}T${endTime}`, 'Europe/Helsinki').format() : endDate; 
-        eventData["has_end_time"] = !!endTime;
-      } else {
-        eventData["end_time"] = eventData["start_time"];
-        eventData["has_end_time"] = eventData["has_start_time"];
-      }
-      
-      new ModulesClass(config)
-        .linkedevents.createEvent(eventData)
-        .callback((data) => {
-          res.send(200);
-        }, (err) => {
-          res.status(err.response.status).send(err.response.text);
-        });
+      });
     });
     
   };
