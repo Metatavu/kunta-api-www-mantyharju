@@ -388,7 +388,7 @@
         eventData["start_time"] = eventStart.format();
         eventData["has_start_time"] = !!startTime;
         
-        if (endDate) {
+        if (eventEnd) {
           eventData["end_time"] = eventEnd.format();
           eventData["has_end_time"] = !!endTime;
         } else {
