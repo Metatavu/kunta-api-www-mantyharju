@@ -17,7 +17,7 @@ mixin event(event)
         .event-banner-content-container
           .event-banner-text-container
             h3
-              =event.name + " " + event.startHumanReadable
+              =!event.name + " " + event.startHumanReadable
 
 mixin newsArticle(article)
   .index-box-item
@@ -27,7 +27,7 @@ mixin newsArticle(article)
           =article.shortDate
       .index-box-item-title
         h6
-          =article.title
+          !=article.title
       .index-box-item-content
         !=article.shortAbstract
         i.fa.fa-chevron-right
@@ -40,7 +40,7 @@ mixin renderAnnouncement(announcement)
           =announcement.shortDate
       .index-box-item-content
         p 
-          =announcement.title
+          !=announcement.title
         i.fa.fa-chevron-right
       
 mixin banner(banner)
