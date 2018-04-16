@@ -59,12 +59,11 @@ mixin displayed-event()
   - var event = tileMap['tapahtuma']
   .events-banner
     .event-banner-item(data-lazy-bg-image=event.imageSrc,data-lazy-bg-size='.carousel-inner')
-      .row
-        a.banner-link(href=event.link, target="_blank")
-          .event-banner-content-container
-            .event-banner-text-container
-              h3
-                !=event.contents
+      a.banner-link(href=event.link, target="_blank")
+      .event-banner-content-container
+        .event-banner-text-container
+          h3
+            !=event.contents
 
 mixin banners-slider(banners) 
   .header-banner
