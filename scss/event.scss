@@ -5,8 +5,10 @@
 .image-container {
   margin-bottom: 10px;
 
-  .featured-image {
-    margin-bottom: 0;
+  .event-image {
+    display: block;
+    height: auto;
+    margin: 0 auto;
+    max-width: 100%;
   }
-
 }
