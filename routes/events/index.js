@@ -365,36 +365,33 @@
           return;
         }
         
+        if (!endDate) {
+          res.status(400).send('Loppumispäivämäärä on pakollinen');
+          return;
+        }
+        
         const eventStart = startTime ? moment.tz(`${startDate}T${startTime}`,  moment.ISO_8601, 'Europe/Helsinki') : moment(startDate, moment.ISO_8601);
         if (!eventStart.isValid()) {
           res.status(400).send('Alkamispäivämäärä tai aika on virheellisen muotoinen. Ole hyvä ja käytä muotoa VVVV-MM-DD (esim. 2019-12-24) ja muotoa HH:MM (esim 10:30)');
           return;
         }
-
-        let eventEnd = null;
-        if (endDate || endTime) {
-          eventEnd = endTime ? moment.tz(`${endDate}T${endTime}`,  moment.ISO_8601, 'Europe/Helsinki') : moment(endDate, moment.ISO_8601);
-          if (!eventEnd.isValid()) {
-            res.status(400).send('Loppumispäivämäärä tai aika on virheellisen muotoinen. Ole hyvä ja käytä muotoa VVVV-MM-DD (esim. 2019-12-24) ja muotoa HH:MM (esim 10:30)');
-            return;
-          }
-
-          if (eventStart.isAfter(eventEnd)) {
-            res.status(400).send('Alkamisaika ei voi olla loppumisajan jälkeen');
-            return;
-          }
+        
+        const eventEnd = endTime ? moment.tz(`${endDate}T${endTime}`,  moment.ISO_8601, 'Europe/Helsinki') : moment(endDate, moment.ISO_8601);
+        if (!eventEnd.isValid()) {
+          res.status(400).send('Loppumispäivämäärä tai aika on virheellisen muotoinen. Ole hyvä ja käytä muotoa VVVV-MM-DD (esim. 2019-12-24) ja muotoa HH:MM (esim 10:30)');
+          return;
         }
 
+        if (eventStart.isAfter(eventEnd)) {
+          res.status(400).send('Alkamisaika ei voi olla loppumisajan jälkeen');
+          return;
+        }
+        
         eventData["start_time"] = eventStart.format();
         eventData["has_start_time"] = !!startTime;
         
-        if (eventEnd) {
-          eventData["end_time"] = eventEnd.format();
-          eventData["has_end_time"] = !!endTime;
-        } else {
-          eventData["end_time"] = eventData["start_time"];
-          eventData["has_end_time"] = eventData["has_start_time"];
-        }
+        eventData["end_time"] = eventEnd.format();
+        eventData["has_end_time"] = !!endTime;
 
         module.linkedevents.createEvent(eventData)
           .callback((data) => {
