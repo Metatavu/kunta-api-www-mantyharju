@@ -132,10 +132,11 @@
   margin-bottom: 15px;
   
   .event-banner-item {
-    height: 350px;
-    background-size: cover;
-    background-repeat: no-repeat;
     background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 365px;
+    position: relative;
     
     .event-banner-content-container {
       padding: 25px;
