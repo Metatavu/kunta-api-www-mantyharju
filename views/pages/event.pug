@@ -31,7 +31,7 @@ block content
           if event.imageSrc
             .row
               .col-xs-24.image-container
-                .featured-image(data-lazy-bg-image=event.imageSrc)
+                img.event-image(src=event.imageSrc, alt="Image")
           .row
             .col-xs-24.date-container
               label
