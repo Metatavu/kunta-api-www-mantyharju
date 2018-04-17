@@ -138,19 +138,20 @@
             "imageSrc": event.imageId ? util.format('/eventImages/%s/%s', event.id, event.imageId) : '/gfx/layout/tapahtuma_default_120_95.jpg',
             "shortDescription": _.truncate(event.description, {length: 200})
           });
-          
+        });
+
         res.render('ajax/events-list.pug', Object.assign(req.kuntaApi.data, {
           page: page,
           lastPage: lastPage,
           events: events
         }));
-        }, (err) => {
-          next({
-           status: 500,
-           error: err
-         });
-       });
-     });
+      }, (err) => {
+        next({
+          status: 500,
+          error: err
+        });
+      });
+    });
     
     app.get(util.format('%s/uusi', Common.EVENTS_FOLDER), (req, res, next) => {
       new ModulesClass(config)
