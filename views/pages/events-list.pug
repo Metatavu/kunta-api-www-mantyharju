@@ -18,34 +18,29 @@ block content
       +breadcrumbs(breadcrumbs)
         
   .container.page-container
+    .row.event-list-top-row
+      .col-4
+        h1
+          |Tapahtumat
+      .col-4
+        a.pull-right.btn.btn-success(href="/tapahtumat/uusi")
+          |Lisää uusi tapahtuma
     .row
-      .col-xs-24
-        .page-content
-          .row
-            .col-xs-24
-              .row
-                .col-xs-18
-                  h1
-                    |Tapahtumat
-                .col-xs-6
-                  a.btn.btn-success(href="/tapahtumat/uusi")
-                    |Lisää uusi tapahtuma
-          .row
-            .col-xs-24.col-lg-18.events-container
-            .col-lg-6
-              h5.date-filter-title
-                i.fa.fa-calendar
-                |&nbsp;Suodata
-              label Tapahtumat alkaen:
-              .input-group
-                input.date-range-filter.filter-start.form-control(type="text", placeholder="Alkupäivämäärä")
-                span.input-group-btn
-                  button.btn.btn-secondary.empty-date-filter-btn
-                    .fa.fa-times
-              br
-              label Tapahtumat ennen:
-              .input-group
-                input.date-range-filter.filter-end.form-control(type="text", placeholder="Loppupäivämäärä")
-                span.input-group-btn
-                  button.btn.btn-secondary.empty-date-filter-btn
-                    .fa.fa-times          
+      .col-xs-24.col-lg-18.events-container
+      .col-lg-6.event-list-filter-column
+        h5.date-filter-title
+          i.fa.fa-calendar
+          |&nbsp;Suodata
+        label Tapahtumat alkaen:
+        .input-group
+          input.date-range-filter.filter-start.form-control(type="text", placeholder="Alkupäivämäärä")
+          span.input-group-btn
+            button.btn.btn-secondary.empty-date-filter-btn
+              .fa.fa-times
+        br
+        label Tapahtumat ennen:
+        .input-group
+          input.date-range-filter.filter-end.form-control(type="text", placeholder="Loppupäivämäärä")
+          span.input-group-btn
+            button.btn.btn-secondary.empty-date-filter-btn
+              .fa.fa-times           
