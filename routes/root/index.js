@@ -25,11 +25,19 @@
   module.exports = (app, config, ModulesClass) => {
     
     app.get('/', (req, res, next) => {
+      const eventOptions = {
+        'maxResults': Common.EVENT_COUNT,
+        'orderBy': 'START_DATE',
+        'orderDir': 'DESCENDING',
+        'startAfter': null,
+        'endAfter': (new Date()).toISOString()
+      };
+      
       new ModulesClass(config)
         .news.latest(0, 5)
         .banners.list()
         .announcements.list(Common.ANNOUNCEMENT_COUNT, 'PUBLICATION_DATE', 'DESCENDING')
-        .events.latest(Common.EVENT_COUNT, 'START_DATE', 'DESCENDING')
+        .events.list(eventOptions)
         .pages.getContent(Common.MOVIES_PAGE_ID)
         .callback(function(data) {
           const path = req.path.substring(9);

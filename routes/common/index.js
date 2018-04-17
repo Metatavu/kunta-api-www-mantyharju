@@ -22,7 +22,7 @@
     }
 
     static get EVENT_COUNT() { 
-      return 5;
+      return 3;
     }
  
     static get FILES_FOLDER() { 

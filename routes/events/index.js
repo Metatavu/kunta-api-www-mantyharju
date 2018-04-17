@@ -119,12 +119,13 @@
       const start = req.query.start ? moment(req.query.start, 'DD.MM.YYYY').startOf('day').format() : null;
       const end = req.query.end ? moment(req.query.end, 'DD.MM.YYYY').endOf('day').format() : null;
       const module = new ModulesClass(config);
-        
+      
       module.events.list({ 
         firstResult: page * perPage,
         maxResults: perPage + 1,
         orderBy: 'START_DATE',
         orderDir: 'DESCENDING',
+        startAfter: start,
         startBefore: end,
         endAfter: start
       })
@@ -153,7 +154,7 @@
     
     app.get(util.format('%s/uusi', Common.EVENTS_FOLDER), (req, res, next) => {
       new ModulesClass(config)
-        .events.list({ 
+        .events.list({
           firstResult: 0,
           maxResults: 50,
           orderBy: 'START_DATE',
