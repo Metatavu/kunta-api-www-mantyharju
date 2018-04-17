@@ -21,6 +21,43 @@ mixin eventMenuItem(item, event)
     a.page-nav-link(href=item.id)
       !=item.name
 
+mixin eventsList(events)
+  .row              
+    each event in events
+      .col-xs-24.event-list-item
+        .row.event
+          .col-xs-24.col-md-6.col-lg-4
+            .event-image-container
+              .event-image(data-lazy-bg-image=event.imageSrc)
+          .col-xs-24.col-md-18.col-lg-20
+            .row
+              .col-xs-24
+                span.date
+                  =event.shortDate
+                a.title(href='/tapahtumat/' + event.id)
+                  !=event.name
+            .row
+              .col-xs-24
+                !=event.shortDescription
+                
+mixin eventsPages(page, lastPage) 
+  if page !== undefined              
+    if page > 0
+      a.page-prev(href="?page=" + (page - 1))
+        |Edellinen sivu
+    else
+      span.page-prev
+        |Edellinen sivu
+    span.page-number
+      |Sivu 
+      =page + 1
+    if !lastPage
+      a.page-next(href="?page=" + (page + 1))
+        |Seuraava sivu
+    else
+      span.page-next
+        |Seuraava sivu
+
 mixin pageMenuItem(item)
   if (item.meta && !item.meta.hideMenuChildren) && ((item.children && item.children.length) || item.hasChildren)
     span.page-nav-item(class=[item.id == id ? 'active' : '', item.children && item.children.length ? 'open' : ''].join(' '))
