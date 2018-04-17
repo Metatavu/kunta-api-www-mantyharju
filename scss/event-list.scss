@@ -47,5 +47,43 @@
   * {
     display: none;
   }
+}
+
+.event-list-top-row {
+  justify-content: space-between;
   
+  @media (max-width: $break-xx-small) {
+    justify-content: center;
+  }
+  
+  @media (max-width: $break-x-small) {
+    padding: 0 15px;
+  }
+  
+  .btn {
+    @media (min-width: $break-large) {
+      margin-right: 100px;
+    }
+    
+    @media (max-width: $break-large - 1) {
+      margin-right: 33px;
+    }
+    
+    @media (max-width: $break-medium) {
+      margin-right: 0;
+    }
+    
+  }
+}
+
+.event-list-filter-column {
+  @media (max-width: $break-x-small) {
+    margin-top: 15px;
+  }
+}
+
+.event-list-item {
+  @media (max-width: $break-x-small) {
+    padding: 0 30px;
+  }
 }
