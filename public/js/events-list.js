@@ -26,16 +26,13 @@
     }
 
     $.ajax('/ajax/events?' + params.join('&'), {
-      success: $.proxy(function (html) {
+      success: function (html) {
         $('.events-container')
           .html(html)
           .removeClass('loading')
           .find('*[data-lazy-bg-image]')
           .lazyBackgroundImage();
-      }, this),
-      error: $.proxy(function (jqXHR, textStatus) {
-        // TODO: ERROR
-      }, this)
+      }
     });
   }
   
