@@ -1,5 +1,5 @@
 /* global flatpickr */
-/*jshint esversion: 6 */
+/* jshint esversion: 6 */
 
 (function () {
   'use strict';
