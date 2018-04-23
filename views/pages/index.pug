@@ -17,7 +17,7 @@ mixin event(event)
         .event-banner-content-container
           .event-banner-text-container
             h3
-              =!event.name + " " + event.startHumanReadable
+              !=event.name + " " + event.startHumanReadable
 
 mixin newsArticle(article)
   .index-box-item
