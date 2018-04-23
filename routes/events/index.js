@@ -109,39 +109,58 @@
     app.get(Common.EVENTS_FOLDER, (req, res, next) => {
       const perPage = Common.EVENTS_COUNT_PAGE;
       const page = parseInt(req.query.page)||0;
+      
+      res.render('pages/events-list.pug', Object.assign(req.kuntaApi.data, {
+        breadcrumbs : [{path: Common.EVENTS_FOLDER, title: 'Tapahtumat'}]
+      }));
+    });
+    
+    app.get('/ajax/events', (req, res, next) => {
+      const perPage = Common.EVENTS_COUNT_PAGE;
+      const page = parseInt(req.query.page)||0;
+      const start = req.query.start ? moment(req.query.start, 'DD.MM.YYYY').startOf('day').format() : null;
+      const end = req.query.end ? moment(req.query.end, 'DD.MM.YYYY').endOf('day').format() : null;
       const module = new ModulesClass(config);
         
-      module.events.list(page * perPage, perPage + 1, 'START_DATE', 'DESCENDING')
-        .callback((data) => {
-          const lastPage = data[0].length < perPage + 1;
-          const events = data[0].splice(0, perPage).map(event => {
-            return Object.assign(event, {
-              "shortDate": moment(event.start).format("D.M.YYYY"),
-              "imageSrc": event.imageId ? util.format('/eventImages/%s/%s', event.id, event.imageId) : '/gfx/layout/tapahtuma_default_120_95.jpg',
-              "shortDescription": _.truncate(striptags(event.description), {length: 200})
-            });
-          });
-          
-          const bannerSrc = '/gfx/layout/mikkeli-page-banner-default.jpg';
-         
-          res.render('pages/events-list.pug', Object.assign(req.kuntaApi.data, {
-            page: page,
-            lastPage: lastPage,
-            events: events,
-            bannerSrc: bannerSrc,
-            breadcrumbs : [{path: Common.EVENTS_FOLDER, title: 'Tapahtumat'}]
-          }));
-        }, (err) => {
-          next({
-            status: 500,
-            error: err
+      module.events.list({ 
+        firstResult: page * perPage,
+        maxResults: perPage + 1,
+        orderBy: 'START_DATE',
+        orderDir: 'DESCENDING',
+        startBefore: end,
+        endAfter: start
+      })
+      .callback((data) => {
+        const lastPage = data[0].length < perPage + 1;
+        const events = data[0].splice(0, perPage).map(event => {
+          return Object.assign(event, {
+            "shortDate": moment(event.start).format("D.M.YYYY"),
+            "imageSrc": event.imageId ? util.format('/eventImages/%s/%s', event.id, event.imageId) : '/gfx/layout/tapahtuma_default_120_95.jpg',
+            "shortDescription": _.truncate(event.description, {length: 200})
           });
         });
+
+        res.render('ajax/events-list.pug', Object.assign(req.kuntaApi.data, {
+          page: page,
+          lastPage: lastPage,
+          events: events
+        }));
+      }, (err) => {
+        next({
+          status: 500,
+          error: err
+        });
+      });
     });
     
     app.get(util.format('%s/uusi', Common.EVENTS_FOLDER), (req, res, next) => {
       new ModulesClass(config)
-        .events.list(0, 50, 'START_DATE', 'DESCENDING')
+        .events.list({ 
+          firstResult: 0,
+          maxResults: 50,
+          orderBy: 'START_DATE',
+          orderDir: 'DESCENDING'
+        })
         .callback((data) => {
           const latestEvents = data[0];
   
@@ -167,7 +186,12 @@
         
       new ModulesClass(config)
         .events.find(id)
-        .events.list(0, 50, 'START_DATE', 'DESCENDING')
+        .events.list({ 
+          firstResult: 0,
+          maxResults: 50,
+          orderBy: 'START_DATE',
+          orderDir: 'DESCENDING'
+        })
         .callback((data) => {
           const event = data[0];
           const latestEvents = data[1];
@@ -365,36 +389,33 @@
           return;
         }
         
+        if (!endDate) {
+          res.status(400).send('Loppumispäivämäärä on pakollinen');
+          return;
+        }
+        
         const eventStart = startTime ? moment.tz(`${startDate}T${startTime}`,  moment.ISO_8601, 'Europe/Helsinki') : moment(startDate, moment.ISO_8601);
         if (!eventStart.isValid()) {
           res.status(400).send('Alkamispäivämäärä tai aika on virheellisen muotoinen. Ole hyvä ja käytä muotoa VVVV-MM-DD (esim. 2019-12-24) ja muotoa HH:MM (esim 10:30)');
           return;
         }
-
-        let eventEnd = null;
-        if (endDate || endTime) {
-          eventEnd = endTime ? moment.tz(`${endDate}T${endTime}`,  moment.ISO_8601, 'Europe/Helsinki') : moment(endDate, moment.ISO_8601);
-          if (!eventEnd.isValid()) {
-            res.status(400).send('Loppumispäivämäärä tai aika on virheellisen muotoinen. Ole hyvä ja käytä muotoa VVVV-MM-DD (esim. 2019-12-24) ja muotoa HH:MM (esim 10:30)');
-            return;
-          }
-
-          if (eventStart.isAfter(eventEnd)) {
-            res.status(400).send('Alkamisaika ei voi olla loppumisajan jälkeen');
-            return;
-          }
+        
+        const eventEnd = endTime ? moment.tz(`${endDate}T${endTime}`,  moment.ISO_8601, 'Europe/Helsinki') : moment(endDate, moment.ISO_8601);
+        if (!eventEnd.isValid()) {
+          res.status(400).send('Loppumispäivämäärä tai aika on virheellisen muotoinen. Ole hyvä ja käytä muotoa VVVV-MM-DD (esim. 2019-12-24) ja muotoa HH:MM (esim 10:30)');
+          return;
         }
 
+        if (eventStart.isAfter(eventEnd)) {
+          res.status(400).send('Alkamisaika ei voi olla loppumisajan jälkeen');
+          return;
+        }
+        
         eventData["start_time"] = eventStart.format();
         eventData["has_start_time"] = !!startTime;
         
-        if (eventEnd) {
-          eventData["end_time"] = eventEnd.format();
-          eventData["has_end_time"] = !!endTime;
-        } else {
-          eventData["end_time"] = eventData["start_time"];
-          eventData["has_end_time"] = eventData["has_start_time"];
-        }
+        eventData["end_time"] = eventEnd.format();
+        eventData["has_end_time"] = !!endTime;
 
         module.linkedevents.createEvent(eventData)
           .callback((data) => {
