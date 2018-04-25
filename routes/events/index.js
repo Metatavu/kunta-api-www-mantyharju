@@ -205,7 +205,10 @@
             breadcrumbs : [
               {path: Common.EVENTS_FOLDER, title: 'Tapahtumat'}, 
               {path: util.format('%s/%s', Common.EVENTS_FOLDER, id), title: event.name }
-            ]
+            ],
+            baseUrl : req.protocol + '://' + req.get('host'),
+            pageRoute: req.originalUrl,
+            ogContent: striptags(event.description)
           }));
         }, (err) => {
           next({

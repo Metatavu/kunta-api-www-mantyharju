@@ -52,3 +52,10 @@ block content
               .col-xs-24 
                 p Osoite: 
                   =event.address + ' ' + zip + ' ' + city
+block ogTags
+  - var pageUrl = baseUrl + pageRoute
+  - var imageUrl = baseUrl + event.imageSrc
+  meta(property='og:url', content=pageUrl)
+  meta(property='og:title', content=event.name)
+  meta(property='og:description', content=ogContent)
+  meta(property='og:image', content=imageUrl)
