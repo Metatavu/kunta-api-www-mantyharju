@@ -54,8 +54,9 @@ block content
                   =event.address + ' ' + zip + ' ' + city
 block ogTags
   - var pageUrl = baseUrl + pageRoute
-  - var imageUrl = baseUrl + event.imageSrc
+  - var imageUrl = event.imageSrc ? baseUrl + event.imageSrc : null
   meta(property='og:url', content=pageUrl)
   meta(property='og:title', content=event.name)
   meta(property='og:description', content=ogContent)
-  meta(property='og:image', content=imageUrl)
+  if imageUrl
+    meta(property='og:image', content=imageUrl)
