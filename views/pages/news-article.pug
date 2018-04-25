@@ -43,3 +43,11 @@ block content
                each tag in tags
                 a.tag(href='/uutiset/?tag=' + tag)
                   =tag
+block ogTags
+  - var pageUrl = baseUrl + pageRoute
+  - var imageUrl = imageSrc ? baseUrl + imageSrc : null
+  meta(property='og:url', content=pageUrl)
+  meta(property='og:title', content=title)
+  meta(property='og:description', content=ogContent)
+  if imageUrl
+    meta(property='og:image', content=imageUrl)
