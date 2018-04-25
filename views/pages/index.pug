@@ -17,7 +17,7 @@ mixin event(event)
         .event-banner-content-container
           .event-banner-text-container
             h3
-              =!event.name + " " + event.startHumanReadable
+              !=event.name + " " + event.startHumanReadable
 
 mixin newsArticle(article)
   .index-box-item
@@ -55,16 +55,16 @@ mixin banner(banner)
         .banner-text(style=banner.style)
           !=banner.contents
 
-mixin events-slider(events)
+mixin displayed-event()
+  - var event = tileMap['tapahtuma']
   .events-banner
-    #event-slide.carousel.slide(data-ride='carousel')
-      .banner-carousel-items
-        .carousel-inner(role='listbox')
-          each event, eventIndex in events
-            - var itemClass=eventIndex == 0 ? "carousel-item active" : 'carousel-item'
-            div(class=itemClass)
-              +event(event)
-  
+    .event-banner-item(data-lazy-bg-image=event.imageSrc,data-lazy-bg-size='.carousel-inner')
+      a.banner-link(href=event.link, target="_blank")
+      .event-banner-content-container
+        .event-banner-text-container
+          h3
+            !=event.contents
+
 mixin banners-slider(banners) 
   .header-banner
     #banner-slide.carousel.slide(data-ride='carousel')
@@ -194,7 +194,7 @@ block content
       .col-xs-24.col-lg-12
         .row
           .col-xs
-            +events-slider(events)
+            +displayed-event()
         .row
           .col-xs
             .index-box
