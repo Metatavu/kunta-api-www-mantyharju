@@ -1,4 +1,4 @@
-/*jshint esversion: 6 */
+/*jshint esversion: 5 */
 /* global moment */
 
 (function () {
@@ -17,9 +17,9 @@
     },
     
     _getParameters: function () {
-      const limit = $('.kunta-api-job-list').attr('data-limit');
-      const sortBy = $('.kunta-api-job-list').attr('data-sort-by');
-      const sortDir = $('.kunta-api-job-list').attr('data-sort-dir');
+      var limit = $('.kunta-api-job-list').attr('data-limit');
+      var sortBy = $('.kunta-api-job-list').attr('data-sort-by');
+      var sortDir = $('.kunta-api-job-list').attr('data-sort-dir');
       
       return {
         limit: this._attributeExists(limit) ? limit : this.defaultLimit,
@@ -37,7 +37,7 @@
     },
     
     _getJobs: function () {
-      const parameters = this._getParameters();
+      var parameters = this._getParameters();
       
       $.ajax({
         url : '/jobs/'+ Object.values(parameters).join('/'),
@@ -48,15 +48,15 @@
     },
     
     _appendList: function (jobs) {
-      jobs.forEach((job) => {
-        const jobPublished = moment(job.publicationStart).format('DD.MM.YYYY');
-        const html = `
+      for (var i = 0; i < jobs.length; i++) {
+        var jobPublished = moment(jobs[i].publicationStart).format('DD.MM.YYYY');
+        var html = `
           <li class="jobs-list-item">
-            <a href="${job.link}" target="_blank">
-              <h6 class="jobs-list-item-header">${job.title}</h6>
+            <a href="${jobs[i].link}" target="_blank">
+              <h6 class="jobs-list-item-header">${jobs[i].title}</h6>
               <h6 class="jobs-list-item-title">Ilmoitus jätetty ${jobPublished}</h6>
               <p class="jobs-list-item-content">
-                ${this._truncateString(job.description)}
+                ${this._truncateString(jobs[i].description)}
                 <span>
                   <i class="fa fa-chevron-right"></i>
                 </span>
@@ -65,11 +65,11 @@
           </li>
         `;
         $('.jobs-list').append(html);
-      });
+      }
     },
     
     _truncateString: function (string) {
-      const stringLength = 150;
+      var stringLength = 150;
       return `${string.substring(0, stringLength)}...`;
     }
   
