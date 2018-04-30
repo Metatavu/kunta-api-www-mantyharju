@@ -66,7 +66,7 @@
     
     _truncateString: function (string) {
       var stringLength = 150;
-      return `${string.substring(0, stringLength)}...`;
+      return string.substring(0, stringLength) + '...';
     }
   
   });
