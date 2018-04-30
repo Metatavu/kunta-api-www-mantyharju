@@ -1,0 +1,41 @@
+.jobs-list-container {
+  background-color: #f2f2f2;
+  padding: 15px 25px;
+}
+
+.jobs-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.jobs-list-item {
+  border-bottom: 1px solid #d9d9d9;
+  padding-top: 15px;
+  
+  h6 {
+    font-family: 'Quattrocento Sans', sans-serif;
+    margin: 2px 0;
+    padding: 0;
+    font-size: 15px;
+    font-weight: 400;
+  }
+  
+  .jobs-list-item-header {
+    color: #109894;
+  }
+  
+  .jobs-list-item-title {
+    color: #e99137;
+  }
+  
+  .jobs-list-item-content {
+    margin-top: 10px;
+    color: #000000;
+    
+    .fa-chevron-right {
+      font-size: 10px;
+      color: #e99137;
+    }
+  }
+}
