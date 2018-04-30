@@ -1,4 +1,4 @@
-@import './colors.scss';
+@import "./colors";
 
 .jobs-list-container {
   background-color: $index-box-bg-color;
@@ -17,10 +17,10 @@
 
   h6 {
     font-family: 'Quattrocento Sans', sans-serif;
-    margin: 2px 0;
-    padding: 0;
     font-size: 15px;
     font-weight: 400;
+    margin: 2px 0;
+    padding: 0;
   }
 
   .jobs-list-item-header {
@@ -32,8 +32,8 @@
   }
 
   .jobs-list-item-content {
-    margin-top: 10px;
     color: $index-box-text-color;
+    margin-top: 10px;
   }
 }
 
