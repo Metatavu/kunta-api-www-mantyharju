@@ -1,5 +1,7 @@
+@import './colors.scss';
+
 .jobs-list-container {
-  background-color: #f2f2f2;
+  background-color: $index-box-bg-color;
   padding: 15px 25px;
 }
 
@@ -10,9 +12,9 @@
 }
 
 .jobs-list-item {
-  border-bottom: 1px solid #d9d9d9;
+  border-bottom: 1px solid $index-box-border-color;
   padding-top: 15px;
-  
+
   h6 {
     font-family: 'Quattrocento Sans', sans-serif;
     margin: 2px 0;
@@ -20,22 +22,22 @@
     font-size: 15px;
     font-weight: 400;
   }
-  
+
   .jobs-list-item-header {
-    color: #109894;
+    color: $index-box-text-header-color;
   }
-  
+
   .jobs-list-item-title {
-    color: #e99137;
+    color: $read-more-text-color;
   }
-  
+
   .jobs-list-item-content {
     margin-top: 10px;
-    color: #000000;
-    
-    .fa-chevron-right {
-      font-size: 10px;
-      color: #e99137;
-    }
+    color: $index-box-text-color;
   }
+}
+
+.fa-chevron-right {
+  color: $read-more-text-color;
+  font-size: 10px;
 }
