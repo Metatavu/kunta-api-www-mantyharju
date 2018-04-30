@@ -50,20 +50,16 @@
     _appendList: function (jobs) {
       for (var i = 0; i < jobs.length; i++) {
         var jobPublished = moment(jobs[i].publicationStart).format('DD.MM.YYYY');
-        var html = `
-          <li class="jobs-list-item">
-            <a href="${jobs[i].link}" target="_blank">
-              <h6 class="jobs-list-item-header">${jobs[i].title}</h6>
-              <h6 class="jobs-list-item-title">Ilmoitus jätetty ${jobPublished}</h6>
-              <p class="jobs-list-item-content">
-                ${this._truncateString(jobs[i].description)}
-                <span>
-                  <i class="fa fa-chevron-right"></i>
-                </span>
-              </p>
-            </a>
-          </li>
-        `;
+        var html = '';
+        
+        html += '<li class="jobs-list-item">';
+        html += '<a href="' + jobs[i].link + '" target="_blank">';
+        html += '<h6 class="jobs-list-item-header">' + jobs[i].title + '</h6>';
+        html += '<h6 class="jobs-list-item-title">Ilmoitus jätetty ' + jobPublished + '</h6>';
+        html += '<p class="jobs-list-item-content">' + this._truncateString(jobs[i].description);
+        html += '<span><i class="fa fa-chevron-right"></i></span>';
+        html += '</p></a></li>';
+         
         $('.jobs-list').append(html);
       }
     },
