@@ -33,3 +33,8 @@ block content
           .row
             .col-xs-24
               !=contents
+block ogTags
+  - var pageUrl = baseUrl + pageRoute
+  meta(property='og:url', content=pageUrl)
+  meta(property='og:title', content=title)
+  meta(property='og:description', content=ogContent)

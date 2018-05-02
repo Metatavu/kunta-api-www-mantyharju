@@ -38,16 +38,15 @@
 }
 
 .events-container.loading {
-  background-image: url('/gfx/load.svg');
-  background-size: 64px auto;
+  background-image: url("/gfx/load.svg");
   background-position: center;
   background-repeat: no-repeat;
+  background-size: 64px auto;
   min-height: 500px;
   
   * {
     display: none;
   }
-  
 }
 
 .event-list-top-row {

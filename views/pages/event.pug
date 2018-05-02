@@ -31,7 +31,7 @@ block content
           if event.imageSrc
             .row
               .col-xs-24.image-container
-                .featured-image(data-lazy-bg-image=event.imageSrc)
+                img.event-image(src=event.imageSrc, alt="Image")
           .row
             .col-xs-24.date-container
               label
@@ -52,3 +52,11 @@ block content
               .col-xs-24 
                 p Osoite: 
                   =event.address + ' ' + zip + ' ' + city
+block ogTags
+  - var pageUrl = baseUrl + pageRoute
+  - var imageUrl = event.imageSrc ? baseUrl + event.imageSrc : null
+  meta(property='og:url', content=pageUrl)
+  meta(property='og:title', content=event.name)
+  meta(property='og:description', content=ogContent)
+  if imageUrl
+    meta(property='og:image', content=imageUrl)

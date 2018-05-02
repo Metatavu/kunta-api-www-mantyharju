@@ -1,3 +1,4 @@
+/* jshint esversion: 6 */
 /* global flatpickr */
 /* jshint esversion: 6 */
 
@@ -26,16 +27,13 @@
     }
 
     $.ajax('/ajax/events?' + params.join('&'), {
-      success: $.proxy(function (html) {
+      success: function (html) {
         $('.events-container')
           .html(html)
           .removeClass('loading')
           .find('*[data-lazy-bg-image]')
           .lazyBackgroundImage();
-      }, this),
-      error: $.proxy(function (jqXHR, textStatus) {
-        // TODO: ERROR
-      }, this)
+      }
     });
   }
   

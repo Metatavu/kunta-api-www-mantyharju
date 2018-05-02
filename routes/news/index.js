@@ -7,6 +7,7 @@
   const util = require('util');
   const moment = require('moment');
   const Common = require(__dirname + '/../common');
+  const striptags = require('striptags');
 
   module.exports = (app, config, ModulesClass) => {
     
@@ -62,6 +63,9 @@
           }
 
           res.render('pages/news-article.pug', Object.assign(req.kuntaApi.data, {
+            baseUrl : req.protocol + '://' + req.get('host'),
+            pageRoute: req.originalUrl,
+            ogContent: striptags(newsArticle.contents),
             id: newsArticle.id,
             slug: newsArticle.slug,
             title: newsArticle.title,

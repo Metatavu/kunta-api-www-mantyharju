@@ -132,11 +132,21 @@
   margin-bottom: 15px;
   
   .event-banner-item {
-    height: 350px;
-    background-size: cover;
-    background-repeat: no-repeat;
     background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 365px;
+    position: relative;
     
+    .banner-link {
+      height: 100%;
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: 100%;
+      z-index: 10;
+    }
+
     .event-banner-content-container {
       padding: 25px;
       background-color: $event-banner-bg-color;

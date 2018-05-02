@@ -30,7 +30,7 @@
       "name": "end-date",
       "type": "date",
       "title": "Loppumispäivämäärä",
-      "required": false
+      "required": true
     }, {
       "name": "end-time",
       "type": "time",
