@@ -127,7 +127,7 @@
         maxResults: perPage + 1,
         orderBy: 'START_DATE',
         orderDir: 'DESCENDING',
-        endBefore: end,
+        startBefore: end,
         startAfter: start
       })
       .callback((data) => {
