@@ -127,8 +127,8 @@
         maxResults: perPage + 1,
         orderBy: 'START_DATE',
         orderDir: 'DESCENDING',
-        startBefore: end,
-        endAfter: start
+        endBefore: end,
+        startAfter: start
       })
       .callback((data) => {
         const lastPage = data[0].length < perPage + 1;
