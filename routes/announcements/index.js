@@ -10,6 +10,8 @@
   const _ = require('lodash');
   const Common = require(__dirname + '/../common');
   const striptags = require('striptags');
+  const Entities = require('html-entities').AllHtmlEntities;
+  const entities = new Entities();
 
   module.exports = (app, config, ModulesClass) => {
 
@@ -35,10 +37,11 @@
             });
             return;
           }
-
+          
           res.render('pages/announcement.pug', Object.assign(req.kuntaApi.data, {
             baseUrl : req.protocol + '://' + req.get('host'),
             pageRoute: req.originalUrl,
+            ogTitle: entities.decode(announcement.title),
             ogContent: striptags(announcement.contents),
             id: announcement.id,
             slug: announcement.slug,

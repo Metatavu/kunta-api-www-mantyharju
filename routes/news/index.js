@@ -8,6 +8,8 @@
   const moment = require('moment');
   const Common = require(__dirname + '/../common');
   const striptags = require('striptags');
+  const Entities = require('html-entities').AllHtmlEntities;
+  const entities = new Entities();
 
   module.exports = (app, config, ModulesClass) => {
     
@@ -61,10 +63,11 @@
             });
             return;
           }
-
+          
           res.render('pages/news-article.pug', Object.assign(req.kuntaApi.data, {
             baseUrl : req.protocol + '://' + req.get('host'),
             pageRoute: req.originalUrl,
+            ogTitle: entities.decode(newsArticle.title),
             ogContent: striptags(newsArticle.contents),
             id: newsArticle.id,
             slug: newsArticle.slug,

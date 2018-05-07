@@ -35,6 +35,8 @@ block content
               !=contents
 block ogTags
   - var pageUrl = baseUrl + pageRoute
+  - var imageUrl = baseUrl + '/gfx/layout/mantyharju_logo_625x350.jpg'
   meta(property='og:url', content=pageUrl)
-  meta(property='og:title', content=title)
+  meta(property='og:title', content=ogTitle)
   meta(property='og:description', content=ogContent)
+  meta(property='og:image', content=imageUrl)
