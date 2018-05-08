@@ -42,7 +42,7 @@
             baseUrl : req.protocol + '://' + req.get('host'),
             pageRoute: req.originalUrl,
             ogTitle: entities.decode(announcement.title),
-            ogContent: striptags(announcement.contents),
+            ogContent: entities.decode(striptags(announcement.contents)),
             id: announcement.id,
             slug: announcement.slug,
             title: announcement.title,

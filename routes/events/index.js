@@ -211,7 +211,7 @@
             baseUrl : req.protocol + '://' + req.get('host'),
             pageRoute: req.originalUrl,
             ogTitle: entities.decode(event.name),
-            ogContent: striptags(event.description)
+            ogContent: entities.decode(striptags(event.description))
           }));
         }, (err) => {
           next({

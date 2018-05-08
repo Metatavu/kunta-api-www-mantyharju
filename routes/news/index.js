@@ -68,7 +68,7 @@
             baseUrl : req.protocol + '://' + req.get('host'),
             pageRoute: req.originalUrl,
             ogTitle: entities.decode(newsArticle.title),
-            ogContent: striptags(newsArticle.contents),
+            ogContent: entities.decode(striptags(newsArticle.contents)),
             id: newsArticle.id,
             slug: newsArticle.slug,
             title: newsArticle.title,
