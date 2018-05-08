@@ -14,6 +14,8 @@
   const path = require('path');
   const validator = require('validator');
   const striptags = require("striptags");
+  const Entities = require('html-entities').AllHtmlEntities;
+  const entities = new Entities();
 
   function formatDate(date) {
     const momentDate = moment(date);
@@ -208,7 +210,8 @@
             ],
             baseUrl : req.protocol + '://' + req.get('host'),
             pageRoute: req.originalUrl,
-            ogContent: striptags(event.description)
+            ogTitle: entities.decode(event.name),
+            ogContent: entities.decode(striptags(event.description))
           }));
         }, (err) => {
           next({

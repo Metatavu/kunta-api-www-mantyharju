@@ -54,9 +54,8 @@ block content
                   =event.address + ' ' + zip + ' ' + city
 block ogTags
   - var pageUrl = baseUrl + pageRoute
-  - var imageUrl = event.imageSrc ? baseUrl + event.imageSrc : null
+  - var imageUrl = event.imageSrc ? baseUrl + event.imageSrc : baseUrl + '/gfx/layout/mantyharju_logo_625x350.jpg'
   meta(property='og:url', content=pageUrl)
-  meta(property='og:title', content=event.name)
+  meta(property='og:title', content=ogTitle)
   meta(property='og:description', content=ogContent)
-  if imageUrl
-    meta(property='og:image', content=imageUrl)
+  meta(property='og:image', content=imageUrl)
