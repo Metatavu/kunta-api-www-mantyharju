@@ -40,7 +40,7 @@
       var parameters = this._getParameters();
       
       $.ajax({
-        url : '/jobs/'+ Object.values(parameters).join('/'),
+        url : '/jobs/?'+ $.param(parameters),
         success : $.proxy(function(data) {
           this._appendList(data[0]);
         }, this)

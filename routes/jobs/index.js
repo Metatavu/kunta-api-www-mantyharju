@@ -9,10 +9,10 @@
 
   module.exports = (app, config, ModulesClass) => {
     
-    app.get('/jobs/:limit/:sortBy/:sortDir', (req, res) => {
-      const limit = parseInt(req.params.limit);
-      const sortby = req.params.sortBy;
-      const sortDir = req.params.sortDir;
+    app.get('/jobs', (req, res) => {
+      const limit = parseInt(req.query.limit);
+      const sortby = req.query.sortBy;
+      const sortDir = req.query.sortDir;
       
       new ModulesClass(config)
         .jobs.list(limit, sortby, sortDir)
