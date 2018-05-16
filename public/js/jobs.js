@@ -7,10 +7,6 @@
   $.widget("custom.jobs", {
     
     _create: function() {
-      this.defaultLimit = 10;
-      this.defaultSortBy = 'PUBLICATION_END';
-      this.defaultSortDir = 'ASCENDING';
-      
       this.element.append($("<div>").addClass('jobs-list-container'));
       $('.jobs-list-container').append($('<ul>').addClass('jobs-list'));
       this._getJobs();
@@ -22,18 +18,10 @@
       var sortDir = $('.kunta-api-job-list').attr('data-sort-dir');
       
       return {
-        limit: this._attributeExists(limit) ? limit : this.defaultLimit,
-        sortBy: this._attributeExists(sortBy) ? sortBy : this.defaultSortBy,
-        sortDir: this._attributeExists(sortDir) ? sortDir : this.defaultSortDir
+        limit: limit,
+        sortBy: sortBy,
+        sortDir: sortDir
       };
-    },
-    
-    _attributeExists: function (attr) {
-      if (typeof attr !== typeof undefined && attr !== false) {
-        return true;
-      } else {
-        return false;
-      }
     },
     
     _getJobs: function () {
