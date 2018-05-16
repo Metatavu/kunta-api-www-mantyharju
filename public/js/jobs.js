@@ -37,10 +37,9 @@
     },
     
     _getJobs: function () {
-      var parameters = this._getParameters();
-      
       $.ajax({
-        url : '/jobs/?'+ $.param(parameters),
+        url : '/jobs',
+        data: this._getParameters(),
         success : $.proxy(function(data) {
           this._appendList(data[0]);
         }, this)
