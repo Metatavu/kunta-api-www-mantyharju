@@ -14,6 +14,8 @@
   const path = require('path');
   const validator = require('validator');
   const striptags = require("striptags");
+  const Entities = require('html-entities').AllHtmlEntities;
+  const entities = new Entities();
 
   function formatDate(date) {
     const momentDate = moment(date);
@@ -118,7 +120,7 @@
     app.get('/ajax/events', (req, res, next) => {
       const perPage = Common.EVENTS_COUNT_PAGE;
       const page = parseInt(req.query.page)||0;
-      const start = req.query.start ? moment(req.query.start, 'DD.MM.YYYY').startOf('day').format() : null;
+      const start = req.query.start ? moment(req.query.start, 'DD.MM.YYYY') : moment();
       const end = req.query.end ? moment(req.query.end, 'DD.MM.YYYY').endOf('day').format() : null;
       const module = new ModulesClass(config);
         
@@ -127,8 +129,8 @@
         maxResults: perPage + 1,
         orderBy: 'START_DATE',
         orderDir: 'DESCENDING',
-        startBefore: end,
-        startAfter: start
+        endBefore: end,
+        startAfter: start.startOf('day').format()
       })
       .callback((data) => {
         const lastPage = data[0].length < perPage + 1;
@@ -208,7 +210,8 @@
             ],
             baseUrl : req.protocol + '://' + req.get('host'),
             pageRoute: req.originalUrl,
-            ogContent: striptags(event.description)
+            ogTitle: entities.decode(event.name),
+            ogContent: entities.decode(striptags(event.description))
           }));
         }, (err) => {
           next({
