@@ -9,7 +9,7 @@
   module.exports = (app, config, ModulesClass) => {
 
     app.get('/ajax/search', (req, res) => {
-      const search = req.query.search;
+      const search = Common.processFreeTextSearch(req.query.search);
       const preferLanguages = req.headers['accept-language'];
       
       new ModulesClass(config)
