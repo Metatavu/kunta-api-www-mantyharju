@@ -1,4 +1,4 @@
-if !pages.length && !files.length
+if !pages.length && !files.length && !newsArticles.length
   .no-results
     |Haulla ei löytynyt tuloksia
 else
@@ -10,7 +10,7 @@ else
         li
           i.fa.fa-file-text-o(aria-hidden="true")
           a(href='/redirect/page/' + page.id)
-            =page.title
+            !=page.title
   if files.length
     h3
       |Tiedostot
@@ -19,7 +19,7 @@ else
         li
           i.fa.fa-paperclip(aria-hidden="true")
           a(href='/redirect/file/' + file.id)
-            =file.title
+            !=file.title
           a.file-page-link(href='/redirect/page/' + file.pageId)
             i.fa.fa-external-link(aria-hidden="true")
   if newsArticles.length
@@ -30,4 +30,4 @@ else
         li
           i.fa.fa-newspaper-o(aria-hidden="true")
           a(href='/uutiset/' + newsArticle.slug)
-            =newsArticle.title
+            !=newsArticle.title
