@@ -231,6 +231,18 @@
       
       return result.join('');
     }
+    
+    static processFreeTextSearch(search) {
+      if (!search) {
+        return null;
+      }
+      
+      const searchTerms = _.map(search.replace(/\ {1,}/g, ' ').split(' '), (term) => {
+        return `+(${term}*)`;
+      });
+      
+      return searchTerms.join(' ');
+    }
   }
 
   module.exports = Common;
