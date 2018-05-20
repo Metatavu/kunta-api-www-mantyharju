@@ -17,15 +17,44 @@
   const Entities = require('html-entities').AllHtmlEntities;
   const entities = new Entities();
 
-  function formatDate(date) {
+  function hasTime(date) {
     const momentDate = moment(date);
     const midnight = momentDate.clone().startOf('day');
+    return momentDate.diff(midnight) > 0;
+  }
+
+  function isSameDay(start, end) {
+    const startMoment = moment(start);
+    const endMoment = moment(end);
     
-    if (momentDate.diff(midnight) === 0) {
-      return momentDate.format("D.M.YYYY");
+    return startMoment.isSame(endMoment, "day");
+  }
+  
+  function formatDatePart(date) {
+    if (hasTime(date)) {
+      return moment(date).format("D.M.YYYY HH:mm");
     }
     
-    return util.format('%s klo %s alkaen', moment(date).format('D.M.YYYY'), moment(date).format('H:mm'));
+    return moment(date).format("D.M.YYYY");
+  }
+
+  function formatDate(start, end) {
+    if (!end && !hasTime(start)) {
+      return moment(start).format("D.M.YYYY");
+    } else if(!end && hasTime(start)) {
+      const startMoment = moment(start);
+      return `${startMoment.format('D.M.YYYY')} klo ${startMoment.format('H:mm')} alkaen`;
+    } else if (isSameDay(start, end) && !hasTime(start)) {
+      return moment(start).format("D.M.YYYY");
+    } else if (moment(start).isSame(moment(end))) {
+      return formatDatePart(start);
+    } else if (isSameDay(start, end)) {
+      const startMoment = moment(start);
+      const endMoment = moment(end);
+      return `${startMoment.format('D.M.YYYY')} klo ${startMoment.format('H:mm')} - ${endMoment.format('H:mm')}`;
+    } else {
+      return `${formatDatePart(start)} - ${formatDatePart(end)}`;
+    }
   }
   
   function truncateDescription(description) {
@@ -197,10 +226,10 @@
         .callback((data) => {
           const event = data[0];
           const latestEvents = data[1];
-          
+
           res.render('pages/event.pug', Object.assign(req.kuntaApi.data, {
             event: Object.assign(event, {
-              "start": formatDate(event.start),
+              "start": formatDate(event.start, event.end),
               "imageSrc": event.imageId ? util.format('/eventImages/%s/%s', event.id, event.imageId) : null
             }),
             latestEvents: latestEvents,
