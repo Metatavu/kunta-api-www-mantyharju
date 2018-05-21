@@ -17,7 +17,8 @@ head
   link(rel='icon', type='image/png', href='/gfx/favicons/favicon-96x96.png', sizes='96x96')
   link(rel='icon', type='image/png', href='/gfx/favicons/favicon-32x32.png', sizes='32x32')
   link(rel='icon', type='image/png', href='/gfx/favicons/favicon-16x16.png', sizes='16x16')
-  link(rel='icon', type='image/png', href='/gfx/favicons/favicon-128.png', sizes='128x128')
+  link(rel='icon', type='image/png', href='/gfx/favicons/favicon-128.png', sizes='128x128') 
+  link(rel="stylesheet", href="/css/jobs.min.css") 
   block ogTags
   meta(name='application-name', content='www.mantyharju.fi')
   meta(name='msapplication-TileColor', content='#FFFFFF')
@@ -30,8 +31,10 @@ head
   script(defer="defer",type="text/javascript", src="//cdn.metatavu.io/libs/jquery/3.1.1/jquery.min.js")
   script(defer="defer",type="text/javascript", src="//cdn.metatavu.io/libs/jquery-ui/1.12.1/jquery-ui.min.js")
   script(defer="defer",type="text/javascript", src="//cdn.metatavu.io/libs/tether/1.3.3/js/tether.min.js")
+  script(defer="defer", type="text/javascript", src="//cdn.metatavu.io/libs/moment/2.19.2/moment-with-locales.min.js")
   script(defer="defer",type="text/javascript", src="/bootstrap/js/bootstrap.min.js")
   script(defer="defer",type="text/javascript", src="/js/common.js")
+  script(defer="defer", type="text/javascript", src="/js/jobs.js")  
   if incidentUrls
     script(defer="defer",type="text/javascript", src="//cdn.metatavu.io/libs/kunta-api-incidents/" + incidentScriptVersion + "/incidents.min.js", id="incidents-script", data-urls=incidentUrls, data-interval=incidentsPollInterval)
     link(rel="stylesheet", href="//cdn.metatavu.io/libs/kunta-api-incidents/" + incidentScriptVersion + "/incidents.min.css")

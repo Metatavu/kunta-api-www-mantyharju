@@ -300,7 +300,7 @@
   background-position: center center;
   position: relative;
   margin-bottom: 15px;
-  padding: 10px;
+  padding: 15px;
   background-color: $index-box-bg-color;
 
   @media (max-width: $break-x-small) {
@@ -329,10 +329,10 @@
   }
 
   p {
-    @include font-std(16px);
+    @include font-std(14px);
     overflow: hidden;
     text-overflow: ellipsis;
-
+    
     a {
       position: relative;
       z-index: 2;
