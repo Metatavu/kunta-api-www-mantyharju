@@ -2,7 +2,6 @@
 
 .jobs-list-container {
   background-color: $index-box-bg-color;
-  padding: 15px 25px;
 }
 
 .jobs-list {
@@ -34,6 +33,7 @@
   .jobs-list-item-content {
     color: $index-box-text-color;
     margin-top: 10px;
+    font-size: 14px;
   }
 }
 
