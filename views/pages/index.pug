@@ -118,12 +118,11 @@ mixin tile(tile)
           !=tile.contents
 
 mixin footerTile(tile)
-  if tile
-    a(href=tile.link,target="_blank")
-      .footer-tile(data-lazy-bg-image=tile.imageSrc)
-      if tile.contents
-        .footer-tile-contents
-          !=tile.contents
+  a(href=tile.link,target="_blank")
+    .footer-tile(data-lazy-bg-image=tile.imageSrc)
+    if tile.contents
+      .footer-tile-contents
+        !=tile.contents
 
 mixin footerTileMovies()
   if movieImageUrls.length > 0
