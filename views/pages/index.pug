@@ -46,14 +46,14 @@ mixin renderAnnouncement(announcement)
 mixin banner(banner)
   .header-banner-item(data-lazy-bg-image=banner.imageSrc,data-lazy-bg-size='.carousel-inner')
     .row
-     .col-lg-10.col-xs-24.banner-content-container(style='background-color: '+banner.bgcolor)
-      if banner.link
-        a.banner-link(href=banner.link,target="_blank")
-      h1(style=banner.style)
-        =banner.title
-      .banner-text-container
-        .banner-text(style=banner.style)
-          !=banner.contents
+      .col-lg-10.col-xs-24.banner-content-container(style='background-color: '+banner.title ? banner.bgcolor : 'none')
+        if banner.link
+          a.banner-link(href=banner.link,target="_blank")
+        h1(style=banner.style)
+          =banner.title
+        .banner-text-container
+          .banner-text(style=banner.style)
+            !=banner.contents
 
 mixin displayed-event()
   - var event = tileMap['tapahtuma']
