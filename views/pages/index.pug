@@ -45,10 +45,10 @@ mixin renderAnnouncement(announcement)
       
 mixin banner(banner)
   .header-banner-item(data-lazy-bg-image=banner.imageSrc,data-lazy-bg-size='.carousel-inner')
+    if banner.link
+      a.banner-link(href=banner.link,target="_blank")
     .row
       .col-lg-10.col-xs-24.banner-content-container(style=banner.title ? 'background-color: '+ banner.bgcolor : false)
-        if banner.link
-          a.banner-link(href=banner.link,target="_blank")
         h1(style=banner.style)
           =banner.title
         .banner-text-container
@@ -68,6 +68,10 @@ mixin displayed-event()
 mixin banners-slider(banners) 
   .header-banner
     #banner-slide.carousel.slide(data-ride='carousel')
+      .banner-carousel-indicators
+        ol.carousel-indicators
+          each banner, bannerIndex in banners
+            li(data-target='#banner-slide', data-slide-to=bannerIndex)
       .col-xs-24.col-lg-6.quick-nav-buttons-container
         .row
           .col-xs-6.col-lg-12.pull-lg-right.no-gutters.quick-nav-button-container
