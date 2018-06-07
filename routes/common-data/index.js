@@ -67,7 +67,7 @@
 
           req.kuntaApi = {
             data: {
-              cookies: config.get('cookies'),
+              cookieInfo: config.get('cookieInfo'),
               menus: menus,
               fragmentMap: fragmentMap,
               googleAnalytics: googleAnalytics,
