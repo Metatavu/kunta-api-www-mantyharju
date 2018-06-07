@@ -64,9 +64,10 @@
               incidentUrls.push(incidentUrl);
             }
           }
-          
+
           req.kuntaApi = {
             data: {
+              cookieInfo: config.get('cookieInfo'),
               menus: menus,
               fragmentMap: fragmentMap,
               googleAnalytics: googleAnalytics,
