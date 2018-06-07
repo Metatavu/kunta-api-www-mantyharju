@@ -64,7 +64,7 @@
               incidentUrls.push(incidentUrl);
             }
           }
-          
+
           req.kuntaApi = {
             data: {
               cookies: config.get('cookies'),
