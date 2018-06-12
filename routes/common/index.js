@@ -109,18 +109,24 @@
     }
     
     static parseActiveMovies(pageContents) {
-      const $ = cheerio.load(pageContents);
-      const movies = $('.kunta-api-movie');
-      const activeMovies = [];
-      
-      movies.each((index, movie) => {
-        const movieData = Common.parseMovieData($, movie);
-        if (Common.isActiveMovie(movieData)) {
-          activeMovies.push(movieData);
-        }
-      });
-      
-      return activeMovies;
+      try {
+        const $ = cheerio.load(pageContents);
+        const movies = $('.kunta-api-movie');
+        const activeMovies = [];
+        
+        movies.each((index, movie) => {
+          const movieData = Common.parseMovieData($, movie);
+          if (Common.isActiveMovie(movieData)) {
+            activeMovies.push(movieData);
+          }
+        });
+        
+        return activeMovies;
+      } catch (e) {
+        console.error("Failed to parse active movies", e);
+      }
+
+      return [];
     }
     
     static resolveLinkType(link) {
