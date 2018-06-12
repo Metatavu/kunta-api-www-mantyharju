@@ -1,109 +1,120 @@
 extends ../layout/index.pug
 
 mixin renderTextEvent(event)
-  .index-box-item
-    a(href='/tapahtumat/' + event.id)
-      .index-box-item-header
-        span
-          =event.shortDate
-      .index-box-item-content
-        !=event.name
-        i.fa.fa-chevron-right
+  if event
+    .index-box-item
+      a(href='/tapahtumat/' + event.id)
+        .index-box-item-header
+          span
+            =event.shortDate
+        .index-box-item-content
+          !=event.name
+          i.fa.fa-chevron-right
 
 mixin event(event)
-  .event-banner-item(data-lazy-bg-image=event.imageSrc,data-lazy-bg-size='.carousel-inner')
-    .row
-      a.banner-link(href=event.originalUrl, target="_blank")
+  if event
+    .event-banner-item(data-lazy-bg-image=event.imageSrc,data-lazy-bg-size='.carousel-inner')
+      .row
+        a.banner-link(href=event.originalUrl, target="_blank")
+          .event-banner-content-container
+            .event-banner-text-container
+              h3
+                !=event.name + " " + event.startHumanReadable
+
+mixin newsArticle(article)
+  if article
+    .index-box-item
+      a(href='/uutiset/' + article.slug)
+        .index-box-item-header
+          span
+            =article.shortDate
+        .index-box-item-title
+          h6
+            !=article.title
+        .index-box-item-content
+          !=article.shortAbstract
+          i.fa.fa-chevron-right
+      
+mixin renderAnnouncement(announcement)
+  if announcement
+    .index-box-item
+      a(href='/kuulutukset/' + announcement.slug)
+        .index-box-item-header
+          span
+            =announcement.shortDate
+        .index-box-item-content
+          p 
+            !=announcement.title
+          i.fa.fa-chevron-right
+      
+mixin banner(banner)
+  if banner
+    .header-banner-item(data-lazy-bg-image=banner.imageSrc,data-lazy-bg-size='.carousel-inner')
+      if banner.link
+        a.banner-link(href=banner.link,target="_blank")
+      .row
+        .col-lg-10.col-xs-24.banner-content-container(style=banner.title ? 'background-color: '+ banner.bgcolor : false)
+          h1(style=banner.style)
+            =banner.title
+          .banner-text-container
+            .banner-text(style=banner.style)
+              !=banner.contents
+
+mixin displayed-event()
+  - var event = tileMap ? tileMap['tapahtuma'] : null
+  if event
+    .events-banner
+      .event-banner-item(data-lazy-bg-image=event.imageSrc,data-lazy-bg-size='.carousel-inner')
+        a.banner-link(href=event.link, target="_blank")
         .event-banner-content-container
           .event-banner-text-container
             h3
-              !=event.name + " " + event.startHumanReadable
+              !=event.contents
 
-mixin newsArticle(article)
-  .index-box-item
-    a(href='/uutiset/' + article.slug)
-      .index-box-item-header
-        span
-          =article.shortDate
-      .index-box-item-title
-        h6
-          !=article.title
-      .index-box-item-content
-        !=article.shortAbstract
-        i.fa.fa-chevron-right
-      
-mixin renderAnnouncement(announcement)
-  .index-box-item
-    a(href='/kuulutukset/' + announcement.slug)
-      .index-box-item-header
-        span
-          =announcement.shortDate
-      .index-box-item-content
-        p 
-          !=announcement.title
-        i.fa.fa-chevron-right
-      
-mixin banner(banner)
-  .header-banner-item(data-lazy-bg-image=banner.imageSrc,data-lazy-bg-size='.carousel-inner')
-    .row
-     .col-lg-10.col-xs-24.banner-content-container(style='background-color: '+banner.bgcolor)
-      if banner.link
-        a.banner-link(href=banner.link,target="_blank")
-      h1(style=banner.style)
-        =banner.title
-      .banner-text-container
-        .banner-text(style=banner.style)
-          !=banner.contents
-
-mixin displayed-event()
-  - var event = tileMap['tapahtuma']
-  .events-banner
-    .event-banner-item(data-lazy-bg-image=event.imageSrc,data-lazy-bg-size='.carousel-inner')
-      a.banner-link(href=event.link, target="_blank")
-      .event-banner-content-container
-        .event-banner-text-container
-          h3
-            !=event.contents
-
-mixin banners-slider(banners) 
-  .header-banner
-    #banner-slide.carousel.slide(data-ride='carousel')
-      .col-xs-24.col-lg-6.quick-nav-buttons-container
-        .row
-          .col-xs-6.col-lg-12.pull-lg-right.no-gutters.quick-nav-button-container
-            .quick-nav-container
-              a(href="/sisalto/palveluiden-aukioloajat")
-                .quick-nav-icon-container
-                  img.quick-nav-icon.img-responsive(src="/gfx/layout/aukioloajat.png")
-                .quick-nav-title
-                  h4 Palveluiden aukioloajat
-          .col-xs-6.col-lg-12.pull-lg-right.no-gutters.quick-nav-button-container
-            .quick-nav-container
-              a(href="/sisalto/osallistu-ja-vaikuta")
-                .quick-nav-icon-container
-                  img.quick-nav-icon.img-responsive(src="/gfx/layout/osallistu.png")
-                .quick-nav-title
-                  h4 Osallistu ja vaikuta
-          .col-xs-6.col-lg-12.pull-lg-right.no-gutters.quick-nav-button-container
-            .quick-nav-container
-              a(href="/tapahtumat")
-                .quick-nav-icon-container
-                  img.quick-nav-icon.img-responsive(src="/gfx/layout/tapahtumat.png")
-                .quick-nav-title
-                  h4 Tapahtumat
-          .col-xs-6.col-lg-12.pull-lg-right.no-gutters.quick-nav-button-container
-            .quick-nav-container
-              a(href="http://mantyharju.karttatiimi.fi/",target="_blank")
-                .quick-nav-icon-container
-                  img.quick-nav-icon.img-responsive(src="/gfx/layout/kartat.png")
-                .quick-nav-title
-                  h4 Kartat
-      .banner-carousel-items
-        .carousel-inner(role='listbox')
-          each banner, bannerIndex in banners
-            - var itemClass=bannerIndex === 0 ? "carousel-item active" : 'carousel-item'
-            div(class=itemClass)
-              +banner(banner)
+mixin banners-slider(banners)
+  if banners
+    .header-banner
+      #banner-slide.carousel.slide(data-ride='carousel')
+        .banner-carousel-indicators
+          ol.carousel-indicators
+            each banner, bannerIndex in banners
+              li(data-target='#banner-slide', data-slide-to=bannerIndex)
+        .col-xs-24.col-lg-6.quick-nav-buttons-container
+          .row
+            .col-xs-6.col-lg-12.pull-lg-right.no-gutters.quick-nav-button-container
+              .quick-nav-container
+                a(href="/sisalto/palveluiden-aukioloajat")
+                  .quick-nav-icon-container
+                    img.quick-nav-icon.img-responsive(src="/gfx/layout/aukioloajat.png")
+                  .quick-nav-title
+                    h4 Palveluiden aukioloajat
+            .col-xs-6.col-lg-12.pull-lg-right.no-gutters.quick-nav-button-container
+              .quick-nav-container
+                a(href="/sisalto/osallistu-ja-vaikuta")
+                  .quick-nav-icon-container
+                    img.quick-nav-icon.img-responsive(src="/gfx/layout/osallistu.png")
+                  .quick-nav-title
+                    h4 Osallistu ja vaikuta
+            .col-xs-6.col-lg-12.pull-lg-right.no-gutters.quick-nav-button-container
+              .quick-nav-container
+                a(href="/tapahtumat")
+                  .quick-nav-icon-container
+                    img.quick-nav-icon.img-responsive(src="/gfx/layout/tapahtumat.png")
+                  .quick-nav-title
+                    h4 Tapahtumat
+            .col-xs-6.col-lg-12.pull-lg-right.no-gutters.quick-nav-button-container
+              .quick-nav-container
+                a(href="http://mantyharju.karttatiimi.fi/",target="_blank")
+                  .quick-nav-icon-container
+                    img.quick-nav-icon.img-responsive(src="/gfx/layout/kartat.png")
+                  .quick-nav-title
+                    h4 Kartat
+        .banner-carousel-items
+          .carousel-inner(role='listbox')
+            each banner, bannerIndex in banners
+              - var itemClass=bannerIndex === 0 ? "carousel-item active" : 'carousel-item'
+              div(class=itemClass)
+                +banner(banner)
 
 mixin tile(tile)
   if tile
@@ -118,14 +129,15 @@ mixin tile(tile)
           !=tile.contents
 
 mixin footerTile(tile)
-  a(href=tile.link,target="_blank")
-    .footer-tile(data-lazy-bg-image=tile.imageSrc)
-    if tile.contents
-      .footer-tile-contents
-        !=tile.contents
+  if tile
+    a(href=tile.link,target="_blank")
+      .footer-tile(data-lazy-bg-image=tile.imageSrc)
+      if tile.contents
+        .footer-tile-contents
+          !=tile.contents
 
 mixin footerTileMovies()
-  if movieImageUrls.length > 0
+  if movieImageUrls && movieImageUrls.length > 0
     a(href=movieBanner.link)
       #myCarousel.carousel.slide(data-ride='carousel')
         .carousel-inner
