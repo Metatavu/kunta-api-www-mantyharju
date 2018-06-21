@@ -16,6 +16,7 @@
     .banner-content-container {
       padding: 35px;
       margin-left: 35px;
+      pointer-events: none;
       
       @media (max-width: $break-medium) {
         margin: 0;
@@ -47,7 +48,6 @@
     
       p, h1 {
         position: relative;
-        z-index: 1;
         color: #fff;
       }
     }  
@@ -62,7 +62,6 @@
   position: absolute;
   right: 0;
   top: 0;
-  z-index: 100;
 }
 
 .quick-nav-buttons-container {
@@ -144,7 +143,6 @@
       position: absolute;
       top: 0;
       width: 100%;
-      z-index: 10;
     }
 
     .event-banner-content-container {
