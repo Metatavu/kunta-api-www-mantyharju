@@ -158,6 +158,7 @@
       h3 {
         @include font-std-bold(24px);
         text-transform: uppercase;
+        color: $event-banner-text-color !important;
         letter-spacing: -0.5px;
       }
       
