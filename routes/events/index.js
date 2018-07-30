@@ -16,6 +16,8 @@
   const striptags = require("striptags");
   const Entities = require('html-entities').AllHtmlEntities;
   const entities = new Entities();
+  const Common = require(`${__dirname}/../common`);
+  const Autolinker = require( 'autolinker' );
 
   function hasTime(date) {
     const momentDate = moment(date);
@@ -59,8 +61,8 @@
   
   function truncateDescription(description) {
     return _.truncate(description, {
-    "length": 150
-   });
+      "length": 150
+    });
   }
   
   module.exports = (app, config, ModulesClass) => {
@@ -107,7 +109,6 @@
         files: 1
       } 
     });
-    const Common = require(__dirname + '/../common');
 
     app.get('/eventImages/:eventId/:imageId', (req, res, next) => {
       var eventId = req.params.eventId;
@@ -226,7 +227,7 @@
         .callback((data) => {
           const event = data[0];
           const latestEvents = data[1];
-
+          event.description = Common.plainTextParagraphs(Autolinker.link(event.description));
           res.render('pages/event.pug', Object.assign(req.kuntaApi.data, {
             event: Object.assign(event, {
               "start": formatDate(event.start, event.end),
