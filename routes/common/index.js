@@ -6,7 +6,9 @@
   const _ = require('lodash');
   const cheerio = require('cheerio');
   const moment = require('moment'); 
-  
+  const isNumber = require('is-number');
+  const nl2br  = require('nl2br');
+
   class Common {
     
     static get CONTENT_FOLDER() { 
@@ -98,6 +100,14 @@
         showtime.locale('fi');
         return showtime.format('llll');
       });
+
+      if (result.price) {
+        if (isNumber(result.price)) {
+          result.price = `${result.price} €`;
+        } else {
+          result.price = nl2br(result.price);
+        }
+      }
 
       result['imageUrl'] = $(movieElement).find('img').attr('data-original');
 
