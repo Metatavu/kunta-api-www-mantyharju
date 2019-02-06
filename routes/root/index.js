@@ -29,8 +29,8 @@
         'maxResults': Common.EVENT_COUNT,
         'orderBy': 'START_DATE',
         'orderDir': 'DESCENDING',
-        'startAfter': null,
-        'endAfter': (new Date()).toISOString()
+        'startAfter': (new Date()).toISOString(),
+        'endAfter': null
       };
       
       new ModulesClass(config)
