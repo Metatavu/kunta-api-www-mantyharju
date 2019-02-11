@@ -37,8 +37,9 @@ block content
               +pageMenuItem(child)
       .col-xs-24.col-lg-18
         .page-content
-          h1
-            !=title
+          if !isMoviePage
+            h1
+              !=title
           if featuredImageSrc
             .featured-image(data-lazy-bg-image=featuredImageSrc)
           !=contents
