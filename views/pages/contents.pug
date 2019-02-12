@@ -41,6 +41,9 @@ block content
             h1
               !=title
           if featuredImageSrc
-            .featured-image(data-lazy-bg-image=featuredImageSrc)
+            if isMoviePage
+              img(src=featuredImageSrc style="padding:15px;max-width:100%;")
+            else
+              .featured-image(data-lazy-bg-image=featuredImageSrc)
           !=contents
     input.rootPath(type="hidden", value=rootPath)
