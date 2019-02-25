@@ -42,6 +42,8 @@ block content
               !=title
           if featuredImageSrc
             if isMoviePage
+              a(target="_blank" href="https://www.facebook.com/Kino-Mäntyharju-367737830746240")
+                i.fa.fa-facebook-official(style="font-size:55px;position:absolute;right:30px;margin-top:-50px;")
               img(src=featuredImageSrc style="padding:15px;max-width:100%;")
             else
               .featured-image(data-lazy-bg-image=featuredImageSrc)
