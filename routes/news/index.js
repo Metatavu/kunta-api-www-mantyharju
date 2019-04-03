@@ -8,6 +8,7 @@
   const moment = require('moment');
   const Common = require(__dirname + '/../common');
   const striptags = require('striptags');
+  const RSS = require('rss');
   const Entities = require('html-entities').AllHtmlEntities;
   const entities = new Entities();
 
@@ -118,6 +119,45 @@
           });
         });
     });
+
+    app.get('/rss', (req, res, next) => {
+      const perPage = 20;
+      const baseUrl = `${req.protocol}://${req.get('host')}`;
+      const rss = new RSS({
+        "title": "Ajankohtaista",
+        "feed_url": `${baseUrl}/rss`,
+        "site_url": baseUrl,
+        "ttl": 720
+      });
+      new ModulesClass(config).news.latest(0, perPage)
+        .callback((data) => {
+          let newsArticles = data[0].map(newsArticle => {
+            return Object.assign(newsArticle, {
+              "shortDate": moment(newsArticle.published).format("D.M.YYYY"),
+              "imageSrc": newsArticle.imageId ? util.format('/newsArticleImages/%s/%s', newsArticle.id, newsArticle.imageId) : null
+            });
+          });
+
+          newsArticles.forEach((newsArticle) => {
+            rss.item({
+              "title": entities.decode(newsArticle.title),
+              "description": entities.decode(newsArticle.contents),
+              "categories": newsArticle.tags,
+              "url": `${baseUrl}${Common.NEWS_FOLDER}/${newsArticle.slug}`,
+              "date": moment(newsArticle.published).toDate().toUTCString()
+            });
+          });
+
+          res.set("Content-Type", "application/rss+xml");
+          res.status(200).send(rss.xml());
+        }, (err) => {
+          next({
+            status: 500,
+            error: err
+          });
+        });
+    });
+
   };
 
 }).call(this);
