@@ -123,7 +123,7 @@
     app.get('/feed/:format', (req, res, next) => {
       const feedFormat = req.params.format;
       if (["rss", "atom", "json"].indexOf(feedFormat) < 0) {
-        res.status(400).send("Invalid feed format")
+        res.status(400).send("Invalid feed format");
         return;
       }
 
@@ -174,7 +174,7 @@
               res.status(200).send(feed.atom1());
             break;
             default:
-              res.status(400).send("Invalid feed format")
+              res.status(400).send("Invalid feed format");
             break;
           }
         }, (err) => {
