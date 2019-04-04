@@ -8,7 +8,7 @@
   const moment = require('moment');
   const Common = require(__dirname + '/../common');
   const striptags = require('striptags');
-  const RSS = require('rss');
+  const Feed = require('feed').Feed;
   const Entities = require('html-entities').AllHtmlEntities;
   const entities = new Entities();
 
@@ -120,14 +120,24 @@
         });
     });
 
-    app.get('/rss', (req, res, next) => {
+    app.get('/feed/:format', (req, res, next) => {
+      const feedFormat = req.params.format;
+      if (["rss", "atom", "json"].indexOf(feedFormat) < 0) {
+        res.status(400).send("Invalid feed format")
+        return;
+      }
+
       const perPage = 20;
       const baseUrl = `${req.protocol}://${req.get('host')}`;
-      const rss = new RSS({
+      const feed = new Feed({
         "title": "Ajankohtaista",
-        "feed_url": `${baseUrl}/rss`,
-        "site_url": baseUrl,
-        "ttl": 720
+        "link": baseUrl,
+        "id": baseUrl,
+        feedLinks: {
+          json: `${baseUrl}/feed/json`,
+          atom: `${baseUrl}/feed/atom`,
+          rss: `${baseUrl}/feed/rss`
+        },
       });
       new ModulesClass(config).news.latest(0, perPage)
         .callback((data) => {
@@ -139,17 +149,34 @@
           });
 
           newsArticles.forEach((newsArticle) => {
-            rss.item({
-              "title": entities.decode(newsArticle.title),
-              "description": entities.decode(newsArticle.contents),
-              "categories": newsArticle.tags,
-              "url": `${baseUrl}${Common.NEWS_FOLDER}/${newsArticle.slug}`,
-              "date": moment(newsArticle.published).toDate().toUTCString()
+            feed.addItem({
+              id: `${baseUrl}${Common.NEWS_FOLDER}/${newsArticle.slug}`,
+              title: entities.decode(newsArticle.title),
+              description: entities.decode(newsArticle.abstract),
+              content: entities.decode(newsArticle.contents),
+              category: newsArticle.tags,
+              link: `${baseUrl}${Common.NEWS_FOLDER}/${newsArticle.slug}`,
+              date: moment(newsArticle.published).toDate()
             });
           });
 
-          res.set("Content-Type", "application/rss+xml");
-          res.status(200).send(rss.xml());
+          switch (feedFormat) {
+            case "json":
+              res.set("Content-Type", "application/json");
+              res.status(200).send(feed.json1());
+            break;
+            case "rss":
+              res.set("Content-Type", "application/rss+xml");
+              res.status(200).send(feed.rss2());
+            break;
+            case "atom":
+              res.set("Content-Type", "application/atom+xml");
+              res.status(200).send(feed.atom1());
+            break;
+            default:
+              res.status(400).send("Invalid feed format")
+            break;
+          }
         }, (err) => {
           next({
             status: 500,
