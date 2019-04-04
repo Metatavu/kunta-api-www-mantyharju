@@ -20,6 +20,7 @@
   "dependencies": {
     "autolinker": "^1.7.0",
     "cheerio": "^0.22.0",
+    "feed": "^2.0.4",
     "html-entities": "^1.2.1",
     "is-number": "^7.0.0",
     "lodash": "^4.17.4",
