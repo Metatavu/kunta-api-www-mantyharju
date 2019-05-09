@@ -45,7 +45,7 @@
     }, {
       "name": "location-help",
       "type": "html",
-      "html": "Mikäli paikkaa ei löydy haulla voit lisätä uuden klikkaamalla <a href=\"#\" class=\"new-place-link\">tästä</a>"
+      "html": "<strong>Mikäli paikkaa ei löydy haulla voit lisätä uuden klikkaamalla </strong> <a href=\"#\" class=\"new-place-link\">tästä</a>"
     }, {
       "name": "image-url",
       "type": "text",
@@ -60,6 +60,10 @@
       "only-images": true,
       "single-file": true,
       "required": false
+    }, {
+      "name": "image-help",
+      "type": "html",
+      "html": "<div class='image-help-container'><div style='width:70%'><p>Lisää tapahtumalle laadukas ja hyvä kuva.</p><p>Sallitut tiedostotyypit: jpg, jpeg, png.</p><p>Kuvan on oltava mitoiltaan vähintään 1140x400 pikseliä.</p><p>Suurin sallittu tiedostokoko on 2 Mt.</p><p>Valitse mieluiten vaakamallinen kuva, koska kuvan ala- ja yläosasta rajautuu osa pois.</p><p>Parhaiten toimii kuva, jossa ei ole tekstiä.</p></div></div>"
     }, {
       "name": "description-fi",
       "type": "memo",

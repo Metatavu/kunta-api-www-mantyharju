@@ -1,4 +1,5 @@
 @charset "UTF-8";
+@import "./colors";
 
 .fixed-top {
   position: fixed;
@@ -12,7 +13,7 @@
   float: right !important;
 }
 
-.col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12, {
+.col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12 {
   position: relative;
   min-height: 1px;
   padding-right: 15px;
@@ -130,3 +131,31 @@
   background-position: right 10px center;
   background-repeat: no-repeat;
 }
+
+.image-help-container {
+
+  background-color: $primary-menu-bg-color;
+  color:white;
+  padding:20px;
+
+  p {
+    margin-bottom: 3px;
+    font-size: 16px;
+  }
+
+}
+
+.image-help-container:after{
+  content: ' ';
+  width: 0px;
+  height: 0px;
+  border-top: 15px solid transparent;
+  border-left: 15px solid transparent;
+  border-bottom: 15px solid $primary-menu-bg-color;
+  border-right: 15px solid transparent;
+  position: absolute;
+  left: 50%;
+  top: -14%;
+  margin-left: -10px;
+  }
+  
