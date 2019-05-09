@@ -1,4 +1,5 @@
 @charset "UTF-8";
+@import "./colors";
 
 .fixed-top {
   position: fixed;
@@ -12,7 +13,18 @@
   float: right !important;
 }
 
-.col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12, {
+.col-1,
+.col-2,
+.col-3,
+.col-4,
+.col-5,
+.col-6,
+.col-7,
+.col-8,
+.col-9,
+.col-10,
+.col-11,
+.col-12 {
   position: relative;
   min-height: 1px;
   padding-right: 15px;
@@ -129,4 +141,30 @@
   background-image: url("/gfx/load-2.svg");
   background-position: right 10px center;
   background-repeat: no-repeat;
+}
+
+.image-help-container {
+
+  background-color: $create-event-tooltip-container;
+  color: $create-event-tooltip-text;
+  padding: 20px;
+
+  p {
+    font-size: 16px;
+    margin-bottom: 3px;
+  }
+
+  &::after {
+    border-bottom: 15px solid $create-event-tooltip-container;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 15px solid transparent;
+    content: " ";
+    height: 0;
+    left: 50%;
+    margin-left: -15px;
+    position: absolute;
+    top: -14%;
+    width: 0;
+  }
 }
