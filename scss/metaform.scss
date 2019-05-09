@@ -145,8 +145,8 @@
 
 .image-help-container {
 
-  background-color: $primary-menu-bg-color;
-  color: #ffffff;
+  background-color: $create-event-tooltip-container;
+  color: $create-event-tooltip-text;
   padding: 20px;
 
   p {
@@ -155,7 +155,7 @@
   }
 
   &::after {
-    border-bottom: 15px solid $primary-menu-bg-color;
+    border-bottom: 15px solid $create-event-tooltip-container;
     border-left: 15px solid transparent;
     border-right: 15px solid transparent;
     border-top: 15px solid transparent;
@@ -166,7 +166,6 @@
     position: absolute;
     top: -14%;
     width: 0;
-  
   }
 
 }
