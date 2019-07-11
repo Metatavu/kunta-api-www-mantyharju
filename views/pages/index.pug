@@ -224,8 +224,22 @@ block content
                       | Tapahtumat
               .index-box-content.tab-content
                 .tab-pane.active#events-tab(role="tabpanel")
-                  each event in events
-                    +renderTextEvent(event)
+                  if eventsNow.length > 0
+                    .eventsNow
+                      h4
+                        | Tapahtumat nyt
+                      each event in eventsNow
+                        +renderTextEvent(event)
+                  if eventsIncoming.length > 0
+                    .eventsIncoming
+                      if eventsNow.length > 0
+                        h4(style="margin-top:15px")
+                          | Tulevat tapahtumat
+                      else
+                        h4
+                          | Tulevat tapahtumat
+                      each event in eventsIncoming
+                        +renderTextEvent(event)
                   a.read-more(href="/tapahtumat")
                     | Lisää tapahtumia
                     i.fa.fa-chevron-right

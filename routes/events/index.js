@@ -171,7 +171,7 @@
             "shortDescription": _.truncate(event.description, {length: 200})
           });
         });
-
+        
         res.render('ajax/events-list.pug', Object.assign(req.kuntaApi.data, {
           page: page,
           lastPage: lastPage,
