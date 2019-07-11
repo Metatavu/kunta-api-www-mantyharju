@@ -1,6 +1,6 @@
 {
   "name": "kunta-api-www-mantyharju",
-  "version": "1.0.49",
+  "version": "1.0.51",
   "description": " Kunta API visualization layer implementation for Mäntyharju",
   "main": "index.js",
   "scripts": {
