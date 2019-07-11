@@ -90,7 +90,20 @@
               "startHumanReadable": formatEventStart(event.start)
             });
           });
-          
+
+          var eventsNow = [];
+          var eventsIncoming = [];
+          var now = moment().add(1, 'hour');
+          events.forEach( event => {
+            const start = moment(event.start);
+            const end = moment(event.end);
+            if(moment(now).isBetween( start, end )){
+              eventsNow.push(event);
+            } else {
+              eventsIncoming.push(event);
+            }
+          });
+
           const movieImageUrls = _.uniq(activeMovies.map((movie) => {
             return movie.imageUrl;
           }));
@@ -103,7 +116,8 @@
             banners: banners,
             announcements: announcements,
             news: news,
-            events: events,
+            eventsNow: eventsNow,
+            eventsIncoming: eventsIncoming,
             movieImageUrls: movieImageUrls.filter(Boolean),
             movieBanner: movieBanner[0] ? movieBanner[0] : null
           }));
