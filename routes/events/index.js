@@ -516,14 +516,17 @@
           eventData["has_end_time"] = !!endTime;
 
           module.linkedevents.createEvent(eventData)
-            .callback((data) => {
+            .callback(() => {
               res.send(200);
             }, (err) => {
               res.status(err.response.status).send(err.response.text);
             });
         }, (err) => {
           res.status(400).send("Tapahtumapaikka on virheellinen. Ole hyvä ja valitse tapahtumapaikka listasta.");
-          return;
+          next({
+            status: 500,
+            error: err
+          });
         });
       } catch (err) {
         next({
