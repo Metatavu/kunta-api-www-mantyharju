@@ -441,7 +441,6 @@
         const startTime = req.body["start-time"];
         const endDate = req.body["end-date"];
         const endTime = req.body["end-time"];
-        const timezone = "Europe/Helsinki";
         
         if (!startDate) {
           res.status(400).send("Alkamispäivämäärä on pakollinen");
