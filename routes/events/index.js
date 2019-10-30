@@ -89,9 +89,9 @@
      * @returns {any} translated event
      */
     function translateEvent(event, defaultImage) {
-      const shortDescription = (event.short_description ? event.short_description.fi : "") || "";
-      const description = (event.description ? event.description.fi : "") || "";
-      const name = (event.name ? event.name.fi : "") || "";
+      const shortDescription = (event.short_description ? event.short_description.fi : "") || "";
+      const description = (event.description ? event.description.fi : "") || "";
+      const name = (event.name ? event.name.fi : "") || "";
       const imageUrl = event.images && event.images.length ? event.images[0].url : null;
       const start = formatDate(event.start_time, event.end_time);
 
@@ -100,7 +100,7 @@
         "name": name,
         "start": start,
         "shortDate": moment(event.start_time).format("D.M.YYYY"),
-        "imageSrc": imageUrl || defaultImage,
+        "imageSrc": imageUrl || defaultImage,
         "description": Common.plainTextParagraphs(Autolinker.link(description)),
         "shortDescription": _.truncate(shortDescription, { length: 200 })
       };
@@ -276,7 +276,7 @@
     
     app.get("/linkedevents/places/search", (req, res, next) => {
       const text = req.query.q;
-      const page = req.query.page || 1;
+      const page = req.query.page || 1;
       const pageSize = Common.LINKEDEVENTS_MAX_PLACES;
       
       new ModulesClass(config)
@@ -320,7 +320,7 @@
     
     app.get("/linkedevents/keywords/search", (req, res, next) => {
       const text = req.query.text;
-      const page = req.query.page || 1;
+      const page = req.query.page || 1;
       const pageSize = Common.LINKEDEVENTS_MAX_PLACES;
       
       new ModulesClass(config)
@@ -353,7 +353,7 @@
     app.delete("/linkedevents/image/:filename", (req, res) => {
       const filename = req.params.filename;
       const fileDeleteKey = req.query.c;
-      const uploadFolder = config.get("uploads:path") || "uploads/";
+      const uploadFolder = config.get("uploads:path") || "uploads/";
       const keyFilePath = uploadFolder + filename + "." + fileDeleteKey;
       
       if (fs.existsSync(keyFilePath)) {
@@ -388,14 +388,14 @@
         }
       }
 
-      const nameFi = (req.body["name-fi"] || "").trim();
-      if (!nameFi) {
+      const nameFi = (req.body["name-fi"] || "").trim();
+      if (!nameFi) {
         res.status(400).send("Nimi (Suomi) on pakollinen");
         return;
       }
       
       const location = req.body.location;
-      if (!location) {
+      if (!location) {
         res.status(400).send("Paikka on pakollinen");
         return;
       }
@@ -443,12 +443,12 @@
         const endTime = req.body["end-time"];
         const timezone = "Europe/Helsinki";
         
-        if (!startDate) {
+        if (!startDate) {
           res.status(400).send("Alkamispäivämäärä on pakollinen");
           return;
         }
         
-        if (!endDate) {
+        if (!endDate) {
           res.status(400).send("Loppumispäivämäärä on pakollinen");
           return;
         }
