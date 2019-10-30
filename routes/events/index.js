@@ -2,27 +2,27 @@
 /* global __dirname */
 
 (function() {
-  'use strict';
+  "use strict";
   
-  const _ = require('lodash');
-  const util = require('util');
-  const moment = require('moment-timezone');
-  const metaformFields = require('metaform-fields');
-  const multer  = require('multer');
-  const fs = require('fs');
-  const uuidv4 = require('uuid/v4');
-  const path = require('path');
-  const validator = require('validator');
+  const _ = require("lodash");
+  const util = require("util");
+  const moment = require("moment-timezone");
+  const metaformFields = require("metaform-fields");
+  const multer  = require("multer");
+  const fs = require("fs");
+  const uuidv4 = require("uuid/v4");
+  const path = require("path");
+  const validator = require("validator");
   const striptags = require("striptags");
-  const Entities = require('html-entities').AllHtmlEntities;
+  const Entities = require("html-entities").AllHtmlEntities;
   const entities = new Entities();
   const Common = require(`${__dirname}/../common`);
-  const Autolinker = require( 'autolinker' );
-  const LinkedEventsClient = require('linkedevents-client');
+  const Autolinker = require( "autolinker" );
+  const LinkedEventsClient = require("linkedevents-client");
 
   function hasTime(date) {
     const momentDate = moment(date);
-    const midnight = momentDate.clone().startOf('day');
+    const midnight = momentDate.clone().startOf("day");
     return momentDate.diff(midnight) > 0;
   }
 
@@ -46,7 +46,7 @@
       return moment(start).format("D.M.YYYY");
     } else if(!end && hasTime(start)) {
       const startMoment = moment(start);
-      return `${startMoment.format('D.M.YYYY')} klo ${startMoment.format('H:mm')} alkaen`;
+      return `${startMoment.format("D.M.YYYY")} klo ${startMoment.format("H:mm")} alkaen`;
     } else if (isSameDay(start, end) && !hasTime(start)) {
       return moment(start).format("D.M.YYYY");
     } else if (moment(start).isSame(moment(end))) {
@@ -54,7 +54,7 @@
     } else if (isSameDay(start, end)) {
       const startMoment = moment(start);
       const endMoment = moment(end);
-      return `${startMoment.format('D.M.YYYY')} klo ${startMoment.format('H:mm')} - ${endMoment.format('H:mm')}`;
+      return `${startMoment.format("D.M.YYYY")} klo ${startMoment.format("H:mm")} - ${endMoment.format("H:mm")}`;
     } else {
       return `${formatDatePart(start)} - ${formatDatePart(end)}`;
     }
@@ -74,7 +74,7 @@
      * @returns {LinkedEventsClient.EventApi} events API instance
      */
     function getLinkedEventsEventsApi() {
-      const apiUrl = config.get('linkedevents:api-url');
+      const apiUrl = config.get("linkedevents:api-url");
       const client = LinkedEventsClient.ApiClient.instance;      
       client.basePath = apiUrl;
   
@@ -153,15 +153,15 @@
 
     const storage = multer.diskStorage({
       destination: (req, file, cb) => {
-        cb(null, config.get('uploads:path'));
+        cb(null, config.get("uploads:path"));
       },
       filename: (req, file, cb) => {
-        let uploadFolder = config.get('uploads:path');
+        let uploadFolder = config.get("uploads:path");
         let fileName = file.originalname;
         let fileCount = 0;
         let filePath = uploadFolder + fileName;
         let nameWithoutExtension = fileName;
-        let extension = '';
+        let extension = "";
 
         if (fileName.lastIndexOf(".") > -1 ){
           nameWithoutExtension = fileName.substring(0, fileName.lastIndexOf("."));
@@ -170,7 +170,7 @@
 
         while (fs.existsSync(filePath)) {
           fileCount++;
-          fileName = nameWithoutExtension + '_' + fileCount + extension;
+          fileName = nameWithoutExtension + "_" + fileCount + extension;
           filePath = uploadFolder + fileName;
         }
 
@@ -182,11 +182,11 @@
       storage: storage, 
       fileFilter: function (req, file, callback) {
         const ext = path.extname(file.originalname);
-        if(ext == '.png' || ext == '.jpg' || ext == '.gif' || ext == '.jpeg') {
+        if(ext == ".png" || ext == ".jpg" || ext == ".gif" || ext == ".jpeg") {
           return callback(null, true);
         }
 
-        callback(new Error('Only images are allowed'));
+        callback(new Error("Only images are allowed"));
       },
       limits: {
         fileSize: 2097152,
@@ -198,23 +198,23 @@
       const perPage = Common.EVENTS_COUNT_PAGE;
       const page = parseInt(req.query.page)||0;
       
-      res.render('pages/events-list.pug', Object.assign(req.kuntaApi.data, {
-        breadcrumbs : [{path: Common.EVENTS_FOLDER, title: 'Tapahtumat'}]
+      res.render("pages/events-list.pug", Object.assign(req.kuntaApi.data, {
+        breadcrumbs : [{path: Common.EVENTS_FOLDER, title: "Tapahtumat"}]
       }));
     });
     
     
-    app.get('/ajax/events', async (req, res, next) => {
+    app.get("/ajax/events", async (req, res, next) => {
       try {
         const perPage = Common.EVENTS_COUNT_PAGE;
         const page = parseInt(req.query.page)||0;
-        const start = req.query.start ? moment(req.query.start, 'DD.MM.YYYY') : moment();
-        const end = req.query.end ? moment(req.query.end, 'DD.MM.YYYY').endOf('day') : null;
+        const start = req.query.start ? moment(req.query.start, "DD.MM.YYYY") : moment();
+        const end = req.query.end ? moment(req.query.end, "DD.MM.YYYY").endOf("day") : null;
         
         const events = await listEvents(perPage, page + 1, start, end, "/gfx/layout/tapahtuma_default_120_95.jpg");
         const lastPage = events.length < perPage;
 
-        res.render('ajax/events-list.pug', Object.assign(req.kuntaApi.data, {
+        res.render("ajax/events-list.pug", Object.assign(req.kuntaApi.data, {
           page: page,
           lastPage: lastPage,
           events: events
@@ -227,17 +227,17 @@
       }
     });
     
-    app.get(util.format('%s/uusi', Common.EVENTS_FOLDER), async (req, res, next) => {
+    app.get(util.format("%s/uusi", Common.EVENTS_FOLDER), async (req, res, next) => {
       try {
         const latestEvents = await listEvents(50, 1, moment(), null, null);
 
-        res.render('pages/event-new', Object.assign(req.kuntaApi.data, {
+        res.render("pages/event-new", Object.assign(req.kuntaApi.data, {
           viewModel: require(`${__dirname}/forms/create-event`),
           plugins: [ metaformFields.templates() ],
           latestEvents: latestEvents,
           breadcrumbs : [
-            { path: Common.EVENTS_FOLDER, title: 'Tapahtumat' }, 
-            { path: util.format('%s/uusi', Common.EVENTS_FOLDER), title: 'Uusi' }
+            { path: Common.EVENTS_FOLDER, title: "Tapahtumat" }, 
+            { path: util.format("%s/uusi", Common.EVENTS_FOLDER), title: "Uusi" }
           ]
         }));
       } catch (err) {
@@ -248,20 +248,20 @@
       }
     });
 
-    app.get(util.format('%s/:id', Common.EVENTS_FOLDER), async (req, res, next) => {
+    app.get(util.format("%s/:id", Common.EVENTS_FOLDER), async (req, res, next) => {
       try {
         const id = req.params.id;
         const event = await findEvent(id, null);
         const latestEvents = await listEvents(50, 1, moment(), null, null);
 
-        res.render('pages/event.pug', Object.assign(req.kuntaApi.data, {
+        res.render("pages/event.pug", Object.assign(req.kuntaApi.data, {
           event: event,
           latestEvents: latestEvents,
           breadcrumbs : [
-            {path: Common.EVENTS_FOLDER, title: 'Tapahtumat'}, 
-            {path: util.format('%s/%s', Common.EVENTS_FOLDER, id), title: event.name }
+            {path: Common.EVENTS_FOLDER, title: "Tapahtumat"}, 
+            {path: util.format("%s/%s", Common.EVENTS_FOLDER, id), title: event.name }
           ],
-          baseUrl : req.protocol + '://' + req.get('host'),
+          baseUrl : req.protocol + "://" + req.get("host"),
           pageRoute: req.originalUrl,
           ogTitle: entities.decode(event.name),
           ogContent: entities.decode(striptags(event.description))
@@ -274,7 +274,7 @@
       }
     });
     
-    app.get('/linkedevents/places/search', (req, res, next) => {
+    app.get("/linkedevents/places/search", (req, res, next) => {
       const text = req.query.q;
       const page = req.query.page || 1;
       const pageSize = Common.LINKEDEVENTS_MAX_PLACES;
@@ -286,26 +286,26 @@
           res.send(_.map(places, (place) => {
             return {
               value: place.id,
-              label: place.name ? place.name.fi : ''
+              label: place.name ? place.name.fi : ""
             };
           }));
         });
     });
     
-    app.get('/ajax/linkedevents/places/new', (req, res, next) => {
-      res.render('ajax/place-new', Object.assign(req.kuntaApi.data, {
+    app.get("/ajax/linkedevents/places/new", (req, res, next) => {
+      res.render("ajax/place-new", Object.assign(req.kuntaApi.data, {
         viewModel: require(`${__dirname}/forms/create-place`),
         plugins: [ metaformFields.templates() ]
       }));
     });
     
-    app.post('/linkedevents/places/create', (req, res, next) => {
+    app.post("/linkedevents/places/create", (req, res, next) => {
       const placeData = {
         "publication_status": "public",
         "name": {
-          "fi": req.body['name-fi'],
-          "sv": req.body['name-sv'],
-          "en": req.body['name-en']
+          "fi": req.body["name-fi"],
+          "sv": req.body["name-sv"],
+          "en": req.body["name-en"]
         }
       };
       
@@ -318,7 +318,7 @@
         });
     });
     
-    app.get('/linkedevents/keywords/search', (req, res, next) => {
+    app.get("/linkedevents/keywords/search", (req, res, next) => {
       const text = req.query.text;
       const page = req.query.page || 1;
       const pageSize = Common.LINKEDEVENTS_MAX_PLACES;
@@ -330,31 +330,31 @@
           res.send(_.map(keywords, (keyword) => {
             return {
               value: keyword.id,
-              label: keyword.name ? keyword.name.fi : ''
+              label: keyword.name ? keyword.name.fi : ""
             };
           }));
         });
     });
 
-    app.post('/linkedevents/image', upload.single('file'), (req, res, next) => {
+    app.post("/linkedevents/image", upload.single("file"), (req, res, next) => {
       const deleteKey = uuidv4();
-      const deleteKeyFilePath = config.get('uploads:path') + req.file.filename + '.' + deleteKey;
+      const deleteKeyFilePath = config.get("uploads:path") + req.file.filename + "." + deleteKey;
       
-      fs.closeSync(fs.openSync(deleteKeyFilePath, 'w'));
+      fs.closeSync(fs.openSync(deleteKeyFilePath, "w"));
       
       res.send([{
         filename: req.file.filename,
         originalname: req.file.filename,
         deleteKey: deleteKey,
-        url: config.get('uploads:baseUrl') + req.file.filename
+        url: config.get("uploads:baseUrl") + req.file.filename
       }]);
     });
     
-    app.delete('/linkedevents/image/:filename', (req, res) => {
+    app.delete("/linkedevents/image/:filename", (req, res) => {
       const filename = req.params.filename;
       const fileDeleteKey = req.query.c;
-      const uploadFolder = config.get('uploads:path') || 'uploads/';
-      const keyFilePath = uploadFolder + filename + '.' + fileDeleteKey;
+      const uploadFolder = config.get("uploads:path") || "uploads/";
+      const keyFilePath = uploadFolder + filename + "." + fileDeleteKey;
       
       if (fs.existsSync(keyFilePath)) {
         fs.unlinkSync(keyFilePath);
@@ -365,44 +365,44 @@
       }
     });
     
-    app.post('/linkedevents/event/create', (req, res, next) => {
+    app.post("/linkedevents/event/create", (req, res, next) => {
       const module = new ModulesClass(config);
 
       let imageUrls = [];
-      if (req.body['image-url']) {
-        imageUrls.push(req.body['image-url']);
+      if (req.body["image-url"]) {
+        imageUrls.push(req.body["image-url"]);
       }
       
-      if (req.body['image']) {
-        if (Array.isArray(req.body['image'])) {
-          imageUrls = imageUrls.concat(req.body['image']);
+      if (req.body["image"]) {
+        if (Array.isArray(req.body["image"])) {
+          imageUrls = imageUrls.concat(req.body["image"]);
         } else {
-          imageUrls.push(req.body['image']);
+          imageUrls.push(req.body["image"]);
         }
       }
       
       for (let i = 0; i < imageUrls.length; i++) {
         if (!validator.isURL(imageUrls[i])) {
-          res.status(400).send('Kuvan osoitteen pitää olla URL-osoite. Mikäli olet lataamassa kuvaa omalta tietokoneeltasi, klikkaa lisää tiedosto - painiketta.');
+          res.status(400).send("Kuvan osoitteen pitää olla URL-osoite. Mikäli olet lataamassa kuvaa omalta tietokoneeltasi, klikkaa lisää tiedosto - painiketta.");
           return;
         }
       }
 
-      const nameFi = (req.body['name-fi'] || '').trim();
+      const nameFi = (req.body["name-fi"] || "").trim();
       if (!nameFi) {
-        res.status(400).send('Nimi (Suomi) on pakollinen');
+        res.status(400).send("Nimi (Suomi) on pakollinen");
         return;
       }
       
       const location = req.body.location;
       if (!location) {
-        res.status(400).send('Paikka on pakollinen');
+        res.status(400).send("Paikka on pakollinen");
         return;
       }
 
       module.linkedevents.findPlace(location).callback((linkedEventsLocation) => {
         if (!linkedEventsLocation) {
-          res.status(400).send('Tapahtumapaikka on virheellinen. Ole hyvä ja valitse tapahtumapaikka listasta.');
+          res.status(400).send("Tapahtumapaikka on virheellinen. Ole hyvä ja valitse tapahtumapaikka listasta.");
           return;
         }
 
@@ -410,21 +410,21 @@
           "publication_status": "draft",
           "name": {
             "fi": nameFi,
-            "sv": req.body['name-sv'],
-            "en": req.body['name-en']
+            "sv": req.body["name-sv"],
+            "en": req.body["name-en"]
           },
           "description": {
-            "fi": req.body['description-fi'],
-            "sv": req.body['description-sv'],
-            "en": req.body['description-en']
+            "fi": req.body["description-fi"],
+            "sv": req.body["description-sv"],
+            "en": req.body["description-en"]
           },
           "short_description": {
-            "fi": truncateDescription(req.body['description-fi']),
-            "sv": truncateDescription(req.body['description-sv']),
-            "en": truncateDescription(req.body['description-en'])
+            "fi": truncateDescription(req.body["description-fi"]),
+            "sv": truncateDescription(req.body["description-sv"]),
+            "en": truncateDescription(req.body["description-en"])
           },
           "provider": {
-            "fi": req.body['provider']
+            "fi": req.body["provider"]
           },
           "image-urls": imageUrls,
           "keywords": [Common.DEFAULT_EVENT_KEYWORD_ID],
@@ -437,36 +437,36 @@
           }]
         };
         
-        const startDate = req.body['start-date'];
-        const startTime = req.body['start-time'];
-        const endDate = req.body['end-date'];
-        const endTime = req.body['end-time'];
-        const timezone = 'Europe/Helsinki';
+        const startDate = req.body["start-date"];
+        const startTime = req.body["start-time"];
+        const endDate = req.body["end-date"];
+        const endTime = req.body["end-time"];
+        const timezone = "Europe/Helsinki";
         
         if (!startDate) {
-          res.status(400).send('Alkamispäivämäärä on pakollinen');
+          res.status(400).send("Alkamispäivämäärä on pakollinen");
           return;
         }
         
         if (!endDate) {
-          res.status(400).send('Loppumispäivämäärä on pakollinen');
+          res.status(400).send("Loppumispäivämäärä on pakollinen");
           return;
         }
         
-        const eventStart = startTime ? moment.tz(`${startDate}T${startTime}`,  moment.ISO_8601, 'Europe/Helsinki') : moment(startDate, moment.ISO_8601);
+        const eventStart = startTime ? moment.tz(`${startDate}T${startTime}`,  moment.ISO_8601, "Europe/Helsinki") : moment(startDate, moment.ISO_8601);
         if (!eventStart.isValid()) {
-          res.status(400).send('Alkamispäivämäärä tai aika on virheellisen muotoinen. Ole hyvä ja käytä muotoa VVVV-MM-DD (esim. 2019-12-24) ja muotoa HH:MM (esim 10:30)');
+          res.status(400).send("Alkamispäivämäärä tai aika on virheellisen muotoinen. Ole hyvä ja käytä muotoa VVVV-MM-DD (esim. 2019-12-24) ja muotoa HH:MM (esim 10:30)");
           return;
         }
         
-        const eventEnd = endTime ? moment.tz(`${endDate}T${endTime}`,  moment.ISO_8601, 'Europe/Helsinki') : moment(endDate, moment.ISO_8601);
+        const eventEnd = endTime ? moment.tz(`${endDate}T${endTime}`,  moment.ISO_8601, "Europe/Helsinki") : moment(endDate, moment.ISO_8601);
         if (!eventEnd.isValid()) {
-          res.status(400).send('Loppumispäivämäärä tai aika on virheellisen muotoinen. Ole hyvä ja käytä muotoa VVVV-MM-DD (esim. 2019-12-24) ja muotoa HH:MM (esim 10:30)');
+          res.status(400).send("Loppumispäivämäärä tai aika on virheellisen muotoinen. Ole hyvä ja käytä muotoa VVVV-MM-DD (esim. 2019-12-24) ja muotoa HH:MM (esim 10:30)");
           return;
         }
 
         if (eventStart.isAfter(eventEnd)) {
-          res.status(400).send('Alkamisaika ei voi olla loppumisajan jälkeen');
+          res.status(400).send("Alkamisaika ei voi olla loppumisajan jälkeen");
           return;
         }
         
@@ -483,7 +483,7 @@
             res.status(err.response.status).send(err.response.text);
           });
       }, (err) => {
-        res.status(400).send('Tapahtumapaikka on virheellinen. Ole hyvä ja valitse tapahtumapaikka listasta.');
+        res.status(400).send("Tapahtumapaikka on virheellinen. Ole hyvä ja valitse tapahtumapaikka listasta.");
         return;
       });
     });
