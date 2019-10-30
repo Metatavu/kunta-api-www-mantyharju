@@ -18,6 +18,7 @@
   const entities = new Entities();
   const Common = require(`${__dirname}/../common`);
   const Autolinker = require( 'autolinker' );
+  const LinkedEventsClient = require('linkedevents-client');
 
   function hasTime(date) {
     const momentDate = moment(date);
@@ -64,9 +65,92 @@
       "length": 150
     });
   }
-  
+
   module.exports = (app, config, ModulesClass) => {
-    
+  
+    /**
+     * Returns events API instance
+     * 
+     * @returns {LinkedEventsClient.EventApi} events API instance
+     */
+    function getLinkedEventsEventsApi() {
+      const apiUrl = config.get('linkedevents:api-url');
+      const client = LinkedEventsClient.ApiClient.instance;      
+      client.basePath = apiUrl;
+  
+      return new LinkedEventsClient.EventApi();    
+    }
+
+    /**
+     * Translates LinkedEvents event into format expected by the pug templates
+     * 
+     * @param {any} event LinkedEvents event
+     * @param {string} defaultImage default image 
+     * @returns {any} translated event
+     */
+    function translateEvent(event, defaultImage) {
+      const shortDescription = (event.short_description ? event.short_description.fi : "") || "";
+      const description = (event.description ? event.description.fi : "") || "";
+      const name = (event.name ? event.name.fi : "") || "";
+      const imageUrl = event.images && event.images.length ? event.images[0].url : null;
+      const start = formatDate(event.start_time, event.end_time);
+
+      return {
+        "id": event.id,
+        "name": name,
+        "start": start,
+        "shortDate": moment(event.start_time).format("D.M.YYYY"),
+        "imageSrc": imageUrl || defaultImage,
+        "description": Common.plainTextParagraphs(Autolinker.link(description)),
+        "shortDescription": _.truncate(shortDescription, { length: 200 })
+      };
+    }
+
+    /**
+     * Lists events from LinkedEvents API
+     * 
+     * @param {number} perPage events per page
+     * @param {number} page page number (1 based)
+     * @param {moment} start start date
+     * @param {moment} end end date
+     * @param {string} defaultImage default image
+     * @returns {Promise} promise for events 
+     */
+    async function listEvents (perPage, page, start, end, defaultImage) {
+      const eventsApi = getLinkedEventsEventsApi();
+
+      const listOptions = {
+        "sort": "end_time",
+        "page": page,
+        "pageSize": perPage
+      };
+
+      if (start) {
+        listOptions["start"] = start.toDate(); 
+      }
+
+      if (end) {
+        listOptions["end"] = end.toDate();
+      }
+
+      const events = (await eventsApi.eventList(listOptions)).data;
+
+      return events.map((event) => translateEvent(event, defaultImage));
+    }
+
+    /**
+     * Finds event from LinkedEvents API
+     * 
+     * @param {string} id event id
+     * @param {string} defaultImage default image
+     * @returns {Promise} promise for event 
+     */
+    async function findEvent (id, defaultImage) {
+      const eventsApi = getLinkedEventsEventsApi();
+      const event = (await eventsApi.eventRetrieve(id));
+      return translateEvent(event, defaultImage);
+    }
+
     const storage = multer.diskStorage({
       destination: (req, file, cb) => {
         cb(null, config.get('uploads:path'));
@@ -110,34 +194,6 @@
       } 
     });
 
-    app.get('/eventImages/:eventId/:imageId', (req, res, next) => {
-      var eventId = req.params.eventId;
-      var imageId = req.params.imageId;
-      
-      if (!eventId || !imageId) {
-        next({
-          status: 404
-        });
-        
-        return;
-      }
-      
-      new ModulesClass(config)
-        .events.streamImageData(eventId, imageId, req.query, req.headers)
-        .callback((result) => {
-          var stream = result[0];
-          
-          if (stream) {
-            stream.pipe(res);
-          } else {
-            next({
-              status: 500,
-              message: "Kuvan lataus epäonnistui"
-            });
-          }
-        });
-    });
-
     app.get(Common.EVENTS_FOLDER, (req, res, next) => {
       const perPage = Common.EVENTS_COUNT_PAGE;
       const page = parseInt(req.query.page)||0;
@@ -147,108 +203,75 @@
       }));
     });
     
-    app.get('/ajax/events', (req, res, next) => {
-      const perPage = Common.EVENTS_COUNT_PAGE;
-      const page = parseInt(req.query.page)||0;
-      const start = req.query.start ? moment(req.query.start, 'DD.MM.YYYY') : moment();
-      const end = req.query.end ? moment(req.query.end, 'DD.MM.YYYY').endOf('day').format() : null;
-      const module = new ModulesClass(config);
+    
+    app.get('/ajax/events', async (req, res, next) => {
+      try {
+        const perPage = Common.EVENTS_COUNT_PAGE;
+        const page = parseInt(req.query.page)||0;
+        const start = req.query.start ? moment(req.query.start, 'DD.MM.YYYY') : moment();
+        const end = req.query.end ? moment(req.query.end, 'DD.MM.YYYY').endOf('day') : null;
         
-      module.events.list({ 
-        firstResult: page * perPage,
-        maxResults: perPage + 1,
-        orderBy: 'START_DATE',
-        orderDir: 'DESCENDING',
-        endBefore: end,
-        startAfter: start.startOf('day').format()
-      })
-      .callback((data) => {
-        const lastPage = data[0].length < perPage + 1;
-        const events = data[0].splice(0, perPage).map(event => {
-          return Object.assign(event, {
-            "shortDate": moment(event.start).format("D.M.YYYY"),
-            "imageSrc": event.imageId ? util.format('/eventImages/%s/%s', event.id, event.imageId) : '/gfx/layout/tapahtuma_default_120_95.jpg',
-            "shortDescription": _.truncate(event.description, {length: 200})
-          });
-        });
-        
+        const events = await listEvents(perPage, page + 1, start, end, "/gfx/layout/tapahtuma_default_120_95.jpg");
+        const lastPage = events.length < perPage;
+
         res.render('ajax/events-list.pug', Object.assign(req.kuntaApi.data, {
           page: page,
           lastPage: lastPage,
           events: events
         }));
-      }, (err) => {
+      } catch (err) {
         next({
           status: 500,
           error: err
         });
-      });
+      }
     });
     
-    app.get(util.format('%s/uusi', Common.EVENTS_FOLDER), (req, res, next) => {
-      new ModulesClass(config)
-        .events.list({ 
-          firstResult: 0,
-          maxResults: 50,
-          orderBy: 'START_DATE',
-          orderDir: 'DESCENDING'
-        })
-        .callback((data) => {
-          const latestEvents = data[0];
-  
-          res.render('pages/event-new', Object.assign(req.kuntaApi.data, {
-            viewModel: require(`${__dirname}/forms/create-event`),
-            plugins: [ metaformFields.templates() ],
-            latestEvents: latestEvents,
-            breadcrumbs : [
-              { path: Common.EVENTS_FOLDER, title: 'Tapahtumat' }, 
-              { path: util.format('%s/uusi', Common.EVENTS_FOLDER), title: 'Uusi' }
-            ]
-          }));
-        }, (err) => {
-          next({
-            status: 500,
-            error: err
-          });
+    app.get(util.format('%s/uusi', Common.EVENTS_FOLDER), async (req, res, next) => {
+      try {
+        const latestEvents = await listEvents(50, 1, moment(), null, null);
+
+        res.render('pages/event-new', Object.assign(req.kuntaApi.data, {
+          viewModel: require(`${__dirname}/forms/create-event`),
+          plugins: [ metaformFields.templates() ],
+          latestEvents: latestEvents,
+          breadcrumbs : [
+            { path: Common.EVENTS_FOLDER, title: 'Tapahtumat' }, 
+            { path: util.format('%s/uusi', Common.EVENTS_FOLDER), title: 'Uusi' }
+          ]
+        }));
+      } catch (err) {
+        next({
+          status: 500,
+          error: err
         });
+      }
     });
 
-    app.get(util.format('%s/:id', Common.EVENTS_FOLDER), (req, res, next) => {
-      const id = req.params.id;
-        
-      new ModulesClass(config)
-        .events.find(id)
-        .events.list({ 
-          firstResult: 0,
-          maxResults: 50,
-          orderBy: 'START_DATE',
-          orderDir: 'DESCENDING'
-        })
-        .callback((data) => {
-          const event = data[0];
-          const latestEvents = data[1];
-          event.description = Common.plainTextParagraphs(Autolinker.link(event.description));
-          res.render('pages/event.pug', Object.assign(req.kuntaApi.data, {
-            event: Object.assign(event, {
-              "start": formatDate(event.start, event.end),
-              "imageSrc": event.imageId ? util.format('/eventImages/%s/%s', event.id, event.imageId) : null
-            }),
-            latestEvents: latestEvents,
-            breadcrumbs : [
-              {path: Common.EVENTS_FOLDER, title: 'Tapahtumat'}, 
-              {path: util.format('%s/%s', Common.EVENTS_FOLDER, id), title: event.name }
-            ],
-            baseUrl : req.protocol + '://' + req.get('host'),
-            pageRoute: req.originalUrl,
-            ogTitle: entities.decode(event.name),
-            ogContent: entities.decode(striptags(event.description))
-          }));
-        }, (err) => {
-          next({
-            status: 500,
-            error: err
-          });
+    app.get(util.format('%s/:id', Common.EVENTS_FOLDER), async (req, res, next) => {
+      try {
+        const id = req.params.id;
+        const event = await findEvent(id, null);
+        const latestEvents = await listEvents(50, 1, moment(), null, null);
+
+        res.render('pages/event.pug', Object.assign(req.kuntaApi.data, {
+          event: event,
+          latestEvents: latestEvents,
+          breadcrumbs : [
+            {path: Common.EVENTS_FOLDER, title: 'Tapahtumat'}, 
+            {path: util.format('%s/%s', Common.EVENTS_FOLDER, id), title: event.name }
+          ],
+          baseUrl : req.protocol + '://' + req.get('host'),
+          pageRoute: req.originalUrl,
+          ogTitle: entities.decode(event.name),
+          ogContent: entities.decode(striptags(event.description))
+        }));
+      } catch (err) {
+        next({
+          status: 500,
+          error: err
         });
+      }
     });
     
     app.get('/linkedevents/places/search', (req, res, next) => {
