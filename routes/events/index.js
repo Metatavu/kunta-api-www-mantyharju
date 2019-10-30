@@ -195,12 +195,16 @@
     });
 
     app.get(Common.EVENTS_FOLDER, (req, res, next) => {
-      const perPage = Common.EVENTS_COUNT_PAGE;
-      const page = parseInt(req.query.page)||0;
-      
-      res.render("pages/events-list.pug", Object.assign(req.kuntaApi.data, {
-        breadcrumbs : [{path: Common.EVENTS_FOLDER, title: "Tapahtumat"}]
-      }));
+      try {
+        res.render("pages/events-list.pug", Object.assign(req.kuntaApi.data, {
+          breadcrumbs : [{path: Common.EVENTS_FOLDER, title: "Tapahtumat"}]
+        }));
+      } catch (err) {
+        next({
+          status: 500,
+          error: err
+        });
+      }
     });
     
     
@@ -275,79 +279,114 @@
     });
     
     app.get("/linkedevents/places/search", (req, res, next) => {
-      const text = req.query.q;
-      const page = req.query.page || 1;
-      const pageSize = Common.LINKEDEVENTS_MAX_PLACES;
-      
-      new ModulesClass(config)
-        .linkedevents.searchPlaces(text, page, pageSize)
-        .callback((data) => {
-          const places = data[0].data||[];
-          res.send(_.map(places, (place) => {
-            return {
-              value: place.id,
-              label: place.name ? place.name.fi : ""
-            };
-          }));
+      try {
+        const text = req.query.q;
+        const page = req.query.page || 1;
+        const pageSize = Common.LINKEDEVENTS_MAX_PLACES;
+        
+        new ModulesClass(config)
+          .linkedevents.searchPlaces(text, page, pageSize)
+          .callback((data) => {
+            const places = data[0].data||[];
+            res.send(_.map(places, (place) => {
+              return {
+                value: place.id,
+                label: place.name ? place.name.fi : ""
+              };
+            }));
+          });      
+      } catch (err) {
+        next({
+          status: 500,
+          error: err
         });
+      }
     });
     
     app.get("/ajax/linkedevents/places/new", (req, res, next) => {
-      res.render("ajax/place-new", Object.assign(req.kuntaApi.data, {
-        viewModel: require(`${__dirname}/forms/create-place`),
-        plugins: [ metaformFields.templates() ]
-      }));
+      try {
+        res.render("ajax/place-new", Object.assign(req.kuntaApi.data, {
+          viewModel: require(`${__dirname}/forms/create-place`),
+          plugins: [ metaformFields.templates() ]
+        }));
+      } catch (err) {
+        next({
+          status: 500,
+          error: err
+        });
+      }
     });
     
     app.post("/linkedevents/places/create", (req, res, next) => {
-      const placeData = {
-        "publication_status": "public",
-        "name": {
-          "fi": req.body["name-fi"],
-          "sv": req.body["name-sv"],
-          "en": req.body["name-en"]
-        }
-      };
-      
-      new ModulesClass(config)
-        .linkedevents.createPlace(placeData)
-        .callback((data) => {
-          res.send(data[0]);
-        }, (err) => {
-          res.status(err.response.status).send(err.response.text);
+      try {
+        const placeData = {
+          "publication_status": "public",
+          "name": {
+            "fi": req.body["name-fi"],
+            "sv": req.body["name-sv"],
+            "en": req.body["name-en"]
+          }
+        };
+        
+        new ModulesClass(config)
+          .linkedevents.createPlace(placeData)
+          .callback((data) => {
+            res.send(data[0]);
+          }, (err) => {
+            res.status(err.response.status).send(err.response.text);
+          });
+      } catch (err) {
+        next({
+          status: 500,
+          error: err
         });
+      }
     });
     
     app.get("/linkedevents/keywords/search", (req, res, next) => {
-      const text = req.query.text;
-      const page = req.query.page || 1;
-      const pageSize = Common.LINKEDEVENTS_MAX_PLACES;
-      
-      new ModulesClass(config)
-        .linkedevents.searchKeywords(text, page, pageSize)
-        .callback((data) => {
-          const keywords = data[0].data||[];
-          res.send(_.map(keywords, (keyword) => {
-            return {
-              value: keyword.id,
-              label: keyword.name ? keyword.name.fi : ""
-            };
-          }));
+      try {
+        const text = req.query.text;
+        const page = req.query.page || 1;
+        const pageSize = Common.LINKEDEVENTS_MAX_PLACES;
+        
+        new ModulesClass(config)
+          .linkedevents.searchKeywords(text, page, pageSize)
+          .callback((data) => {
+            const keywords = data[0].data||[];
+            res.send(_.map(keywords, (keyword) => {
+              return {
+                value: keyword.id,
+                label: keyword.name ? keyword.name.fi : ""
+              };
+            }));
+          });
+      } catch (err) {
+        next({
+          status: 500,
+          error: err
         });
+      }
     });
 
     app.post("/linkedevents/image", upload.single("file"), (req, res, next) => {
-      const deleteKey = uuidv4();
-      const deleteKeyFilePath = config.get("uploads:path") + req.file.filename + "." + deleteKey;
-      
-      fs.closeSync(fs.openSync(deleteKeyFilePath, "w"));
-      
-      res.send([{
-        filename: req.file.filename,
-        originalname: req.file.filename,
-        deleteKey: deleteKey,
-        url: config.get("uploads:baseUrl") + req.file.filename
-      }]);
+      try {
+        const deleteKey = uuidv4();
+        const deleteKeyFilePath = config.get("uploads:path") + req.file.filename + "." + deleteKey;
+        
+        fs.closeSync(fs.openSync(deleteKeyFilePath, "w"));
+        
+        res.send([{
+          filename: req.file.filename,
+          originalname: req.file.filename,
+          deleteKey: deleteKey,
+          url: config.get("uploads:baseUrl") + req.file.filename
+        }]);
+      } catch (err) {
+        next({
+          status: 500,
+          error: err
+        });
+      }
     });
     
     app.delete("/linkedevents/image/:filename", (req, res) => {
@@ -366,125 +405,132 @@
     });
     
     app.post("/linkedevents/event/create", (req, res, next) => {
-      const module = new ModulesClass(config);
+      try {
+        const module = new ModulesClass(config);
 
-      let imageUrls = [];
-      if (req.body["image-url"]) {
-        imageUrls.push(req.body["image-url"]);
-      }
-      
-      if (req.body["image"]) {
-        if (Array.isArray(req.body["image"])) {
-          imageUrls = imageUrls.concat(req.body["image"]);
-        } else {
-          imageUrls.push(req.body["image"]);
+        let imageUrls = [];
+        if (req.body["image-url"]) {
+          imageUrls.push(req.body["image-url"]);
         }
-      }
-      
-      for (let i = 0; i < imageUrls.length; i++) {
-        if (!validator.isURL(imageUrls[i])) {
-          res.status(400).send("Kuvan osoitteen pitää olla URL-osoite. Mikäli olet lataamassa kuvaa omalta tietokoneeltasi, klikkaa lisää tiedosto - painiketta.");
+        
+        if (req.body["image"]) {
+          if (Array.isArray(req.body["image"])) {
+            imageUrls = imageUrls.concat(req.body["image"]);
+          } else {
+            imageUrls.push(req.body["image"]);
+          }
+        }
+        
+        for (let i = 0; i < imageUrls.length; i++) {
+          if (!validator.isURL(imageUrls[i])) {
+            res.status(400).send("Kuvan osoitteen pitää olla URL-osoite. Mikäli olet lataamassa kuvaa omalta tietokoneeltasi, klikkaa lisää tiedosto - painiketta.");
+            return;
+          }
+        }
+
+        const nameFi = (req.body["name-fi"] || "").trim();
+        if (!nameFi) {
+          res.status(400).send("Nimi (Suomi) on pakollinen");
           return;
         }
-      }
+        
+        const location = req.body.location;
+        if (!location) {
+          res.status(400).send("Paikka on pakollinen");
+          return;
+        }
 
-      const nameFi = (req.body["name-fi"] || "").trim();
-      if (!nameFi) {
-        res.status(400).send("Nimi (Suomi) on pakollinen");
-        return;
-      }
-      
-      const location = req.body.location;
-      if (!location) {
-        res.status(400).send("Paikka on pakollinen");
-        return;
-      }
+        module.linkedevents.findPlace(location).callback((linkedEventsLocation) => {
+          if (!linkedEventsLocation) {
+            res.status(400).send("Tapahtumapaikka on virheellinen. Ole hyvä ja valitse tapahtumapaikka listasta.");
+            return;
+          }
 
-      module.linkedevents.findPlace(location).callback((linkedEventsLocation) => {
-        if (!linkedEventsLocation) {
+          const eventData = {
+            "publication_status": "draft",
+            "name": {
+              "fi": nameFi,
+              "sv": req.body["name-sv"],
+              "en": req.body["name-en"]
+            },
+            "description": {
+              "fi": req.body["description-fi"],
+              "sv": req.body["description-sv"],
+              "en": req.body["description-en"]
+            },
+            "short_description": {
+              "fi": truncateDescription(req.body["description-fi"]),
+              "sv": truncateDescription(req.body["description-sv"]),
+              "en": truncateDescription(req.body["description-en"])
+            },
+            "provider": {
+              "fi": req.body["provider"]
+            },
+            "image-urls": imageUrls,
+            "keywords": [Common.DEFAULT_EVENT_KEYWORD_ID],
+            "location": location,
+            "offers": [{
+              is_free: true,
+              price: null,
+              info_url: null,
+              description: null
+            }]
+          };
+          
+          const startDate = req.body["start-date"];
+          const startTime = req.body["start-time"];
+          const endDate = req.body["end-date"];
+          const endTime = req.body["end-time"];
+          
+          if (!startDate) {
+            res.status(400).send("Alkamispäivämäärä on pakollinen");
+            return;
+          }
+          
+          if (!endDate) {
+            res.status(400).send("Loppumispäivämäärä on pakollinen");
+            return;
+          }
+          
+          const eventStart = startTime ? moment.tz(`${startDate}T${startTime}`,  moment.ISO_8601, "Europe/Helsinki") : moment(startDate, moment.ISO_8601);
+          if (!eventStart.isValid()) {
+            res.status(400).send("Alkamispäivämäärä tai aika on virheellisen muotoinen. Ole hyvä ja käytä muotoa VVVV-MM-DD (esim. 2019-12-24) ja muotoa HH:MM (esim 10:30)");
+            return;
+          }
+          
+          const eventEnd = endTime ? moment.tz(`${endDate}T${endTime}`,  moment.ISO_8601, "Europe/Helsinki") : moment(endDate, moment.ISO_8601);
+          if (!eventEnd.isValid()) {
+            res.status(400).send("Loppumispäivämäärä tai aika on virheellisen muotoinen. Ole hyvä ja käytä muotoa VVVV-MM-DD (esim. 2019-12-24) ja muotoa HH:MM (esim 10:30)");
+            return;
+          }
+
+          if (eventStart.isAfter(eventEnd)) {
+            res.status(400).send("Alkamisaika ei voi olla loppumisajan jälkeen");
+            return;
+          }
+          
+          eventData["start_time"] = eventStart.format();
+          eventData["has_start_time"] = !!startTime;
+          
+          eventData["end_time"] = eventEnd.format();
+          eventData["has_end_time"] = !!endTime;
+
+          module.linkedevents.createEvent(eventData)
+            .callback((data) => {
+              res.send(200);
+            }, (err) => {
+              res.status(err.response.status).send(err.response.text);
+            });
+        }, (err) => {
           res.status(400).send("Tapahtumapaikka on virheellinen. Ole hyvä ja valitse tapahtumapaikka listasta.");
           return;
-        }
-
-        const eventData = {
-          "publication_status": "draft",
-          "name": {
-            "fi": nameFi,
-            "sv": req.body["name-sv"],
-            "en": req.body["name-en"]
-          },
-          "description": {
-            "fi": req.body["description-fi"],
-            "sv": req.body["description-sv"],
-            "en": req.body["description-en"]
-          },
-          "short_description": {
-            "fi": truncateDescription(req.body["description-fi"]),
-            "sv": truncateDescription(req.body["description-sv"]),
-            "en": truncateDescription(req.body["description-en"])
-          },
-          "provider": {
-            "fi": req.body["provider"]
-          },
-          "image-urls": imageUrls,
-          "keywords": [Common.DEFAULT_EVENT_KEYWORD_ID],
-          "location": location,
-          "offers": [{
-            is_free: true,
-            price: null,
-            info_url: null,
-            description: null
-          }]
-        };
-        
-        const startDate = req.body["start-date"];
-        const startTime = req.body["start-time"];
-        const endDate = req.body["end-date"];
-        const endTime = req.body["end-time"];
-        
-        if (!startDate) {
-          res.status(400).send("Alkamispäivämäärä on pakollinen");
-          return;
-        }
-        
-        if (!endDate) {
-          res.status(400).send("Loppumispäivämäärä on pakollinen");
-          return;
-        }
-        
-        const eventStart = startTime ? moment.tz(`${startDate}T${startTime}`,  moment.ISO_8601, "Europe/Helsinki") : moment(startDate, moment.ISO_8601);
-        if (!eventStart.isValid()) {
-          res.status(400).send("Alkamispäivämäärä tai aika on virheellisen muotoinen. Ole hyvä ja käytä muotoa VVVV-MM-DD (esim. 2019-12-24) ja muotoa HH:MM (esim 10:30)");
-          return;
-        }
-        
-        const eventEnd = endTime ? moment.tz(`${endDate}T${endTime}`,  moment.ISO_8601, "Europe/Helsinki") : moment(endDate, moment.ISO_8601);
-        if (!eventEnd.isValid()) {
-          res.status(400).send("Loppumispäivämäärä tai aika on virheellisen muotoinen. Ole hyvä ja käytä muotoa VVVV-MM-DD (esim. 2019-12-24) ja muotoa HH:MM (esim 10:30)");
-          return;
-        }
-
-        if (eventStart.isAfter(eventEnd)) {
-          res.status(400).send("Alkamisaika ei voi olla loppumisajan jälkeen");
-          return;
-        }
-        
-        eventData["start_time"] = eventStart.format();
-        eventData["has_start_time"] = !!startTime;
-        
-        eventData["end_time"] = eventEnd.format();
-        eventData["has_end_time"] = !!endTime;
-
-        module.linkedevents.createEvent(eventData)
-          .callback((data) => {
-            res.send(200);
-          }, (err) => {
-            res.status(err.response.status).send(err.response.text);
-          });
-      }, (err) => {
-        res.status(400).send("Tapahtumapaikka on virheellinen. Ole hyvä ja valitse tapahtumapaikka listasta.");
-        return;
-      });
+        });
+      } catch (err) {
+        next({
+          status: 500,
+          error: err
+        });
+      }
     });
     
   };
