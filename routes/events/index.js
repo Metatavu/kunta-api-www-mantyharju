@@ -167,7 +167,7 @@
      */
     async function findEvent (id, defaultImage) {
       const eventsApi = getLinkedEventsEventsApi();
-      const event = (await eventsApi.eventRetrieve(id));
+      const event = await eventsApi.eventRetrieve(id);
       return translateEvent(event, defaultImage);
     }
 
@@ -231,7 +231,7 @@
     app.get("/ajax/events", async (req, res, next) => {
       try {
         const perPage = Common.EVENTS_COUNT_PAGE;
-        const page = parseInt(req.query.page)||0;
+        const page = parseInt(req.query.page) || 0;
         const start = req.query.start ? moment(req.query.start, "DD.MM.YYYY") : moment();
         const end = req.query.end ? moment(req.query.end, "DD.MM.YYYY").endOf("day") : null;
         
@@ -387,7 +387,7 @@
         new ModulesClass(config)
           .linkedevents.searchKeywords(text, page, pageSize)
           .callback((data) => {
-            const keywords = data[0].data||[];
+            const keywords = data[0].data || [];
             res.send(_.map(keywords, (keyword) => {
               return {
                 value: keyword.id,
