@@ -372,7 +372,7 @@
         res.send(place);
       } catch (err) {
         next({
-          status: (err.response ? err.response.status : 500) || 500,
+          status: (err.response ? err.response.status : 500) || 500,
           error: err
         });
       }
