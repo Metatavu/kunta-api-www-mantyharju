@@ -298,23 +298,31 @@
       }
     });
     
-    app.get("/linkedevents/places/search", (req, res, next) => {
+    app.get("/linkedevents/places/search", async (req, res, next) => {
       try {
         const text = req.query.q;
         const page = req.query.page || 1;
         const pageSize = Common.LINKEDEVENTS_MAX_PLACES;
-        
-        new ModulesClass(config)
-          .linkedevents.searchPlaces(text, page, pageSize)
-          .callback((data) => {
-            const places = data[0].data||[];
-            res.send(_.map(places, (place) => {
-              return {
-                value: place.id,
-                label: place.name ? place.name.fi : ""
-              };
-            }));
-          });      
+
+        const filterApi = getLinkedEventsFilterApi();
+        const dataSource = config.get("linkedevents:datasource");
+
+        const options = {
+          showAllPlaces: true,
+          text: text,
+          dataSource: dataSource,
+          page: page,
+          pageSize: pageSize
+        };
+
+        const places = (await filterApi.placeList(options)).data;
+
+        res.send(_.map(places, (place) => {
+          return {
+            value: place.id,
+            label: place.name ? place.name.fi : ""
+          };
+        }));  
       } catch (err) {
         next({
           status: 500,
