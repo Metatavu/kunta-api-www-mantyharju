@@ -31,7 +31,7 @@
   });
 
   $(document).ready(function () {
-    $(".metaform").metaform("option", "onPostSuccess", function (response) {
+    $(".metaform").metaform("option", "onPostSuccess", function () {
       bootbox.alert({
         message: "<i class=\"fa fa-check\" /><h3>Tapahtuma  on lähetetty ylläpidolle arvioitavaksi.</h3>",
         backdrop: true,
