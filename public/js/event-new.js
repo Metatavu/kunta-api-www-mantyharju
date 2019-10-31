@@ -55,6 +55,10 @@
       $(this).removeClass("pristine");
     });
 
+    $("input[name='language-fi']")
+      .prop("checked", "checked")
+      .change();
+
     $(".metaform").addClass("ready");
   });
   
