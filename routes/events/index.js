@@ -75,10 +75,30 @@
      */
     function getLinkedEventsEventsApi() {
       const apiUrl = config.get("linkedevents:api-url");
+      
       const client = LinkedEventsClient.ApiClient.instance;      
       client.basePath = apiUrl;
   
       return new LinkedEventsClient.EventApi();    
+    }
+  
+    /**
+     * Returns filter API instance
+     * 
+     * @returns {LinkedEventsClient.FilterApi} filter API instance
+     */
+    function getLinkedEventsFilterApi() {
+      const apiUrl = config.get("linkedevents:api-url");
+      const apiKey = config.get("linkedevents:api-key");
+
+      const client = LinkedEventsClient.ApiClient.instance;      
+      
+      client.basePath = apiUrl;
+      client.defaultHeaders = {
+        apikey: apiKey
+      };
+  
+      return new LinkedEventsClient.FilterApi();    
     }
 
     /**
@@ -317,7 +337,7 @@
       }
     });
     
-    app.post("/linkedevents/places/create", (req, res, next) => {
+    app.post("/linkedevents/places/create", async (req, res, next) => {
       try {
         const placeData = {
           "publication_status": "public",
@@ -327,17 +347,24 @@
             "en": req.body["name-en"]
           }
         };
-        
-        new ModulesClass(config)
-          .linkedevents.createPlace(placeData)
-          .callback((data) => {
-            res.send(data[0]);
-          }, (err) => {
-            res.status(err.response.status).send(err.response.text);
-          });
+
+        const filterApi = getLinkedEventsFilterApi();
+        const dataSource = config.get("linkedevents:datasource");
+        const publisher = config.get("linkedevents:publisher");
+
+        const place = await filterApi.placeCreate({
+          placeObject: LinkedEventsClient.Place.constructFromObject(Object.assign({
+            "data_source": dataSource,
+            "publisher": publisher,
+            "origin_id": uuidv4(),
+            "deleted": false
+          }, placeData))
+        });
+
+        res.send(place);
       } catch (err) {
         next({
-          status: 500,
+          status: (err.response ? err.response.status : 500) || 500,
           error: err
         });
       }
