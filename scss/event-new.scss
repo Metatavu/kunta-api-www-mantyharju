@@ -1,0 +1,20 @@
+$selectionWidth: 5px;
+
+.default-images {
+  
+  .default-image {
+
+    margin-bottom: 20px;
+
+    img {
+      max-width: 100%;
+      padding: $selectionWidth;
+    }
+
+    &.selected-image img {
+      padding: 0;
+      border: $selectionWidth solid #109894;
+    }
+  }
+
+}

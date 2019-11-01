@@ -259,6 +259,7 @@
           viewModel: require(`${__dirname}/forms/create-event`),
           plugins: [ metaformFields.templates() ],
           latestEvents: latestEvents,
+          defaultImages: JSON.stringify(config.get("linkedevents:defaultImages") || []),
           breadcrumbs : [
             { path: Common.EVENTS_FOLDER, title: "Tapahtumat" }, 
             { path: util.format("%s/uusi", Common.EVENTS_FOLDER), title: "Uusi" }
@@ -407,14 +408,16 @@
       try {
         const deleteKey = uuidv4();
         const deleteKeyFilePath = config.get("uploads:path") + req.file.filename + "." + deleteKey;
+        const fileUrl = config.get("uploads:baseUrl") + req.file.filename;
         
         fs.closeSync(fs.openSync(deleteKeyFilePath, "w"));
         
         res.send([{
+          _id: fileUrl,
           filename: req.file.filename,
           originalname: req.file.filename,
           deleteKey: deleteKey,
-          url: config.get("uploads:baseUrl") + req.file.filename
+          url: fileUrl
         }]);
       } catch (err) {
         next({
@@ -455,12 +458,16 @@
             imageUrls.push(req.body["image"]);
           }
         }
-        
+
         for (let i = 0; i < imageUrls.length; i++) {
-          if (!validator.isURL(imageUrls[i])) {
+          if (!validator.isURL(imageUrls[i], { require_tld: false })) {
             res.status(400).send("Kuvan osoitteen pitää olla URL-osoite. Mikäli olet lataamassa kuvaa omalta tietokoneeltasi, klikkaa lisää tiedosto - painiketta.");
             return;
           }
+        }
+
+        if (!imageUrls.length && req.body["default-image-url"]) {
+          imageUrls.push(req.body["default-image-url"]);
         }
 
         const nameFi = (req.body["name-fi"] || "").trim();
