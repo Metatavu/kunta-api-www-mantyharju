@@ -1,21 +1,48 @@
 {
   "title": "Uusi tapahtuma",
   "sections": [{
+    "title": "Lomake näytetään",
+    "fields": [{
+      "name": "language-fi",
+      "type": "boolean",
+      "title": "suomeksi"
+    }, {
+      "name": "language-sv",
+      "type": "boolean",
+      "title": "ruotsiksi"
+      }, {
+      "name": "language-en",
+      "type": "boolean",
+      "title": "englanniksi"
+      }]
+  }, {
     "fields": [{
       "name": "name-fi",
       "type": "text",
       "title": "Nimi (Suomi)",
-      "required": true
+      "required": true,
+      "visible-if": {
+        "field": "language-fi",
+        "equals": true
+      }
     }, {
       "name": "name-sv",
       "type": "text",
       "title": "Nimi (Ruotsi)",
-      "required": false
+      "required": true,
+      "visible-if": {
+        "field": "language-sv",
+        "equals": true
+      }
     }, {
       "name": "name-en",
       "type": "text",
       "title": "Nimi (Englanti)",
-      "required": false
+      "required": true,
+      "visible-if": {
+        "field": "language-en",
+        "equals": true
+      }
     }, {
       "name": "start-date",
       "type": "date",
@@ -68,17 +95,29 @@
       "name": "description-fi",
       "type": "memo",
       "title": "Kuvaus (Suomi)",
-      "required": true
+      "required": true,
+      "visible-if": {
+        "field": "language-fi",
+        "equals": true
+      }
     }, {
       "name": "description-sv",
       "type": "memo",
       "title": "Kuvaus (Ruotsi)",
-      "required": false
+      "required": true,
+      "visible-if": {
+        "field": "language-sv",
+        "equals": true
+      }
     }, {
       "name": "description-en",
       "type": "memo",
       "title": "Kuvaus (Englanti)",
-      "required": false
+      "required": true,
+      "visible-if": {
+        "field": "language-en",
+        "equals": true
+      }
     }, {
       "name": "provider",
       "type": "text",
