@@ -30,6 +30,41 @@
     
   });
 
+  $.widget("custom.eventDefaultImages", {
+    
+    _create: function() {
+      this.element.addClass("row");
+
+      var images = this.options.images;
+      for (var i = 0; i < images.length; i++) {
+        this._addImage(images[i]);
+      }
+    },
+
+    _addImage: function (url) {
+      var img = $("<img>").attr("src", url).click($.proxy(this._onImageClick, this));
+      var container = $("<div>").addClass("default-image col-xs-12 col-md-8").append(img);
+      this.element.append(container);
+    },
+
+    _onImageClick: function (e) {
+      e.preventDefault();
+      var image = $(e.target);
+      var container = image.closest(".default-image");
+      var isSelected = container.hasClass("selected-image");
+
+      this.element.find(".selected-image").removeClass("selected-image");
+      
+      if (isSelected) {
+        container.removeClass("selected-image");
+        this.element.closest(".metaform").find("input[name=\"default-image-url\"]").removeAttr("value");
+      } else {
+        container.addClass("selected-image");
+        this.element.closest(".metaform").find("input[name=\"default-image-url\"]").val(image.attr("src"));
+      }
+    }
+  });
+
   $(document).ready(function () {
     $(".metaform").metaform("option", "onPostSuccess", function () {
       bootbox.alert({
@@ -58,6 +93,10 @@
     $("input[name='language-fi']")
       .prop("checked", "checked")
       .change();
+
+    $(".metaform .default-images").eventDefaultImages({
+      images: JSON.parse($("input[name=\"default-images\"]").val())
+    });
 
     $(".metaform").addClass("ready");
   });
