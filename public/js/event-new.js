@@ -30,6 +30,49 @@
     
   });
 
+  $.widget("custom.eventDates", {
+
+    _create: function() {
+      flatpickr("#field-start-date", {}).destroy();
+      flatpickr("#field-end-date", {}).destroy();
+
+      this.startPicker = $("#field-start-date").flatpickr({
+        "locale": "fi",
+        "altFormat": "d.m.Y H:i",
+        "altInput": true,
+        "utc": true,
+        "allowInput": true,
+        "enableTime" : true,
+        "time_24hr": true,
+        "onChange": $.proxy(this.onStartDateChange, this)
+        // "plugins": [new rangePlugin({ input: "#field-end-date" })]
+      });
+
+      this.endPicker = $("#field-end-date").flatpickr({
+        "locale": "fi",
+        "altFormat": "d.m.Y H:i",
+        "altInput": true,
+        "utc": true,
+        "allowInput": true,
+        "enableTime" : true,
+        "time_24hr": true,
+        "onChange": $.proxy(this.onEndDateChange, this)
+        // "plugins": [new rangePlugin({ input: "#field-end-date" })]
+      });
+
+    },
+
+    onStartDateChange: function (selectedDates, dateStr, instance) {
+      this.endPicker.set("minDate", selectedDates[0]);
+    },
+
+    onEndDateChange: function (selectedDates, dateStr, instance) {
+     
+    }
+
+
+  });
+
   $.widget("custom.eventDefaultImages", {
     
     _create: function() {
@@ -75,6 +118,8 @@
         }
       });
     });
+
+    $(".metaform").eventDates();
 
     $(".form-control").addClass("pristine");
 

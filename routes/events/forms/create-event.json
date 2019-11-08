@@ -45,24 +45,14 @@
       }
     }, {
       "name": "start-date",
-      "type": "date",
+      "type": "date-time",
       "title": "Alkamispäivämäärä",
       "required": true
     }, {
-      "name": "start-time",
-      "type": "time",
-      "title": "Alkamisaika",
-      "required": false
-    }, {
       "name": "end-date",
-      "type": "date",
+      "type": "date-time",
       "title": "Loppumispäivämäärä",
       "required": true
-    }, {
-      "name": "end-time",
-      "type": "time",
-      "title": "Loppumisaika",
-      "required": false
     }, {
       "name": "location",
       "type": "autocomplete",
