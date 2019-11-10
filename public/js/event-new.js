@@ -1,4 +1,4 @@
-/* global bootbox,$ */
+/* global bootbox,$,flatpickr */
 
 (function () {
   "use strict";
@@ -69,10 +69,8 @@
      * Event handler for start date change
      * 
      * @param {Date} selectedDates date object
-     * @param {string} dateStr date as string 
-     * @param {any} instance flatpickr instance
      */
-    onStartDateChange: function (selectedDates, dateStr, instance) {
+    onStartDateChange: function (selectedDates) {
       this.endPicker.set("minDate", selectedDates[0]);
     }
 
