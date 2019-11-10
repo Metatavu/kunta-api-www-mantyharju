@@ -1,7 +1,7 @@
 {
   "title": "Uusi tapahtuma",
-  "sections": [{
-    "title": "Lomake näytetään",
+  "sections": [ {
+    "title": "Kieli",
     "fields": [{
       "name": "language-fi",
       "type": "boolean",
@@ -42,12 +42,23 @@
       "visible-if": {
         "field": "language-en",
         "equals": true
-      }
-    }, {
+      } 
+      }, {
+      "name": "name-help",
+      "type": "html",
+      "html": "<div class='help-container'><p>Tähän laita tapahtuman nimi, mikäli tapahtuma kuvataan useammalla eri kielellä, laita kaikkiin kohtiin nimi.</p></div>"
+    } 
+  ]} , {
+    "title": "Ajankohta",
+    "fields": [{
       "name": "start-date",
       "type": "date",
       "title": "Alkamispäivämäärä",
       "required": true
+    }, {
+      "name": "time-help",
+      "type": "html",
+      "html": "<div class='help-container'><p>Valitse tapahtuman alkamispäivämäärä. Valitse alkamisaika, jos tapahtuma alkaa tiettyyn kellonaikaan.</p><p>Valitse myös päättymispäivä sekä päättymisaika.</p></div>"
     }, {
       "name": "start-time",
       "type": "time",
@@ -63,7 +74,10 @@
       "type": "time",
       "title": "Loppumisaika",
       "required": false
-    }, {
+    } 
+  ]} , {
+    "title": "Tapahtumapaikka",
+    "fields": [{
       "name": "location",
       "type": "autocomplete",
       "title": "Paikka",
@@ -72,22 +86,25 @@
     }, {
       "name": "location-help",
       "type": "html",
-      "html": "<strong>Mikäli paikkaa ei löydy haulla voit lisätä uuden klikkaamalla </strong> <a href=\"#\" class=\"new-place-link\">tästä</a>"
+      "html": "<div class='help-container'><p>Aloita kirjoittamaan kenttään tapahtumapaikan nimen alkua ja valitse oikea paikka alle ilmestyvästä listasta.</p><p>Jos tapahtumapaikka löytyy listasta, osoitetta ja sijaintia ei tarvitse kuvailla tarkemmin.</p><p>Voit kuitenkin laittaa lisätietoja tapahtuman löytämiseksi, kuten kerrosnumero tai muu tarkempi sijainti.</p></div>"
     }
   ]}, {
     "title": "Tapahtuman kuva",
     "fields": [{
+      "name": "show-default-images",
+      "type": "boolean",
+      "title": "Näytä oletuskuvat"
+    },{
       "name": "default-image-url",
       "type": "hidden"
     }, {
       "name": "default-image-html",
       "type": "html",
-      "html": "<div class=\"default-images\"></div>" 
-    }, {
-      "name": "image-url",
-      "type": "text",
-      "title": "Ulkoisen kuvan url osoite",
-      "required": false
+      "html": "<div class=\"default-images\"></div>",
+      "visible-if": {
+        "field":"show-default-images",
+        "equals": true
+      }  
     }, {
       "name": "image",
       "type": "files",
@@ -100,8 +117,60 @@
     }, {
       "name": "image-help",
       "type": "html",
-      "html": "<div style=\"display: none\" class='image-help-container'><div style='width:70%'><p>Lisää tapahtumalle laadukas ja hyvä kuva.</p><p>Sallitut tiedostotyypit: jpg, jpeg, png.</p><p>Kuvan on oltava mitoiltaan vähintään 1140x400 pikseliä.</p><p>Suurin sallittu tiedostokoko on 2 Mt.</p><p>Valitse mieluiten vaakamallinen kuva, koska kuvan ala- ja yläosasta rajautuu osa pois.</p><p>Parhaiten toimii kuva, jossa ei ole tekstiä.</p></div></div>"
+      "html": "<div class='help-container'><p>Lisää tapahtumalle laadukas ja hyvä kuva.</p><p>Sallitut tiedostotyypit: jpg, jpeg, png.</p><p>Kuvan on oltava mitoiltaan vähintään 1140x400 pikseliä.</p><p>Suurin sallittu tiedostokoko on 2 Mt.</p><p>Valitse mieluiten vaakamallinen kuva, koska kuvan ala- ja yläosasta rajautuu osa pois.</p><p>Parhaiten toimii kuva, jossa ei ole tekstiä.</p></div>"
     }, {
+      "name": "image-url",
+      "type": "text",
+      "title": "Ulkoisen kuvan url osoite",
+      "required": false
+    }
+  ]}, {
+    "title": "Tapahtuman järjestäjän tiedot",
+    "fields": [{
+      "title": "Järjestäjä",
+      "name": "provider",
+      "type": "text",
+      "required": false
+    }, {
+      "name": "provider-help",
+      "type": "html",
+      "html": "<div class='help-container'><p>Tapahtumajärjestäjän nimi, puhelinnumero ja sähköposti näytetään julkisesti tapahtumatietojen yhteydessä.</p></div>"
+    }, {
+      "title": "Puhelinnumero",
+      "name": "provider-phone-number",
+      "type": "number",
+      "required": false
+    }, {
+      "title": "Sähköpostiosoite",
+      "name": "email-address",
+      "type": "email",
+      "required": false
+    }
+  ]}, {
+    "title": "Vastuuhenkilön tiedot",
+    "fields": [{
+      "title": "Vastuuhenkilö",
+      "name": "responsible",
+      "type": "text",
+      "required": true
+    }, {
+      "name": "responsible-help",
+      "type": "html",
+      "html": "<div class='help-container'><p>Vastuuhenkilön tiedot näkyvät vain ylläpidolle.</p><p>Niitä käytetään tarvittaessa yhteydenottoon.</p></div>"
+    }, {
+      "title": "Puhelinnumero",
+      "name": "responsible-phone-number",
+      "type": "number",
+      "required": true
+    }, {
+      "title": "Sähköpostiosoite",
+      "name": "responsible-email-address",
+      "type": "email",
+      "required": true
+    }
+  ]}, {
+    "title": "Tapahtuman kuvaus",
+    "fields": [{
       "name": "description-fi",
       "type": "memo",
       "title": "Kuvaus (Suomi)",
@@ -128,10 +197,140 @@
         "field": "language-en",
         "equals": true
       }
+    }
+  ]}, {
+    "title": "Hinta",
+    "fields": [{
+      "name": "is-free",
+      "type": "boolean",
+      "title": "Ei pääsymaksua"
     }, {
-      "name": "provider",
-      "type": "text",
-      "title": "Tapahtuman järjestäjä / yhteystieto",
+      "name": "price-help",
+      "type": "html",
+      "html": "<div class='help-container'><p>Merkitse jos tapahtuma on maksuton tai lisää tapahtuman hinta tekstimuodossa.</p><p>Voit lisätä linkin verkkolipunmyyntiin.</p></div>"
+    }, {
+      "name": "price-fi",
+      "type": "memo",
+      "title": "Hintatietojen kuvaus (Suomi)",
+      "required": true,
+      "visible-if": {
+        "field": "is-free",
+        "not-equals": true,
+        "and": [{
+          "field": "language-fi",
+          "equals": true
+        }]
+      }
+    }, {
+      "name": "price-sv",
+      "type": "memo",
+      "title": "Hintatietojen kuvaus (Ruotsi)",
+      "required": true,
+      "visible-if": {
+        "field": "is-free",
+        "not-equals": true,
+        "and": [{
+          "field": "language-sv",
+          "equals": true
+        }]
+      }
+    }, {
+      "name": "price-en",
+      "type": "memo",
+      "title": "Hintatietojen kuvaus (Englanti)",
+      "required": true,
+      "visible-if": {
+        "field": "is-free",
+        "not-equals": true,
+        "and": [{
+          "field": "language-en",
+          "equals": true
+        }]
+      }
+    }, {
+      "name": "free-price-fi",
+      "type": "memo",
+      "title": "Hintatietojen kuvaus (Suomi)",
+      "required": false,
+      "visible-if": {
+        "field": "is-free",
+        "equals": true,
+        "and": [{
+          "field": "language-fi",
+          "equals": true
+        }]
+      }
+    }, {
+      "name": "free-price-sv",
+      "type": "memo",
+      "title": "Hintatietojen kuvaus (Ruotsi)",
+      "required": false,
+      "visible-if": {
+        "field": "is-free",
+        "equals": true,
+        "and": [{
+          "field": "language-sv",
+          "equals": true
+          }]
+        }
+    }, {
+      "name": "free-price-en",
+      "type": "memo",
+      "title": "Hintatietojen kuvaus (Englanti)",
+      "required": false,
+      "visible-if": {
+        "field": "is-free",
+        "equals": true,
+        "and": [{
+          "field": "language-en",
+          "equals": true
+          }]
+        }
+    }, {
+      "name": "price-url",
+      "type": "url",
+      "title": "Linkki verkkolipunmyyntiin",
+      "placeholder": "http://wwww verkkosivun osoite",
+      "required": false
+    }
+  ]}, {
+    "title": "Tapahtuman ilmoittautuminen",
+    "fields": [{
+      "name": "registration-fi",
+      "type": "memo",
+      "title": "Ilmoittautuminen (Suomi)",
+      "required": true,
+      "visible-if": {
+        "field": "language-fi",
+        "equals": true
+      }
+    }, {
+      "name": "registration-help",
+      "type": "html",
+      "html": "<div class='help-container'><p>Kerro mahdollisesta ennakkoilmoittautumisesta tai anna lisätietoja esimerkiksi paikkavarauksista.</p><p>Voit lisätä linkin ilmoittautumissivulle.</p></div>"
+    }, {
+      "name": "registration-sv",
+      "type": "memo",
+      "title": "Ilmoittautuminen (Ruotsi)",
+      "required": true,
+      "visible-if": {
+        "field": "language-sv",
+        "equals": true
+      }
+    }, {
+      "name": "registration-en",
+      "type": "memo",
+      "title": "Ilmoittautuminen (Englanti)",
+      "required": true,
+      "visible-if": {
+        "field": "language-en",
+        "equals": true
+      }
+    }, {
+      "name": "registration-url",
+      "type": "url",
+      "title": "Linkki ilmoittautumissivulle",
+      "placeholder": "http://www verkkosivun osoite",
       "required": false
     }, {
       "name": "submit",
