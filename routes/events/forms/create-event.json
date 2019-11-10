@@ -60,20 +60,10 @@
       "type": "html",
       "html": "<div class='help-container'><p>Valitse tapahtuman alkamispäivämäärä. Valitse alkamisaika, jos tapahtuma alkaa tiettyyn kellonaikaan.</p><p>Valitse myös päättymispäivä sekä päättymisaika.</p></div>"
     }, {
-      "name": "start-time",
-      "type": "time",
-      "title": "Alkamisaika",
-      "required": false
-    }, {
       "name": "end-date",
       "type": "date-time",
       "title": "Loppumispäivämäärä",
       "required": true
-    }, {
-      "name": "end-time",
-      "type": "time",
-      "title": "Loppumisaika",
-      "required": false
     } 
   ]} , {
     "title": "Tapahtumapaikka",

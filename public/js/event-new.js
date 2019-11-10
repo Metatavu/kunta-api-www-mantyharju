@@ -32,6 +32,9 @@
 
   $.widget("custom.eventDates", {
 
+    /**
+     * Constructor
+     */
     _create: function() {
       flatpickr("#field-start-date", {}).destroy();
       flatpickr("#field-end-date", {}).destroy();
@@ -44,8 +47,8 @@
         "allowInput": true,
         "enableTime" : true,
         "time_24hr": true,
+        "minDate": new Date(),
         "onChange": $.proxy(this.onStartDateChange, this)
-        // "plugins": [new rangePlugin({ input: "#field-end-date" })]
       });
 
       this.endPicker = $("#field-end-date").flatpickr({
@@ -56,20 +59,22 @@
         "allowInput": true,
         "enableTime" : true,
         "time_24hr": true,
+        "minDate": new Date(),
         "onChange": $.proxy(this.onEndDateChange, this)
-        // "plugins": [new rangePlugin({ input: "#field-end-date" })]
       });
 
     },
 
+    /**
+     * Event handler for start date change
+     * 
+     * @param {Date} selectedDates date object
+     * @param {string} dateStr date as string 
+     * @param {any} instance flatpickr instance
+     */
     onStartDateChange: function (selectedDates, dateStr, instance) {
       this.endPicker.set("minDate", selectedDates[0]);
-    },
-
-    onEndDateChange: function (selectedDates, dateStr, instance) {
-     
     }
-
 
   });
 
