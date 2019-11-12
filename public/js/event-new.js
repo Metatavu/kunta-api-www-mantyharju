@@ -1,4 +1,4 @@
-/* global bootbox,$ */
+/* global bootbox,$,flatpickr */
 
 (function () {
   "use strict";
@@ -28,6 +28,52 @@
       });
     });
     
+  });
+
+  $.widget("custom.eventDates", {
+
+    /**
+     * Constructor
+     */
+    _create: function() {
+      flatpickr("#field-start-date", {}).destroy();
+      flatpickr("#field-end-date", {}).destroy();
+
+      this.startPicker = $("#field-start-date").flatpickr({
+        "locale": "fi",
+        "altFormat": "d.m.Y H:i",
+        "altInput": true,
+        "utc": true,
+        "allowInput": true,
+        "enableTime" : true,
+        "time_24hr": true,
+        "minDate": new Date(),
+        "onChange": $.proxy(this.onStartDateChange, this)
+      });
+
+      this.endPicker = $("#field-end-date").flatpickr({
+        "locale": "fi",
+        "altFormat": "d.m.Y H:i",
+        "altInput": true,
+        "utc": true,
+        "allowInput": true,
+        "enableTime" : true,
+        "time_24hr": true,
+        "minDate": new Date(),
+        "onChange": $.proxy(this.onEndDateChange, this)
+      });
+
+    },
+
+    /**
+     * Event handler for start date change
+     * 
+     * @param {Date} selectedDates date object
+     */
+    onStartDateChange: function (selectedDates) {
+      this.endPicker.set("minDate", selectedDates[0]);
+    }
+
   });
 
   $.widget("custom.eventDefaultImages", {
@@ -75,6 +121,8 @@
         }
       });
     });
+
+    $(".metaform").eventDates();
 
     $(".form-control").addClass("pristine");
 
