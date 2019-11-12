@@ -575,17 +575,13 @@
         eventData["end_time"] = eventEnd.format();
         eventData["has_end_time"] = !!endTime;
 
-        // console.log("payload object", LinkedEventsClient.Event.constructFromObject(Object.assign({
-        //   "data_source": dataSource,
-        //   "publisher": publisher
-        // }, eventData)));
-
         await eventApi.eventCreate({
           eventObject: LinkedEventsClient.Event.constructFromObject(Object.assign({
             "data_source": dataSource,
             "publisher": publisher
           }, eventData))
         });
+        
         res.sendStatus(200);
       } catch (err) {
         next({
