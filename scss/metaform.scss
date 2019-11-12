@@ -172,7 +172,7 @@
       margin-left: -15px;
       position: absolute;
       left: -10px;
-      transform:rotate(-90deg);
+      transform: rotate(-90deg);
       width: 0;
     }
   }
@@ -180,8 +180,9 @@
 
 @media only screen and (max-width: 1660px) {
   .page-content {
-    margin-left: 0px;
+    margin-left: 0;
   }
+
   .help-container {
     background-color: $create-event-tooltip-container;
     color: $create-event-tooltip-text;
