@@ -120,7 +120,7 @@
       "title": "Järjestäjä",
       "name": "provider",
       "type": "text",
-      "required": false
+      "required": true
     }, {
       "name": "provider-help",
       "type": "html",
@@ -191,20 +191,29 @@
   ]}, {
     "title": "Hinta",
     "fields": [{
-      "name": "is-free",
+      "name": "has-price",
       "type": "boolean",
-      "title": "Ei pääsymaksua"
-    }, {
-      "name": "price-help",
-      "type": "html",
-      "html": "<div class='help-container'><p>Merkitse jos tapahtuma on maksuton tai lisää tapahtuman hinta tekstimuodossa.</p><p>Voit lisätä linkin verkkolipunmyyntiin.</p></div>"
+      "title": "Pääsymaksu"
     }, {
       "name": "price-fi",
       "type": "memo",
       "title": "Hintatietojen kuvaus (Suomi)",
       "required": true,
       "visible-if": {
-        "field": "is-free",
+        "field": "has-price",
+        "equals": true,
+        "and": [{
+          "field": "language-fi",
+          "equals": true
+        }]
+      }
+    }, {
+      "name": "free-price-fi",
+      "type": "memo",
+      "title": "Hintatietojen kuvaus (Suomi)",
+      "required": false,
+      "visible-if": {
+        "field": "has-price",
         "not-equals": true,
         "and": [{
           "field": "language-fi",
@@ -212,13 +221,17 @@
         }]
       }
     }, {
+      "name": "price-help",
+      "type": "html",
+      "html": "<div class='help-container'><p>Merkitse jos tapahtuma on maksuton tai lisää tapahtuman hinta tekstimuodossa.</p><p>Voit lisätä linkin verkkolipunmyyntiin.</p></div>"
+    }, {
       "name": "price-sv",
       "type": "memo",
       "title": "Hintatietojen kuvaus (Ruotsi)",
       "required": true,
       "visible-if": {
-        "field": "is-free",
-        "not-equals": true,
+        "field": "has-price",
+        "equals": true,
         "and": [{
           "field": "language-sv",
           "equals": true
@@ -230,23 +243,10 @@
       "title": "Hintatietojen kuvaus (Englanti)",
       "required": true,
       "visible-if": {
-        "field": "is-free",
-        "not-equals": true,
-        "and": [{
-          "field": "language-en",
-          "equals": true
-        }]
-      }
-    }, {
-      "name": "free-price-fi",
-      "type": "memo",
-      "title": "Hintatietojen kuvaus (Suomi)",
-      "required": false,
-      "visible-if": {
-        "field": "is-free",
+        "field": "has-price",
         "equals": true,
         "and": [{
-          "field": "language-fi",
+          "field": "language-en",
           "equals": true
         }]
       }
@@ -256,8 +256,8 @@
       "title": "Hintatietojen kuvaus (Ruotsi)",
       "required": false,
       "visible-if": {
-        "field": "is-free",
-        "equals": true,
+        "field": "has-price",
+        "not-equals": true,
         "and": [{
           "field": "language-sv",
           "equals": true
@@ -269,8 +269,8 @@
       "title": "Hintatietojen kuvaus (Englanti)",
       "required": false,
       "visible-if": {
-        "field": "is-free",
-        "equals": true,
+        "field": "has-price",
+        "not-equals": true,
         "and": [{
           "field": "language-en",
           "equals": true
@@ -280,41 +280,96 @@
       "name": "price-url",
       "type": "url",
       "title": "Linkki verkkolipunmyyntiin",
-      "placeholder": "http://wwww verkkosivun osoite",
+      "placeholder": "http://www verkkosivun osoite",
       "required": false
     }
   ]}, {
     "title": "Tapahtuman ilmoittautuminen",
     "fields": [{
-      "name": "registration-fi",
+      "name": "is-registration",
+      "type": "boolean",
+      "title": "Pakollinen ilmoittautuminen"
+    }, {
+      "name": "no-registration-fi",
       "type": "memo",
       "title": "Ilmoittautuminen (Suomi)",
       "required": true,
       "visible-if": {
-        "field": "language-fi",
-        "equals": true
+        "field": "is-registration",
+        "equals": true,
+        "and": [{
+          "field": "language-fi",
+          "equals": true
+        }]
+      }
+    }, {
+      "name": "registration-fi",
+      "type": "memo",
+      "title": "Ilmoittautuminen (Suomi)",
+      "required": false,
+      "visible-if": {
+        "field": "is-registration",
+        "not-equals": true,
+        "and": [{
+          "field": "language-fi",
+          "equals": true
+        }]
       }
     }, {
       "name": "registration-help",
       "type": "html",
       "html": "<div class='help-container'><p>Kerro mahdollisesta ennakkoilmoittautumisesta tai anna lisätietoja esimerkiksi paikkavarauksista.</p><p>Voit lisätä linkin ilmoittautumissivulle.</p></div>"
     }, {
-      "name": "registration-sv",
+      "name": "no-registration-sv",
       "type": "memo",
       "title": "Ilmoittautuminen (Ruotsi)",
       "required": true,
       "visible-if": {
-        "field": "language-sv",
-        "equals": true
+        "field": "is-registration",
+        "equals": true,
+        "and": [{
+          "field": "language-sv",
+          "equals": true
+        }]
+      }
+    }, {
+      "name": "no-registration-en",
+      "type": "memo",
+      "title": "Ilmoittautuminen (Englanti)",
+      "required": true,
+      "visible-if": {
+        "field": "is-registration",
+        "equals": true,
+        "and": [{
+          "field": "language-en",
+          "equals": true
+        }]
+      }
+    }, {
+      "name": "registration-sv",
+      "type": "memo",
+      "title": "Ilmoittautuminen (Ruotsi)",
+      "required": false,
+      "visible-if": {
+        "field": "is-registration",
+        "not-equals": true,
+        "and": [{
+          "field": "language-sv",
+          "equals": true
+        }]
       }
     }, {
       "name": "registration-en",
       "type": "memo",
       "title": "Ilmoittautuminen (Englanti)",
-      "required": true,
+      "required": false,
       "visible-if": {
-        "field": "language-en",
-        "equals": true
+        "field": "is-registration",
+        "not-equals": true,
+        "and": [{
+          "field": "language-en",
+          "equals": true
+        }]
       }
     }, {
       "name": "registration-url",
@@ -326,6 +381,10 @@
       "name": "submit",
       "type": "submit",
       "text": "Luo"
+    }, {
+      "name": "submit-help",
+      "type": "html",
+      "html": "<div class='help-container'><p>Mikäli tapahtuman lisääminen ei onnistu, voit olla yhteydessä: eija.kling@mantyharju.fi</p></div>"
     }]
   }]
 }
