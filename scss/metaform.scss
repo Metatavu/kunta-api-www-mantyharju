@@ -222,3 +222,17 @@
   background-position: right center;
   background-repeat: no-repeat;
 }
+
+#section-9{
+  fieldset{
+    display: contents;
+    .form-group {
+      margin: 0px;
+      width: 45%;
+    }
+  }
+}
+
+.bootbox-body .metaform:not(.ready) {
+  opacity: 1;
+}

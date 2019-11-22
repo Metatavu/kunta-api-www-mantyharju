@@ -74,6 +74,10 @@
       "required": true,
       "source-url": "/linkedevents/places/search"
     }, {
+      "name": "add-location",
+      "type": "html",
+      "html": "<strong>Mikäli paikkaa ei löydy haulla voit lisätä uuden klikkaamalla </strong> <a href=\"#\" class=\"new-place-link\">tästä</a>"
+    }, {
       "name": "location-help",
       "type": "html",
       "html": "<div class='help-container'><p>Aloita kirjoittamaan kenttään tapahtumapaikan nimen alkua ja valitse oikea paikka alle ilmestyvästä listasta.</p><p>Jos tapahtumapaikka löytyy listasta, osoitetta ja sijaintia ei tarvitse kuvailla tarkemmin.</p><p>Voit kuitenkin laittaa lisätietoja tapahtuman löytämiseksi, kuten kerrosnumero tai muu tarkempi sijainti.</p></div>"
@@ -132,7 +136,7 @@
       "required": false
     }, {
       "title": "Sähköpostiosoite",
-      "name": "email-address",
+      "name": "provider-email-address",
       "type": "email",
       "required": false
     }
@@ -199,6 +203,7 @@
       "type": "memo",
       "title": "Hintatietojen kuvaus (Suomi)",
       "required": true,
+      "placeholder": "Esimerkki: 10 euroa, maksetaan paikanpäälle.",
       "visible-if": {
         "field": "has-price",
         "equals": true,
@@ -212,6 +217,7 @@
       "type": "memo",
       "title": "Hintatietojen kuvaus (Suomi)",
       "required": false,
+      "placeholder": "Esimerkki: 10 euroa, maksetaan paikanpäälle.",
       "visible-if": {
         "field": "has-price",
         "not-equals": true,
@@ -223,12 +229,13 @@
     }, {
       "name": "price-help",
       "type": "html",
-      "html": "<div class='help-container'><p>Merkitse jos tapahtuma on maksuton tai lisää tapahtuman hinta tekstimuodossa.</p><p>Voit lisätä linkin verkkolipunmyyntiin.</p></div>"
+      "html": "<div class='help-container'><p>Merkitse jos tapahtuma on maksullinen ja lisää tapahtuman hinta tekstimuodossa.</p><p>Voit lisätä linkin verkkolipunmyyntiin.</p></div>"
     }, {
       "name": "price-sv",
       "type": "memo",
       "title": "Hintatietojen kuvaus (Ruotsi)",
       "required": true,
+      "placeholder": "Exempel: 10 EUR",
       "visible-if": {
         "field": "has-price",
         "equals": true,
@@ -242,6 +249,7 @@
       "type": "memo",
       "title": "Hintatietojen kuvaus (Englanti)",
       "required": true,
+      "placeholder": "Example: 10 EUR",
       "visible-if": {
         "field": "has-price",
         "equals": true,
@@ -255,6 +263,7 @@
       "type": "memo",
       "title": "Hintatietojen kuvaus (Ruotsi)",
       "required": false,
+      "placeholder": "Exempel: 10 EUR",
       "visible-if": {
         "field": "has-price",
         "not-equals": true,
@@ -268,6 +277,7 @@
       "type": "memo",
       "title": "Hintatietojen kuvaus (Englanti)",
       "required": false,
+      "placeholder": "Example: 10 EUR",
       "visible-if": {
         "field": "has-price",
         "not-equals": true,
@@ -282,6 +292,68 @@
       "title": "Linkki verkkolipunmyyntiin",
       "placeholder": "http://www verkkosivun osoite",
       "required": false
+    }
+  ]}, {
+    "title": "Tapahtumaluokat",
+    "name": "keywords",
+    "fields": [{
+      "name": "movie",
+      "type": "boolean",
+      "title": "Elokuva"
+    }, {
+      "name": "education",
+      "type": "boolean",
+      "title": "Koulutukset ja seminaarit"
+    },{
+      "name": "art-picture",
+      "type": "boolean",
+      "title": "Kuvataide ja näyttelyt"
+    }, {
+      "name": "sports",
+      "type": "boolean",
+      "title": "Liikunta ja urheilu"
+    }, {
+      "name": "museum",
+      "type": "boolean",
+      "title": "Museot"
+    }, {
+      "name": "music",
+      "type": "boolean",
+      "title": "Musiikki"
+    }, {
+      "name": "Food",
+      "type": "boolean",
+      "title": "Ruoka"
+    }, {
+      "name": "literature",
+      "type": "boolean",
+      "title": "Sanataide ja kirjallisuus"
+    }, {
+      "name": "art-studies",
+      "type": "boolean",
+      "title": "Taiteen perusopetus"
+    }, {
+      "name": "dance",
+      "type": "boolean",
+      "title": "Tanssi"
+    }, {
+      "name": "theatre",
+      "type": "boolean",
+      "title": "Teatteri"
+    }, {
+      "name": "export",
+      "type": "boolean",
+      "title": "Vienti ja kansainvälisyys"
+    }, {
+      "name": "else-events",
+      "type": "boolean",
+      "title": "Muut tapahtumat"
+    }
+  ]}, {
+    "fields": [{
+        "name": "keyword-help",
+        "type": "html",
+        "html":"<div class='help-container'><p>Valitse tapahtumallesi 1-3 tapahtumaluokkaa.</p></div>" 
     }
   ]}, {
     "title": "Tapahtuman ilmoittautuminen",
