@@ -277,7 +277,7 @@
               return {
                 name: keyword.id,
                 text: keyword.name.fi
-              }
+              };
             })
           }
         ];
@@ -536,8 +536,6 @@
 
         const notFree = req.body["has-price"];
         const isRegistration = req.body["is-registration"];
-
-        console.log("req.body[asdasdasd]: ", notFree ? req.body["price-fi"] : req.body["free-price-fi"])
 
         const eventData = {
           "publication_status": "draft",
