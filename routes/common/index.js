@@ -68,7 +68,7 @@
     }
     
     static get LINKEDEVENTS_MAX_PLACES() {
-      return 20;
+      return 10;
     }
     
     static get DEFAULT_EVENT_KEYWORD_ID() {

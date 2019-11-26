@@ -75,10 +75,13 @@
      */
     function getLinkedEventsEventsApi() {
       const apiUrl = config.get("linkedevents:api-url");
+      const apiKey = config.get("linkedevents:api-key");
       
       const client = LinkedEventsClient.ApiClient.instance;      
       client.basePath = apiUrl;
-  
+      client.defaultHeaders = {
+        apikey: apiKey
+      };
       return new LinkedEventsClient.EventApi();    
     }
   
@@ -253,18 +256,53 @@
     
     app.get(util.format("%s/uusi", Common.EVENTS_FOLDER), async (req, res, next) => {
       try {
+        const filterApi = getLinkedEventsFilterApi();
+        const dataSource = config.get("linkedevents:datasource");
+
         const latestEvents = await listEvents(50, 1, moment(), null, null);
 
+        const keywords = (await filterApi.keywordList({
+          dataSource: dataSource
+        })).data;
+
+        const viewModel = require(`${__dirname}/forms/create-event`);
+
+        const keywordsSection = viewModel.sections.find(section => section.name === "keywords");
+
+        keywordsSection.fields = [
+          {
+            "type": "checklist",
+            "name": "keywords",
+            "options": keywords.map((keyword) => {
+              return {
+                name: keyword.id,
+                text: keyword.name.fi
+              }
+            })
+          }
+        ];
+
         res.render("pages/event-new", Object.assign(req.kuntaApi.data, {
-          viewModel: require(`${__dirname}/forms/create-event`),
+          viewModel: viewModel,
           plugins: [ metaformFields.templates() ],
           latestEvents: latestEvents,
-          defaultImages: JSON.stringify(config.get("linkedevents:defaultImages") || []),
+          defaultImages: JSON.stringify(config.get("linkedevents:defaultImages") || []),
           breadcrumbs : [
             { path: Common.EVENTS_FOLDER, title: "Tapahtumat" }, 
             { path: util.format("%s/uusi", Common.EVENTS_FOLDER), title: "Uusi" }
           ]
         }));
+      } catch (err) {
+        next({
+          status: 500,
+          error: err
+        });
+      }
+    });
+
+    app.get(util.format("%s/ehdot", Common.EVENTS_FOLDER), (req, res, next) => {
+      try {
+        res.render("pages/terms", req.kuntaApi.data);
       } catch (err) {
         next({
           status: 500,
@@ -298,7 +336,7 @@
         });
       }
     });
-    
+
     app.get("/linkedevents/places/search", async (req, res, next) => {
       try {
         const text = req.query.q;
@@ -369,7 +407,7 @@
             "deleted": false
           }, placeData))
         });
-
+ 
         res.send(place);
       } catch (err) {
         next({
@@ -442,9 +480,17 @@
       }
     });
     
-    app.post("/linkedevents/event/create", (req, res, next) => {
+    app.post("/linkedevents/event/create", async (req, res, next) => {
       try {
-        const module = new ModulesClass(config);
+        const eventApi = getLinkedEventsEventsApi();
+        const filterApi = getLinkedEventsFilterApi();
+        const dataSource = config.get("linkedevents:datasource");
+        const publisher = config.get("linkedevents:publisher");
+        const linkedEventsURL = config.get("linkedevents:api-url");
+        const keywordIds = req.body["keywords"] || [];
+        const keywords = keywordIds.map((keywordId) => {
+          return { "@id" : `${linkedEventsURL}/keyword/${keywordId}/` };
+        });
 
         let imageUrls = [];
         if (req.body["image-url"]) {
@@ -475,104 +521,118 @@
           res.status(400).send("Nimi (Suomi) on pakollinen");
           return;
         }
-        
-        const location = req.body.location;
-        if (!location) {
+
+        const locationId = req.body.location;
+        if (!locationId) {
           res.status(400).send("Paikka on pakollinen");
           return;
         }
 
-        module.linkedevents.findPlace(location).callback((linkedEventsLocation) => {
-          if (!linkedEventsLocation) {
-            res.status(400).send("Tapahtumapaikka on virheellinen. Ole hyvä ja valitse tapahtumapaikka listasta.");
-            return;
-          }
-
-          const eventData = {
-            "publication_status": "draft",
-            "name": {
-              "fi": nameFi,
-              "sv": req.body["name-sv"],
-              "en": req.body["name-en"]
-            },
-            "description": {
-              "fi": req.body["description-fi"],
-              "sv": req.body["description-sv"],
-              "en": req.body["description-en"]
-            },
-            "short_description": {
-              "fi": truncateDescription(req.body["description-fi"]),
-              "sv": truncateDescription(req.body["description-sv"]),
-              "en": truncateDescription(req.body["description-en"])
-            },
-            "provider": {
-              "fi": req.body["provider"]
-            },
-            "image-urls": imageUrls,
-            "keywords": [Common.DEFAULT_EVENT_KEYWORD_ID],
-            "location": location,
-            "offers": [{
-              is_free: true,
-              price: null,
-              info_url: null,
-              description: null
-            }]
-          };
-          
-          const startDate = req.body["start-date"];
-          const startTime = req.body["start-time"];
-          const endDate = req.body["end-date"];
-          const endTime = req.body["end-time"];
-          
-          if (!startDate) {
-            res.status(400).send("Alkamispäivämäärä on pakollinen");
-            return;
-          }
-          
-          if (!endDate) {
-            res.status(400).send("Loppumispäivämäärä on pakollinen");
-            return;
-          }
-          
-          const eventStart = startTime ? moment.tz(`${startDate}T${startTime}`,  moment.ISO_8601, "Europe/Helsinki") : moment(startDate, moment.ISO_8601);
-          if (!eventStart.isValid()) {
-            res.status(400).send("Alkamispäivämäärä tai aika on virheellisen muotoinen. Ole hyvä ja käytä muotoa VVVV-MM-DD (esim. 2019-12-24) ja muotoa HH:MM (esim 10:30)");
-            return;
-          }
-          
-          const eventEnd = endTime ? moment.tz(`${endDate}T${endTime}`,  moment.ISO_8601, "Europe/Helsinki") : moment(endDate, moment.ISO_8601);
-          if (!eventEnd.isValid()) {
-            res.status(400).send("Loppumispäivämäärä tai aika on virheellisen muotoinen. Ole hyvä ja käytä muotoa VVVV-MM-DD (esim. 2019-12-24) ja muotoa HH:MM (esim 10:30)");
-            return;
-          }
-
-          if (eventStart.isAfter(eventEnd)) {
-            res.status(400).send("Alkamisaika ei voi olla loppumisajan jälkeen");
-            return;
-          }
-          
-          eventData["start_time"] = eventStart.format();
-          eventData["has_start_time"] = !!startTime;
-          
-          eventData["end_time"] = eventEnd.format();
-          eventData["has_end_time"] = !!endTime;
-
-          module.linkedevents.createEvent(eventData)
-            .callback(() => {
-              res.send(200);
-            }, (err) => {
-              res.status(err.response.status).send(err.response.text);
-            });
-        }, (err) => {
+        const location = await filterApi.placeRetrieve(locationId);
+        if (!location) {
           res.status(400).send("Tapahtumapaikka on virheellinen. Ole hyvä ja valitse tapahtumapaikka listasta.");
-          next({
-            status: 500,
-            error: err
-          });
+          return;
+        }
+
+        const notFree = req.body["has-price"];
+        const isRegistration = req.body["is-registration"];
+
+        console.log("req.body[asdasdasd]: ", notFree ? req.body["price-fi"] : req.body["free-price-fi"])
+
+        const eventData = {
+          "publication_status": "draft",
+          "name": {
+            "fi": nameFi,
+            "sv": req.body["name-sv"],
+            "en": req.body["name-en"]
+          },
+          "description": {
+            "fi": req.body["description-fi"],
+            "sv": req.body["description-sv"],
+            "en": req.body["description-en"]
+          },
+          "short_description": {
+            "fi": truncateDescription(req.body["description-fi"]),
+            "sv": truncateDescription(req.body["description-sv"]),
+            "en": truncateDescription(req.body["description-en"])
+          },
+          "custom_data": {
+            "provider-fi": req.body["provider"],
+            "provider-phone": req.body["provider-phone-number"],
+            "provider-email": req.body["provider-email-address"],
+            "responsible-fi": req.body["responsible"],
+            "responsible-phone": req.body["responsible-phone-number"],
+            "responsible-email": req.body["responsible-email-address"],
+            "isRegistration": req.body["is-registration"],
+            "registration-fi": isRegistration ? req.body["registration-fi"] : req.body["no-registration-fi"],
+            "registration-sv": isRegistration ? req.body["registration-sv"] : req.body["no-registration-sv"],
+            "registration-en": isRegistration ? req.body["registration-en"] : req.body["no-registration-en"],
+            "registration_url": req.body["registration-url"],
+          },
+          "image-urls": imageUrls,
+          "keywords": keywords,
+          "location": { "@id": `${linkedEventsURL}/place/${locationId}/` },
+          "offers": [{
+            "is_free": req.body["has-price"],
+            "price": {
+              "fi": notFree ? req.body["price-fi"] : req.body["free-price-fi"],
+              "sv": notFree ? req.body["price-sv"] : req.body["free-price-sv"],
+              "en": notFree ? req.body["price-en"] : req.body["free-price-en"]
+            },
+            "info_url": req.body["price-url"],
+            "description": null
+          }],
+        };
+        
+        const startDate = req.body["start-date"];
+        const startTime = req.body["start-time"];
+        const endDate = req.body["end-date"];
+        const endTime = req.body["end-time"];
+        
+        if (!startDate) {
+          res.status(400).send("Alkamispäivämäärä on pakollinen");
+          return;
+        }
+        
+        if (!endDate) {
+          res.status(400).send("Loppumispäivämäärä on pakollinen");
+          return;
+        }
+        
+        const eventStart = startTime ? moment.tz(`${startDate}T${startTime}`,  moment.ISO_8601, "Europe/Helsinki") : moment(startDate, moment.ISO_8601);
+        if (!eventStart.isValid()) {
+          res.status(400).send("Alkamispäivämäärä tai aika on virheellisen muotoinen. Ole hyvä ja käytä muotoa VVVV-MM-DD (esim. 2019-12-24) ja muotoa HH:MM (esim 10:30)");
+          return;
+        }
+        
+        const eventEnd = endTime ? moment.tz(`${endDate}T${endTime}`,  moment.ISO_8601, "Europe/Helsinki") : moment(endDate, moment.ISO_8601);
+        if (!eventEnd.isValid()) {
+          res.status(400).send("Loppumispäivämäärä tai aika on virheellisen muotoinen. Ole hyvä ja käytä muotoa VVVV-MM-DD (esim. 2019-12-24) ja muotoa HH:MM (esim 10:30)");
+          return;
+        }
+
+        if (eventStart.isAfter(eventEnd)) {
+          res.status(400).send("Alkamisaika ei voi olla loppumisajan jälkeen");
+          return;
+        }
+        
+        eventData["start_time"] = eventStart.format();
+        eventData["has_start_time"] = !!startTime;
+        
+        eventData["end_time"] = eventEnd.format();
+        eventData["has_end_time"] = !!endTime;
+        
+        await eventApi.eventCreate({
+          eventObject: LinkedEventsClient.Event.constructFromObject(Object.assign({
+            "data_source": dataSource,
+            "publisher": publisher
+          }, eventData))
         });
+        
+        res.sendStatus(200);
       } catch (err) {
         next({
-          status: 500,
+          status: (err.response ? err.response.status : 500) || 500,
           error: err
         });
       }

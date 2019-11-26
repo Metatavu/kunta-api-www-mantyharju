@@ -1,0 +1,105 @@
+extends ../layout/contents.pug
+
+include ../includes/mixins.pug
+
+block styles
+  link(rel="stylesheet", href="/css/contents-common.min.css")
+  link(rel="stylesheet", href="/css/common-list.min.css")
+  link(rel="stylesheet", href="/css/announcements-list.min.css")
+
+block content
+  .container.page-container
+    .row
+      +breadcrumbs(breadcrumbs)
+      
+  .container.page-container
+    .row
+      .col-xs-24.col-lg-19
+        .page-content
+          .row
+            .col-xs-24.title-container
+              p
+                strong Mäntyharjun tapahtumakalenterin käyttöehdot
+              p 
+                | Lisää tietoa henkilörekisterin tiedoista ja tarkoituksesta saat 
+                a(href="https://mantyharju.fi/sisalto/paatoksenteko/tietosuoja") Mäntyharjun tietosuojaselosteesta
+              p
+                | Näillä sopimusehdoilla ei rajoiteta kuluttajalle kuluttajansuojalain pakottavien säännösten nojalla kuuluvia oikeuksia.
+              p
+                strong Ehtojen yhteenveto
+              p
+                | Lupaat toimittaa paikkansapitävät tiedot henkilöllisyydestäsi rekisteröityessäsi Palvelun Käyttäjäksi. Lupaat olla käyttämättä Palvelua lainvastaisiin toimenpiteisiin tai lainvastaisen tai hyvien tapojen vastaisen materiaalin välittämiseen. Lupaat olla käyttämättä Palvelua sellaisiin toimenpiteisiin, jotka saattaisivat loukata kolmannen tai Mäntyharjun kunnan tekijänoikeutta tai muita immateriaalioikeuksia. Lupaat myös olla käyttämättä Palvelua sellaisen materiaalin välittämiseen, joka sellaisenaan tai jonka lähettäminen saattaa loukata toisen kunniaa, yksityisyyttä tai yrityssalaisuutta, yllyttää rikokseen tai olla herjaavaa tai uhkaavaa. Lupaat olla käyttämättä Palvelua tietoliikenteen häirintään. Lisäksi lupaat olla häiritsemättä Palvelun tarjoamista, Palveluun liitettyjä palvelimia tai muiden käyttäjien Palvelun käyttöä.
+              p Ilmoita kaikista Palvelun väärinkäytöksistä osoitteeseen eija.kling@mantyharju.fi.
+              p
+                strong I KÄYTTÖEHTOJEN HYVÄKSYMINEN
+              p
+                | Mäntyharjun kunta tarjoaa sinulle omistamansa tapahtumakalenteripalvelun (”Palvelu”) näiden käyttöehtojen (”Käyttöehdot”) ja siihen myöhemmin mahdollisesti tehtävien muutosten ja lisäysten mukaisesti.
+              p
+                | Käyttöehdot muodostavat koko sopimuksen käyttäjän ja Mäntyharjun kunnan välille ja kumoavat kaikki aikaisemmat sopimukset, joita osapuolten välillä on ollut. REKISTERÖITYMÄLLÄ KÄYTTÄJÄKSI JA PAINAMALLA ”REKISTERÖI”-PAINIKETTA, HYVÄKSYT NÄMÄ KÄYTTÖEHDOT ITSEÄSI SITOVIKSI.
+              p
+                | Käyttöehtojen kappaleiden otsikot ja yllä oleva ehtojen yhteenveto eivät ole osa sopimusta.
+              p
+                strong II PALVELUN LUONNE
+              p
+                | Mäntyharjun kunnan tapahtumakalenterin käyttöehdot hyväksymällä Käyttäjällä on mahdollisuus tuottaa aineistoa tapahtumakalenteriin. Palvelun käyttäminen on ilmaista.
+              p
+                strong III TIETOSUOJA
+              p
+                | Mäntyharjun kunta noudattaa EU:n ja Suomen tietosuojalainsäädännön säännöksiä henkilötietoja käsitellessään. Mäntyharjun kunta ei luovuta Käyttäjän antamia rekisteröintitietoja tai muita henkilötietolain mukaisia henkilötietoja kolmansille muuten kuin Käyttäjän tai tämän edustajan suostumuksella tai lain tai tuomioistuimen määräyksestä tai kohdan IV mukaisissa tilanteissa. Edellisen estämättä Mäntyharjun kunta voi luovuttaa kolmansille Palvelun käyttöä koskevia tietoja, joista yksittäinen Käyttäjä ei ole tunnistettavissa.
+              p
+                strong IV KÄYTTÄJÄN VELVOITTEET
+              p
+                | Käyttäjä sitoutuu (a) antamaan totuuden- ja ajanmukaiset, täsmälliset ja täydelliset tiedot rekisteröityessään Käyttäjäksi; (b) pitämään näitä tietoja ajan tasalla. Näitä tietoja kutsutaan näissä ehdoissa ”Rekisteröintitiedoiksi”. Jos Käyttäjän antamat tiedot eivät ole (a)- ja (b)-kohdan vaatimusten mukaiset, Mäntyharjun kunnalla on oikeus purkaa Palvelun tarjoamista koskeva sopimus, muut Käyttäjän ja Mäntyharjun kunnan väliset sopimukset sekä poistaa kaikki tiedot Käyttäjän Palvelintilasta.
+              p
+                strong V EI EDELLEENMYYNTIÄ
+              p
+                | Käyttäjä sitoutuu olemaan siirtämättä tätä sopimusta tai Käyttäjän oikeutta käyttää Palvelua ilman Mäntyharjun kunnan etukäteistä kirjallista suostumusta. Kaikki Palvelun tai sen käyttöoikeuden siirrosta ilman Mäntyharjun kunnan lupaa Käyttäjälle koituneet tulot kuuluvat yksinomaan Mäntyharjun kunnalle, ja Käyttäjä on velvollinen suorittamaan ne Mäntyharjun kunnalle täysimääräisesti.
+              p
+                strong VI TIEDOKSIANNOT, PALVELUN MUUTOKSET JA SOPIMUKSEN VOIMASSAOLO
+              p
+                | Mäntyharjun kunta voi muuttaa näitä Käyttöehtoja ilmoittamalla siitä Käyttäjälle tämän kirjautuessa Palveluun. Painamalla ”Kirjaudu sisään”-painiketta Käyttäjä hyväksyy muutokset itseään sitoviksi. Jos Käyttäjä ei hyväksy muutoksia, Mäntyharjun kunta irtisanoo sopimuksen ja kaikki Palvelintilassa olevat tiedot poistetaan.
+              p
+                | Mäntyharjun kunnalla on oikeus muuttaa tai keskeyttää pysyvästi tai tilapäisesti Palvelun tarjoaminen ilman ilmoitusta Käyttäjälle. Mäntyharjun kunta ei ole vastuussa Käyttäjälle tai millekään kolmannelle osapuolelle mistään vahingoista tai kuluista, jotka johtuvat Palvelun muuttamisesta tai keskeyttämisestä.
+              p
+                | Molemmilla osapuolilla on oikeus irtisanoa näiden Käyttöehtojen mukainen sopimus päättymään välittömästi.
+              p
+                | Tiedoksiannot Mäntyharjun kunnalle toimitetaan postitse kunnan toimipaikkaan tai sähköpostitse osoitteeseen osoite@mantyharju.fi. Tiedoksiannot Käyttäjille toimitetaan sähköpostitse tai näytetään Käyttäjälle tämän kirjautuessa palveluun.
+              p
+                strong VII PALVELUN KÄYTTÖ
+              p
+                | Käyttäjä sitoutuu Palvelua käyttäessään noudattamaan Suomen lakia ja muuta kulloinkin sovellettavaksi tulevaa lainsäädäntöä ja muita viranomaissäännöksiä. Käyttäjä sitoutuu olemaan käyttämättä Palvelua tietoliikenteen häirintään sekä sitoutuu olemaan häiritsemättä Palvelun tarjoamista ja Palveluun liitettyjä palvelimia.
+              p
+                | Rekisteröityessään Käyttäjäksi Käyttäjä saa salasanan ja käyttäjätunnuksen, jotka mahdollistavat pääsyn Palveluun. Käyttäjä pitää salasanan salassa ja on vastuussa kaikesta käyttäjätunnuksilla ja salasanalla suoritetuista toimista kuin omistaan. Käyttäjä ilmoittaa Mäntyharjun kunnalle välittömästi kaikesta Palvelun tai Käyttäjän salasanan luvattomasta käytöstä ja muista tietoturvaongelmista.
+              p
+                | Käyttäjä sitoutuu olemaan käyttämättä Palvelua lain tai hyvien tapojen vastaisen materiaalin välittämiseen tai muuhun lain tai hyvien tapojen vastaisiin toimenpiteisiin. Käyttäjä sitoutuu olemaan käyttämättä Palvelua sellaisiin toimenpiteisiin, jotka saattaisivat loukata kolmannen tai Mäntyharjun kunnan tekijänoikeutta tai muita immateriaalioikeuksia. Käyttäjä sitoutuu olemaan käyttämättä Palvelua sellaisen materiaalin välittämiseen, joka tai jonka lähettäminen saattaa loukata kolmannen kunniaa, yksityisyyttä tai salassapitovelvollisuutta, yllyttää rikokseen tai olla herjaavaa tai uhkaavaa tai muuten lainvastaista. Käyttäjä sitoutuu lisäksi olemaan lähettämättä Palvelun kautta viruksia tai muita tietokoneohjelmia tai ohjelmakäskyjen sarjoja, jotka on suunniteltu vaarantamaan tietojenkäsittelyä tai tieto- tai telejärjestelmän toimintaa, vahingoittamaan sellaisen järjestelmän sisältämiä tietoja tai ohjelmistoja tai mahdollistamaan luvattoman pääsyn tietojärjestelmään.
+              p
+                strong VIII KORVAUSVELVOLLISUUS
+              p
+                | Käyttäjä korvaa Mäntyharjun kunnalle ja sen työntekijöille kaikki vahingot ja kulut, jotka johtuvat kolmannen osapuolen Mäntyharjun kuntaa tai sen työntekijää vastaan esittämistä vaatimuksista, jos nämä vaatimukset johtuvat Käyttäjän Käyttöehtojen vastaisesta Palvelun käytöstä tai Käyttäjän tekemistä kolmansien oikeuksien loukkauksista.
+              p
+                strong IX KÄYTTÖEHTOJEN LOUKKAUKSET
+              p
+                | Käyttäjä hyväksyy, että Mäntyharjun kunta voi poistaa Käyttäjän oikeuden käyttää palvelua ja tuhota Käyttäjän Palvelintilassa olevat tiedot, jos Mäntyharjun kunnalla on syytä olettaa, että (a) Käyttäjä on rikkonut Käyttöehtoja, tai (b) Käyttäjä on loukannut Mäntyharjun kunnan oikeutta tai on Palvelua käyttäessään loukannut kolmansien tai muiden Käyttäjien oikeutta.
+              p
+                | Mäntyharjun kunnalla on oikeus poistaa Käyttäjän oikeuden käyttää palvelua ja tuhota Käyttäjän Palvelintilassa olevat tiedot, jos Käyttäjä ei käytä Palvelua kohtuullisen ajan kuluessa. Mäntyharjun kunta määrittää tämän kohtuullisen, vähintään kolmen kuukauden mittaisen ajan.
+              p
+                strong X LINKIT JA ILMOITUKSET
+              p
+                | Mäntyharjun kunta ei vastaa Palvelussa olevien ilmoitusten sisällöstä, eikä ilmoituksissa tarjottavien tai välitettävien tuotteiden tai palveluiden virheettömyydestä tai niitä koskevien tietojen oikeellisuudesta. Palvelussa, mukaan lukien siinä olevat ilmoitukset, voi olla linkkejä muihin tietoverkon palveluihin tai tietolähteisiin. Mäntyharjun kunta ei vastaa näiden linkkien käyttökelpoisuudesta eikä niiden sivujen sisällöstä, joihin linkit Käyttäjän ohjaavat.
+              p
+                strong XI PALVELUNTARJOAJAN OIKEUDET
+              p
+                | Palvelu sisältää tekijänoikeudella suojattua materiaalia, kuten tekstiä, kuvia ja valokuvia, ääntä, musiikkia, jne. Tämä materiaalia on suojattu Suomessa ja kansainvälisesti tekijänoikeudella ja muilla immateriaalioikeuksilla. Oikeudet materiaaliin kuuluvat Mäntyharjun kunnalle ja ilmoittajille, eikä Käyttäjä saa käyttää materiaalia ilman Mäntyharjun kunnan tai ilmoittajien erityistä lupaa.
+              p
+                strong XII EI TAKUUTA
+              p
+                | Palvelu toimitetaan sellaisena kuin se on. Mäntyharjun kuntao pyrkii varmistamaan Palvelun virheettömän toiminnan. Mäntyharjun kunta ei kuitenkaan takaa Palvelun virheetöntä tai jatkuvaa toimintaa. Mäntyharjun kunta ei myöskään takaa Palvelun ja Käyttäjän välisen tiedonsiirron tietoturvaa eikä Palvelusta tai siellä esitettyjen ilmoitusten kautta saatujen tietojen virheettömyyttä.
+              p
+                strong XIV VASTUUNRAJOITUS
+              p
+                | Mäntyharjun kunta ei vastaa Käyttäjälle tai kolmansille aiheutuneista välittömistä, välillisistä tai muista vahingoista, jotka johtuvat Palvelun käytöstä, Palvelun virheistä, Palvelun tarjoamisen keskeytyksistä tai päättymisestä. Mäntyharjun kunta ei myöskään miltään osin ole vastuussa Palvelun ja Käyttäjän välisen tiedonsiirron tietoturvasta eikä Palvelusta tai siellä esitettyjen ilmoitusten kautta saatujen tietojen virheettömyydestä. Lisäksi Mäntyharjun kunta ei miltään osin vastaa Käyttäjän Palvelussa vastaanottamien ja lähettämien viestien sisällöstä tai perillemenosta.
+              p
+                strong XV RIITOJEN RATKAISU
+              p
+                | Käyttöehtoihin ja Palvelun tarjoamiseen sovelletaan Suomen lakia. Kaikki Käyttöehtoja tai Palvelua koskevat riidat käsitellään Etelä-Savon käräjäoikeudessa.
+
