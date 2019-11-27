@@ -224,11 +224,14 @@
 }
 
 #section-9 {
+
   fieldset {
     display: contents;
-    .form-group {
-      margin: 0;
+    
+    .form-check {
+      margin-left: 15px;
       width: 45%;
+      display: inline-block;
     }
   }
 }

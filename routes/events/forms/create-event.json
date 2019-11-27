@@ -296,60 +296,8 @@
   ]}, {
     "title": "Tapahtumaluokat",
     "name": "keywords",
-    "fields": [{
-      "name": "movie",
-      "type": "boolean",
-      "title": "Elokuva"
+    "fields": []
     }, {
-      "name": "education",
-      "type": "boolean",
-      "title": "Koulutukset ja seminaarit"
-    },{
-      "name": "art-picture",
-      "type": "boolean",
-      "title": "Kuvataide ja näyttelyt"
-    }, {
-      "name": "sports",
-      "type": "boolean",
-      "title": "Liikunta ja urheilu"
-    }, {
-      "name": "museum",
-      "type": "boolean",
-      "title": "Museot"
-    }, {
-      "name": "music",
-      "type": "boolean",
-      "title": "Musiikki"
-    }, {
-      "name": "Food",
-      "type": "boolean",
-      "title": "Ruoka"
-    }, {
-      "name": "literature",
-      "type": "boolean",
-      "title": "Sanataide ja kirjallisuus"
-    }, {
-      "name": "art-studies",
-      "type": "boolean",
-      "title": "Taiteen perusopetus"
-    }, {
-      "name": "dance",
-      "type": "boolean",
-      "title": "Tanssi"
-    }, {
-      "name": "theatre",
-      "type": "boolean",
-      "title": "Teatteri"
-    }, {
-      "name": "export",
-      "type": "boolean",
-      "title": "Vienti ja kansainvälisyys"
-    }, {
-      "name": "else-events",
-      "type": "boolean",
-      "title": "Muut tapahtumat"
-    }
-  ]}, {
     "fields": [{
         "name": "keyword-help",
         "type": "html",
