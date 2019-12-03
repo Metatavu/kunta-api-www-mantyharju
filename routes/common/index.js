@@ -68,7 +68,7 @@
     }
     
     static get LINKEDEVENTS_MAX_PLACES() {
-      return 20;
+      return 10;
     }
     
     static get DEFAULT_EVENT_KEYWORD_ID() {
@@ -77,7 +77,7 @@
     
     static parseMovieData($, movieElement) {
       const result = {};
-      const simpleAttributes = ['title', 'age-limit', 'runtime', 'price', 'description', 'trailer-url', 'director', 'cast'];
+      const simpleAttributes = ['title', 'age-limit', 'runtime', 'price', 'description', 'trailer-url', 'ticket-sales-url', 'director', 'cast'];
       const jsonAttributes = ['showtimes', 'classifications'];
 
       for (let i = 0; i < simpleAttributes.length; i++) {

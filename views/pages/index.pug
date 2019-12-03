@@ -90,7 +90,7 @@ mixin banners-slider(banners)
                     h4 Palveluiden aukioloajat
             .col-xs-6.col-lg-12.pull-lg-right.no-gutters.quick-nav-button-container
               .quick-nav-container
-                a(href="/sisalto/osallistu-ja-vaikuta")
+                a(href="/sisalto/paatoksenteko")
                   .quick-nav-icon-container
                     img.quick-nav-icon.img-responsive(src="/gfx/layout/osallistu.png")
                   .quick-nav-title
@@ -201,7 +201,13 @@ block content
             +tile(tileMap['etusivu-mainos'])
         .row
           .col-xs
+            a(href=movieBanner.link)
+              img(style="max-width:100%;" src="/gfx/layout/kino_logo.jpg")
             +footerTileMovies()
+            a(target="_blank" href="https://www.nettilippu.fi/event/2949")
+              img(style="max-width:100%;" src="/gfx/layout/nettilippu_logo.jpg")
+            a(target="_blank" href="https://www.facebook.com/Kino-Mäntyharju-367737830746240")
+              i.fa.fa-facebook-official(style="font-size: 55px;vertical-align: middle;float: right;")
             .xs-spacer.sm-spacer.md-spacer
       .col-xs-24.col-lg-12
         .row
@@ -218,8 +224,22 @@ block content
                       | Tapahtumat
               .index-box-content.tab-content
                 .tab-pane.active#events-tab(role="tabpanel")
-                  each event in events
-                    +renderTextEvent(event)
+                  if eventsNow.length > 0
+                    .eventsNow
+                      h4
+                        | Tapahtumat nyt
+                      each event in eventsNow
+                        +renderTextEvent(event)
+                  if eventsIncoming.length > 0
+                    .eventsIncoming
+                      if eventsNow.length > 0
+                        h4(style="margin-top:15px")
+                          | Tulevat tapahtumat
+                      else
+                        h4
+                          | Tulevat tapahtumat
+                      each event in eventsIncoming
+                        +renderTextEvent(event)
                   a.read-more(href="/tapahtumat")
                     | Lisää tapahtumia
                     i.fa.fa-chevron-right

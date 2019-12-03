@@ -32,6 +32,9 @@ if showtimes && showtimes.length
           |Lippu:
         span
           !=price
+    if ticketSalesUrl
+      .movie-field.ticket-sales-url
+        a(href=ticketSalesUrl) Osta lippu
     if director
       div
         .movie-field.director

@@ -25,20 +25,30 @@
   module.exports = (app, config, ModulesClass) => {
     
     app.get('/', (req, res, next) => {
-      const eventOptions = {
+      
+      const eventOptionsNow = {
         'maxResults': Common.EVENT_COUNT,
         'orderBy': 'START_DATE',
         'orderDir': 'DESCENDING',
-        'startAfter': null,
-        'endAfter': (new Date()).toISOString()
+        'startAfter': moment().subtract(12, 'hours').toISOString(),
+        'endAfter': null
+      };
+
+      const eventOptionsIncoming = {
+        'maxResults': Common.EVENT_COUNT,
+        'orderBy': 'START_DATE',
+        'orderDir': 'DESCENDING',
+        'startAfter': (new Date()).toISOString(),
+        'endAfter': null
       };
       
       new ModulesClass(config)
         .news.latest(0, 5)
         .banners.list()
         .announcements.list(Common.ANNOUNCEMENT_COUNT, 'PUBLICATION_DATE', 'DESCENDING')
-        .events.list(eventOptions)
+        .events.list(eventOptionsIncoming)
         .pages.getContent(Common.MOVIES_PAGE_ID)
+        .events.list(eventOptionsNow)
         .callback(function(data) {
           const path = req.path.substring(9);
           const activeMovies = Common.parseActiveMovies(Common.processPageContent(path, data[4]));
@@ -83,7 +93,7 @@
             });
           });
           
-          var events = _.clone(data[3] || []).map(event => {
+          var eventsNowUnsorted = _.clone(data[5] || []).map(event => {
             return Object.assign(event, {
               "imageSrc": event.imageId ? util.format('/eventImages/%s/%s', event.id, event.imageId) : '/gfx/layout/tapahtuma_default_625x350.jpg',
               "shortDate": moment(event.start).format('D.M.YYYY'),
@@ -91,6 +101,21 @@
             });
           });
           
+          var eventsIncoming = _.clone(data[3] || []).map(event => {
+            return Object.assign(event, {
+              "imageSrc": event.imageId ? util.format('/eventImages/%s/%s', event.id, event.imageId) : '/gfx/layout/tapahtuma_default_625x350.jpg',
+              "shortDate": moment(event.start).format('D.M.YYYY'),
+              "startHumanReadable": formatEventStart(event.start)
+            });
+          });
+
+          var now = moment();
+          var eventsNow = eventsNowUnsorted.filter( event => {
+            const start = moment(event.start);
+            const end = moment(event.end);
+            return moment(now).isBetween( start, end ) ? true : false; 
+          });
+
           const movieImageUrls = _.uniq(activeMovies.map((movie) => {
             return movie.imageUrl;
           }));
@@ -103,7 +128,8 @@
             banners: banners,
             announcements: announcements,
             news: news,
-            events: events,
+            eventsNow: eventsNow,
+            eventsIncoming: eventsIncoming,
             movieImageUrls: movieImageUrls.filter(Boolean),
             movieBanner: movieBanner[0] ? movieBanner[0] : null
           }));
