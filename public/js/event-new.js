@@ -43,11 +43,10 @@
         "locale": "fi",
         "altFormat": "d.m.Y H:i",
         "altInput": true,
-        "utc": true,
         "allowInput": true,
         "enableTime" : true,
         "time_24hr": true,
-        "minDate": new Date(),
+        "minDate": moment().add(1, "h").toDate(), //new Date(),
         "onChange": $.proxy(this.onStartDateChange, this)
       });
 
@@ -55,11 +54,10 @@
         "locale": "fi",
         "altFormat": "d.m.Y H:i",
         "altInput": true,
-        "utc": true,
         "allowInput": true,
         "enableTime" : true,
         "time_24hr": true,
-        "minDate": new Date(),
+        "minDate": moment().add(1, "h").toDate(),
         "onChange": $.proxy(this.onEndDateChange, this)
       });
 
