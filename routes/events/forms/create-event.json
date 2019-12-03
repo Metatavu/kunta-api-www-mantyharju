@@ -46,7 +46,7 @@
       }, {
       "name": "name-help",
       "type": "html",
-      "html": "<div class='help-container'><p>Tähän laita tapahtuman nimi, mikäli tapahtuma kuvataan useammalla eri kielellä, laita kaikkiin kohtiin nimi.</p></div>"
+      "html": "<div class='help-container'><p>Lisää tapahtuman nimi. Mikäli haluat kuvata tapahtuman useammalla kielellä, rastita haluamasi kieli ja lisää nimi kyseisellä kielellä.</p></div>"
     } 
   ]} , {
     "title": "Ajankohta",
@@ -74,13 +74,13 @@
       "required": true,
       "source-url": "/linkedevents/places/search"
     }, {
+      "name": "location-help",
+      "type": "html",
+      "html": "<div class='help-container'><p>Kirjoita kenttään tapahtumapaikan nimen alkua ja valitse oikea paikka alle ilmestyvästä listasta.</p><p>Ilmoittautuminen kohdassa voit määritellä tarkemmin tapahtumaan saapumisesta.</p></div>"
+    }, {
       "name": "add-location",
       "type": "html",
       "html": "<strong>Mikäli paikkaa ei löydy haulla voit lisätä uuden klikkaamalla </strong> <a href=\"#\" class=\"new-place-link\">tästä</a>"
-    }, {
-      "name": "location-help",
-      "type": "html",
-      "html": "<div class='help-container'><p>Aloita kirjoittamaan kenttään tapahtumapaikan nimen alkua ja valitse oikea paikka alle ilmestyvästä listasta.</p><p>Jos tapahtumapaikka löytyy listasta, osoitetta ja sijaintia ei tarvitse kuvailla tarkemmin.</p><p>Voit kuitenkin laittaa lisätietoja tapahtuman löytämiseksi, kuten kerrosnumero tai muu tarkempi sijainti.</p></div>"
     }
   ]}, {
     "title": "Tapahtuman kuva",
@@ -88,7 +88,7 @@
       "name": "show-default-images",
       "type": "boolean",
       "title": "Näytä oletuskuvat"
-    },{
+    }, {
       "name": "default-image-url",
       "type": "hidden"
     }, {
@@ -99,6 +99,10 @@
         "field":"show-default-images",
         "equals": true
       }  
+    }, {
+      "name": "default-image-help",
+      "type": "html",
+      "html": "<div class='help-container'><p>Mikäli sinulla ei ole tapahtumaan liittyvää kuvaa, voit valita ‘Näytä oletuskuvat’ -kohdasta mieleisesi oletuskuvan.</p></div>"
     }, {
       "name": "image",
       "type": "files",
@@ -229,7 +233,7 @@
     }, {
       "name": "price-help",
       "type": "html",
-      "html": "<div class='help-container'><p>Merkitse jos tapahtuma on maksullinen ja lisää tapahtuman hinta tekstimuodossa.</p><p>Voit lisätä linkin verkkolipunmyyntiin.</p></div>"
+      "html": "<div class='help-container'><p>Mikäli tapahtuma on maksullinen, lisää rasti ruutuun ‘Pääsymaksu’ ja lisää lipun hinta tekstimuodossa (esim. 10 euroa/hlö)</p><p>Mikäli käytössä on sähköinen lipunmyynti, voit lisätä linkin sivustolle.</p></div>"
     }, {
       "name": "price-sv",
       "type": "memo",
@@ -289,7 +293,7 @@
     }, {
       "name": "price-url",
       "type": "url",
-      "title": "Linkki verkkolipunmyyntiin",
+      "title": "Linkki lipunmyyntisivulle",
       "placeholder": "http://www verkkosivun osoite",
       "required": false
     }
