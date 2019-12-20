@@ -487,7 +487,12 @@
         const dataSource = config.get("linkedevents:datasource");
         const publisher = config.get("linkedevents:publisher");
         const linkedEventsURL = config.get("linkedevents:api-url");
-        const keywordIds = req.body["keywords"] || [];
+
+        let keywordIds = req.body["keywords"] || [];
+        if (!Array.isArray(keywordIds)) {
+          keywordIds = [keywordIds];
+        }
+
         const keywords = keywordIds.map((keywordId) => {
           return { "@id": `${linkedEventsURL}/keyword/${keywordId}/` };
         });
@@ -561,7 +566,7 @@
             "responsible-fi": req.body["responsible"],
             "responsible-phone": req.body["responsible-phone-number"],
             "responsible-email": req.body["responsible-email-address"],
-            "isRegistration": req.body["is-registration"],
+            "isRegistration": req.body["is-registration"] || false,
             "registration-fi": isRegistration ? req.body["registration-fi"] : req.body["no-registration-fi"],
             "registration-sv": isRegistration ? req.body["registration-sv"] : req.body["no-registration-sv"],
             "registration-en": isRegistration ? req.body["registration-en"] : req.body["no-registration-en"],
