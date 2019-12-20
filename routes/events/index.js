@@ -587,8 +587,6 @@
           }],
         };
 
-        console.log("eventData", eventData);
-
         const startDateTime = req.body["start-date-time"];
         const startDate = req.body["start-date"];
         const endDateTime = req.body["end-date-time"];
