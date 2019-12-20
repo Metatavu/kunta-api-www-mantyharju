@@ -566,7 +566,7 @@
             "responsible-fi": req.body["responsible"],
             "responsible-phone": req.body["responsible-phone-number"],
             "responsible-email": req.body["responsible-email-address"],
-            "isRegistration": req.body["is-registration"] || false,
+            "isRegistration": req.body["is-registration"] || "",
             "registration-fi": isRegistration ? req.body["registration-fi"] : req.body["no-registration-fi"],
             "registration-sv": isRegistration ? req.body["registration-sv"] : req.body["no-registration-sv"],
             "registration-en": isRegistration ? req.body["registration-en"] : req.body["no-registration-en"],
