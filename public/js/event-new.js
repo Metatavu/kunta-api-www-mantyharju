@@ -2,22 +2,22 @@
 
 (function () {
   "use strict";
-  
+
   $(document).on("click", ".new-place-link", function (event) {
     event.preventDefault();
-    
+
     $.get("/ajax/linkedevents/places/new", function (response) {
-      var dialog = bootbox.dialog({ 
+      var dialog = bootbox.dialog({
         title: "Uusi tapahtumapaikka",
         message: response,
         className: "new-place-dialog"
       });
-      
+
       $(".new-place-dialog .metaform").metaform({
         onPostSuccess: function (response) {
           var value = response.id;
-          var label = response.name.fi || response.name.sv || response.name.en;
-          
+          var label = response.name.fi || response.name.sv || response.name.en;
+
           $("#field-location").metaformAutocomplete("val", {
             value: value,
             label: label
@@ -27,7 +27,7 @@
         }
       });
     });
-    
+
   });
 
   $.widget("custom.eventDates", {
@@ -35,27 +35,56 @@
     /**
      * Constructor
      */
-    _create: function() {
+    _create: function () {
       flatpickr("#field-start-date", {}).destroy();
       flatpickr("#field-end-date", {}).destroy();
+      flatpickr("#field-start-date-time", {}).destroy();
+      flatpickr("#field-end-date-time", {}).destroy();
 
-      this.startPicker = $("#field-start-date").flatpickr({
+      this.startTimePicker = $("#field-start-date-time").flatpickr({
         "locale": "fi",
+        "dateFormat": "Z",
         "altFormat": "d.m.Y H:i",
         "altInput": true,
         "allowInput": true,
-        "enableTime" : true,
+        "enableTime": true,
+        "time_24hr": true,
+        "minDate": moment().add(1, "h").toDate(), //new Date(),
+        "onChange": $.proxy(this.onStartDateTimeChange, this)
+      });
+
+      this.startPicker = $("#field-start-date").flatpickr({
+        "locale": "fi",
+        "dateFormat": "Z",
+        "altFormat": "d.m.Y",
+        "altInput": true,
+        "allowInput": true,
+        "enableTime": false,
         "time_24hr": true,
         "minDate": moment().add(1, "h").toDate(), //new Date(),
         "onChange": $.proxy(this.onStartDateChange, this)
       });
 
-      this.endPicker = $("#field-end-date").flatpickr({
+
+      this.endTimePicker = $("#field-end-date-time").flatpickr({
         "locale": "fi",
+        "dateFormat": "Z",
         "altFormat": "d.m.Y H:i",
         "altInput": true,
         "allowInput": true,
-        "enableTime" : true,
+        "enableTime": true,
+        "time_24hr": true,
+        "minDate": moment().add(1, "h").toDate(),
+        "onChange": $.proxy(this.onEndDateTimeChange, this)
+      });
+
+      this.endPicker = $("#field-end-date").flatpickr({
+        "locale": "fi",
+        "dateFormat": "Z",
+        "altFormat": "d.m.Y",
+        "altInput": true,
+        "allowInput": true,
+        "enableTime": false,
         "time_24hr": true,
         "minDate": moment().add(1, "h").toDate(),
         "onChange": $.proxy(this.onEndDateChange, this)
@@ -70,13 +99,23 @@
      */
     onStartDateChange: function (selectedDates) {
       this.endPicker.set("minDate", selectedDates[0]);
+    },
+
+    /**
+      * Event handler for start date change
+      * 
+      * @param {Date} selectedDates date object
+      */
+    onStartDateTimeChange: function (selectedDates) {
+      this.endTimePicker.set("minDate", selectedDates[0]);
     }
+
 
   });
 
   $.widget("custom.eventDefaultImages", {
-    
-    _create: function() {
+
+    _create: function () {
       this.element.addClass("row");
 
       var images = this.options.images;
@@ -98,7 +137,7 @@
       var isSelected = container.hasClass("selected-image");
 
       this.element.find(".selected-image").removeClass("selected-image");
-      
+
       if (isSelected) {
         container.removeClass("selected-image");
         this.element.closest(".metaform").find("input[name=\"default-image-url\"]").removeAttr("value");
@@ -114,7 +153,7 @@
       bootbox.alert({
         message: "<i class=\"fa fa-check\" /><h3>Tapahtuma  on lähetetty ylläpidolle arvioitavaksi.</h3>",
         backdrop: true,
-        callback: function(){
+        callback: function () {
           window.location.reload(true);
         }
       });
@@ -124,15 +163,15 @@
 
     $(".form-control").addClass("pristine");
 
-    $(".form-control").focus(function(){
+    $(".form-control").focus(function () {
       $(this).removeClass("pristine");
     });
 
-    $(".form-control").change(function(){
+    $(".form-control").change(function () {
       $(this).removeClass("pristine");
     });
 
-    $(document).on("click", ".flatpickr-input", function(){
+    $(document).on("click", ".flatpickr-input", function () {
       $(this).removeClass("pristine");
     });
 
@@ -146,5 +185,5 @@
 
     $(".metaform").addClass("ready");
   });
-  
+
 }).call(this);
