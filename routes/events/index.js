@@ -591,17 +591,6 @@
         const hasStartTime = !!startDateTime;
         const hasEndTime = !!endDateTime;
 
-        console.log("startDateTime", startDateTime);
-        console.log("startDate", startDate);
-        console.log("endDateTime", endDateTime);
-        console.log("endDate", endDate);
-
-        /**
-        const startDate = req.body["start-date"];
-        const startTime = req.body["start-time"];
-        const endDate = req.body["end-date"];
-        const endTime = req.body["end-time"];
- */
         if (!startDate && !startDateTime) {
           res.status(400).send("Alkamispäivämäärä on pakollinen");
           return;
@@ -624,9 +613,6 @@
           return;
         }
 
-        console.log("eventStart", eventStart);
-        console.log("eventEnd", eventEnd);
-
         if (eventStart.isAfter(eventEnd)) {
           res.status(400).send("Alkamisaika ei voi olla loppumisajan jälkeen");
           return;
@@ -639,8 +625,6 @@
 
         eventData["end_time"] = hasEndTime ? eventEnd.format() : eventEnd.format("YYYY-MM-DD");
         eventData["has_end_time"] = hasEndTime;
-
-        console.log("eventData", eventData);
 
         await eventApi.eventCreate({
           eventObject: LinkedEventsClient.Event.constructFromObject(Object.assign({
