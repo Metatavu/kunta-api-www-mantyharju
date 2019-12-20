@@ -1,14 +1,14 @@
 /*jshint esversion: 6 */
 /* global __dirname */
 
-(function() {
+(function () {
   "use strict";
-  
+
   const _ = require("lodash");
   const util = require("util");
   const moment = require("moment-timezone");
   const metaformFields = require("metaform-fields");
-  const multer  = require("multer");
+  const multer = require("multer");
   const fs = require("fs");
   const uuidv4 = require("uuid/v4");
   const path = require("path");
@@ -17,7 +17,7 @@
   const Entities = require("html-entities").AllHtmlEntities;
   const entities = new Entities();
   const Common = require(`${__dirname}/../common`);
-  const Autolinker = require( "autolinker" );
+  const Autolinker = require("autolinker");
   const LinkedEventsClient = require("linkedevents-client");
 
   function hasTime(date) {
@@ -29,22 +29,22 @@
   function isSameDay(start, end) {
     const startMoment = moment(start);
     const endMoment = moment(end);
-    
+
     return startMoment.isSame(endMoment, "day");
   }
-  
+
   function formatDatePart(date) {
     if (hasTime(date)) {
       return moment(date).format("D.M.YYYY HH:mm");
     }
-    
+
     return moment(date).format("D.M.YYYY");
   }
 
   function formatDate(start, end) {
     if (!end && !hasTime(start)) {
       return moment(start).format("D.M.YYYY");
-    } else if(!end && hasTime(start)) {
+    } else if (!end && hasTime(start)) {
       const startMoment = moment(start);
       return `${startMoment.format("D.M.YYYY")} klo ${startMoment.format("H:mm")} alkaen`;
     } else if (isSameDay(start, end) && !hasTime(start)) {
@@ -59,7 +59,7 @@
       return `${formatDatePart(start)} - ${formatDatePart(end)}`;
     }
   }
-  
+
   function truncateDescription(description) {
     return _.truncate(description, {
       "length": 150
@@ -67,7 +67,7 @@
   }
 
   module.exports = (app, config, ModulesClass) => {
-  
+
     /**
      * Returns events API instance
      * 
@@ -76,15 +76,15 @@
     function getLinkedEventsEventsApi() {
       const apiUrl = config.get("linkedevents:api-url");
       const apiKey = config.get("linkedevents:api-key");
-      
-      const client = LinkedEventsClient.ApiClient.instance;      
+
+      const client = LinkedEventsClient.ApiClient.instance;
       client.basePath = apiUrl;
       client.defaultHeaders = {
         apikey: apiKey
       };
-      return new LinkedEventsClient.EventApi();    
+      return new LinkedEventsClient.EventApi();
     }
-  
+
     /**
      * Returns filter API instance
      * 
@@ -94,14 +94,14 @@
       const apiUrl = config.get("linkedevents:api-url");
       const apiKey = config.get("linkedevents:api-key");
 
-      const client = LinkedEventsClient.ApiClient.instance;      
-      
+      const client = LinkedEventsClient.ApiClient.instance;
+
       client.basePath = apiUrl;
       client.defaultHeaders = {
         apikey: apiKey
       };
-  
-      return new LinkedEventsClient.FilterApi();    
+
+      return new LinkedEventsClient.FilterApi();
     }
 
     /**
@@ -139,7 +139,7 @@
      * @param {string} defaultImage default image
      * @returns {Promise} promise for events 
      */
-    async function listEvents (perPage, page, start, end, defaultImage) {
+    async function listEvents(perPage, page, start, end, defaultImage) {
       const eventsApi = getLinkedEventsEventsApi();
 
       const listOptions = {
@@ -149,7 +149,7 @@
       };
 
       if (start) {
-        listOptions["start"] = start.toDate(); 
+        listOptions["start"] = start.toDate();
       }
 
       if (end) {
@@ -168,7 +168,7 @@
      * @param {string} defaultImage default image
      * @returns {Promise} promise for event 
      */
-    async function findEvent (id, defaultImage) {
+    async function findEvent(id, defaultImage) {
       const eventsApi = getLinkedEventsEventsApi();
       const event = await eventsApi.eventRetrieve(id);
       return translateEvent(event, defaultImage);
@@ -186,7 +186,7 @@
         let nameWithoutExtension = fileName;
         let extension = "";
 
-        if (fileName.lastIndexOf(".") > -1 ){
+        if (fileName.lastIndexOf(".") > -1) {
           nameWithoutExtension = fileName.substring(0, fileName.lastIndexOf("."));
           extension = fileName.substring(fileName.lastIndexOf("."));
         }
@@ -202,10 +202,10 @@
     });
 
     const upload = multer({
-      storage: storage, 
+      storage: storage,
       fileFilter: function (req, file, callback) {
         const ext = path.extname(file.originalname);
-        if(ext == ".png" || ext == ".jpg" || ext == ".gif" || ext == ".jpeg") {
+        if (ext == ".png" || ext == ".jpg" || ext == ".gif" || ext == ".jpeg") {
           return callback(null, true);
         }
 
@@ -214,13 +214,13 @@
       limits: {
         fileSize: 2097152,
         files: 1
-      } 
+      }
     });
 
     app.get(Common.EVENTS_FOLDER, (req, res, next) => {
       try {
         res.render("pages/events-list.pug", Object.assign(req.kuntaApi.data, {
-          breadcrumbs : [{path: Common.EVENTS_FOLDER, title: "Tapahtumat"}]
+          breadcrumbs: [{ path: Common.EVENTS_FOLDER, title: "Tapahtumat" }]
         }));
       } catch (err) {
         next({
@@ -229,15 +229,15 @@
         });
       }
     });
-    
-    
+
+
     app.get("/ajax/events", async (req, res, next) => {
       try {
         const perPage = Common.EVENTS_COUNT_PAGE;
         const page = parseInt(req.query.page) || 0;
         const start = req.query.start ? moment(req.query.start, "DD.MM.YYYY") : moment();
         const end = req.query.end ? moment(req.query.end, "DD.MM.YYYY").endOf("day") : null;
-        
+
         const events = await listEvents(perPage, page + 1, start, end, "/gfx/layout/tapahtuma_default_120_95.jpg");
         const lastPage = events.length < perPage;
 
@@ -253,7 +253,7 @@
         });
       }
     });
-    
+
     app.get(util.format("%s/uusi", Common.EVENTS_FOLDER), async (req, res, next) => {
       try {
         const filterApi = getLinkedEventsFilterApi();
@@ -284,11 +284,11 @@
 
         res.render("pages/event-new", Object.assign(req.kuntaApi.data, {
           viewModel: viewModel,
-          plugins: [ metaformFields.templates() ],
+          plugins: [metaformFields.templates()],
           latestEvents: latestEvents,
           defaultImages: JSON.stringify(config.get("linkedevents:defaultImages") || []),
-          breadcrumbs : [
-            { path: Common.EVENTS_FOLDER, title: "Tapahtumat" }, 
+          breadcrumbs: [
+            { path: Common.EVENTS_FOLDER, title: "Tapahtumat" },
             { path: util.format("%s/uusi", Common.EVENTS_FOLDER), title: "Uusi" }
           ]
         }));
@@ -320,11 +320,11 @@
         res.render("pages/event.pug", Object.assign(req.kuntaApi.data, {
           event: event,
           latestEvents: latestEvents,
-          breadcrumbs : [
-            {path: Common.EVENTS_FOLDER, title: "Tapahtumat"}, 
-            {path: util.format("%s/%s", Common.EVENTS_FOLDER, id), title: event.name }
+          breadcrumbs: [
+            { path: Common.EVENTS_FOLDER, title: "Tapahtumat" },
+            { path: util.format("%s/%s", Common.EVENTS_FOLDER, id), title: event.name }
           ],
-          baseUrl : req.protocol + "://" + req.get("host"),
+          baseUrl: req.protocol + "://" + req.get("host"),
           pageRoute: req.originalUrl,
           ogTitle: entities.decode(event.name),
           ogContent: entities.decode(striptags(event.description))
@@ -361,20 +361,6 @@
             value: place.id,
             label: place.name ? place.name.fi : ""
           };
-        }));  
-      } catch (err) {
-        next({
-          status: 500,
-          error: err
-        });
-      }
-    });
-    
-    app.get("/ajax/linkedevents/places/new", (req, res, next) => {
-      try {
-        res.render("ajax/place-new", Object.assign(req.kuntaApi.data, {
-          viewModel: require(`${__dirname}/forms/create-place`),
-          plugins: [ metaformFields.templates() ]
         }));
       } catch (err) {
         next({
@@ -383,7 +369,21 @@
         });
       }
     });
-    
+
+    app.get("/ajax/linkedevents/places/new", (req, res, next) => {
+      try {
+        res.render("ajax/place-new", Object.assign(req.kuntaApi.data, {
+          viewModel: require(`${__dirname}/forms/create-place`),
+          plugins: [metaformFields.templates()]
+        }));
+      } catch (err) {
+        next({
+          status: 500,
+          error: err
+        });
+      }
+    });
+
     app.post("/linkedevents/places/create", async (req, res, next) => {
       try {
         const placeData = {
@@ -407,7 +407,7 @@
             "deleted": false
           }, placeData))
         });
- 
+
         res.send(place);
       } catch (err) {
         next({
@@ -416,13 +416,13 @@
         });
       }
     });
-    
+
     app.get("/linkedevents/keywords/search", (req, res, next) => {
       try {
         const text = req.query.text;
         const page = req.query.page || 1;
         const pageSize = Common.LINKEDEVENTS_MAX_PLACES;
-        
+
         new ModulesClass(config)
           .linkedevents.searchKeywords(text, page, pageSize)
           .callback((data) => {
@@ -447,9 +447,9 @@
         const deleteKey = uuidv4();
         const deleteKeyFilePath = config.get("uploads:path") + req.file.filename + "." + deleteKey;
         const fileUrl = config.get("uploads:baseUrl") + req.file.filename;
-        
+
         fs.closeSync(fs.openSync(deleteKeyFilePath, "w"));
-        
+
         res.send([{
           _id: fileUrl,
           filename: req.file.filename,
@@ -464,22 +464,22 @@
         });
       }
     });
-    
+
     app.delete("/linkedevents/image/:filename", (req, res) => {
       const filename = req.params.filename;
       const fileDeleteKey = req.query.c;
       const uploadFolder = config.get("uploads:path") || "uploads/";
       const keyFilePath = uploadFolder + filename + "." + fileDeleteKey;
-      
+
       if (fs.existsSync(keyFilePath)) {
         fs.unlinkSync(keyFilePath);
         fs.unlinkSync(uploadFolder + filename);
-        res.status(204).send(); 
+        res.status(204).send();
       } else {
         res.status(401).send();
       }
     });
-    
+
     app.post("/linkedevents/event/create", async (req, res, next) => {
       try {
         const eventApi = getLinkedEventsEventsApi();
@@ -489,14 +489,14 @@
         const linkedEventsURL = config.get("linkedevents:api-url");
         const keywordIds = req.body["keywords"] || [];
         const keywords = keywordIds.map((keywordId) => {
-          return { "@id" : `${linkedEventsURL}/keyword/${keywordId}/` };
+          return { "@id": `${linkedEventsURL}/keyword/${keywordId}/` };
         });
 
         let imageUrls = [];
         if (req.body["image-url"]) {
           imageUrls.push(req.body["image-url"]);
         }
-        
+
         if (req.body["image"]) {
           if (Array.isArray(req.body["image"])) {
             imageUrls = imageUrls.concat(req.body["image"]);
@@ -581,52 +581,74 @@
             "description": null
           }],
         };
-        
+
+        const startDateTime = req.body["start-date-time"];
+        const startDate = req.body["start-date"];
+        const endDateTime = req.body["end-date-time"];
+        const endDate = req.body["end-date"];
+
+
+        const hasStartTime = !!startDateTime;
+        const hasEndTime = !!endDateTime;
+
+        console.log("startDateTime", startDateTime);
+        console.log("startDate", startDate);
+        console.log("endDateTime", endDateTime);
+        console.log("endDate", endDate);
+
+        /**
         const startDate = req.body["start-date"];
         const startTime = req.body["start-time"];
         const endDate = req.body["end-date"];
         const endTime = req.body["end-time"];
-        
-        if (!startDate) {
+ */
+        if (!startDate && !startDateTime) {
           res.status(400).send("Alkamispäivämäärä on pakollinen");
           return;
         }
-        
-        if (!endDate) {
+
+        if (!endDate && !endDateTime) {
           res.status(400).send("Loppumispäivämäärä on pakollinen");
           return;
         }
-        
-        const eventStart = startTime ? moment.tz(`${startDate}T${startTime}`,  moment.ISO_8601, "Europe/Helsinki") : moment(startDate, moment.ISO_8601);
+
+        const eventStart = startDateTime ? moment.tz(startDateTime, moment.ISO_8601, "Europe/Helsinki") : moment(startDate, moment.ISO_8601);
         if (!eventStart.isValid()) {
           res.status(400).send("Alkamispäivämäärä tai aika on virheellisen muotoinen. Ole hyvä ja käytä muotoa VVVV-MM-DD (esim. 2019-12-24) ja muotoa HH:MM (esim 10:30)");
           return;
         }
-        
-        const eventEnd = endTime ? moment.tz(`${endDate}T${endTime}`,  moment.ISO_8601, "Europe/Helsinki") : moment(endDate, moment.ISO_8601);
+
+        const eventEnd = endDateTime ? moment.tz(endDateTime, moment.ISO_8601, "Europe/Helsinki") : moment(endDate, moment.ISO_8601);
         if (!eventEnd.isValid()) {
           res.status(400).send("Loppumispäivämäärä tai aika on virheellisen muotoinen. Ole hyvä ja käytä muotoa VVVV-MM-DD (esim. 2019-12-24) ja muotoa HH:MM (esim 10:30)");
           return;
         }
 
+        console.log("eventStart", eventStart);
+        console.log("eventEnd", eventEnd);
+
         if (eventStart.isAfter(eventEnd)) {
           res.status(400).send("Alkamisaika ei voi olla loppumisajan jälkeen");
           return;
         }
-        
-        eventData["start_time"] = eventStart.format();
-        eventData["has_start_time"] = !!startTime;
-        
-        eventData["end_time"] = eventEnd.format();
-        eventData["has_end_time"] = !!endTime;
-        
+
+
+
+        eventData["start_time"] = hasStartTime ? eventStart.format() : eventStart.format("YYYY-MM-DD");
+        eventData["has_start_time"] = hasStartTime;
+
+        eventData["end_time"] = hasEndTime ? eventEnd.format() : eventEnd.format("YYYY-MM-DD");
+        eventData["has_end_time"] = hasEndTime;
+
+        console.log("eventData", eventData);
+
         await eventApi.eventCreate({
           eventObject: LinkedEventsClient.Event.constructFromObject(Object.assign({
             "data_source": dataSource,
             "publisher": publisher
           }, eventData))
         });
-        
+
         res.sendStatus(200);
       } catch (err) {
         next({
@@ -635,7 +657,7 @@
         });
       }
     });
-    
+
   };
 
 }).call(this);
