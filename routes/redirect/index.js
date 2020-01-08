@@ -19,7 +19,7 @@
             .pages.resolvePath(id)
             .callback((data) => {
               if (data) {
-                res.redirect(util.format("%s/%s", Common.CONTENT_FOLDER, data));  
+                res.redirect(util.format("%s/%s", Common.CONTENT_FOLDER, Array.isArray(data) ? data[0] : data));  
               } else {
                 res.redirect('/');
               }
