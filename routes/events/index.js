@@ -103,8 +103,10 @@
 
       if (event.offers.length > 0) {
         if (!event.offers[0].is_free) {
-          price = event.offers[0].price.fi;
-        } else if (event.offers[0].is_free && event.offers[0].price.fi) {
+          if (event.offers[0].price.fi) {
+            price = event.offers[0].price.fi;
+          }
+        } else if (event.offers[0].is_free && event.offers[0].price && event.offers[0].price.fi) {
           if (event.offers[0].is_free) {
             if (event.offers[0].price.fi) {
               price = event.offers[0].price.fi;
@@ -334,7 +336,7 @@
         const id = req.params.id;
         const event = await findEvent(id, null);
 
-        const placeId = event.place["@id"].split("http://mantyharju-test.linkedevents.fi/v1/place/");
+        const placeId = event.place["@id"].split("http://mantyharju.linkedevents.fi/v1/place/");
         const place = await findPlace(placeId[1].split("/")[0]);
 
         const latestEvents = await listEvents(50, 1, moment(), null, null);
