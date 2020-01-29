@@ -98,11 +98,31 @@
       const name = (event.name ? event.name.fi : "") || "";
       const imageUrl = event.images && event.images.length ? event.images[0].url : null;
       const start = formatDate(event.start_time, event.end_time);
+      const place = event.location ? event.location : {};
+      let price = undefined;
+
+      if (event.offers.length > 0) {
+        if (!event.offers[0].is_free) {
+          price = event.offers[0].price.fi;
+        } else if (event.offers[0].is_free && event.offers[0].price.fi) {
+          if (event.offers[0].is_free) {
+            if (event.offers[0].price.fi) {
+              price = event.offers[0].price.fi;
+            } else {
+              price = "Ei pääsymäksyä";
+            }
+          }
+        } else {
+          price = "Ei pääsymäksyä";
+        }
+      }
 
       return {
         id: event.id,
         name: name,
         start: start,
+        place: place,
+        price: price,
         shortDate: moment(event.start_time).format("D.M.YYYY"),
         imageSrc: imageUrl || defaultImage,
         description: Common.plainTextParagraphs(Autolinker.link(description)),
@@ -153,6 +173,13 @@
       const eventsApi = getLinkedEventsEventsApi();
       const event = await eventsApi.eventRetrieve(id);
       return translateEvent(event, defaultImage);
+    }
+
+    async function findPlace(id) {
+      const filterApi = getLinkedEventsFilterApi();
+      const place = await filterApi.placeRetrieve(id);
+
+      return place;
     }
 
     const storage = multer.diskStorage({
@@ -306,12 +333,17 @@
       try {
         const id = req.params.id;
         const event = await findEvent(id, null);
+
+        const placeId = event.place["@id"].split("http://mantyharju-test.linkedevents.fi/v1/place/");
+        const place = await findPlace(placeId[1].split("/")[0]);
+
         const latestEvents = await listEvents(50, 1, moment(), null, null);
 
         res.render(
           "pages/event.pug",
           Object.assign(req.kuntaApi.data, {
             event: event,
+            place: place,
             latestEvents: latestEvents,
             breadcrumbs: [
               { path: Common.EVENTS_FOLDER, title: "Tapahtumat" },
@@ -530,6 +562,7 @@
         }
 
         const nameFi = (req.body["name-fi"] || "").trim();
+
         if (!nameFi) {
           res.status(400).send("Nimi (Suomi) on pakollinen");
           return;
@@ -547,7 +580,8 @@
           return;
         }
 
-        const notFree = req.body["has-price"];
+        const hasPrice = req.body["has-price"] ? req.body["has-price"] : true;
+
         const isRegistration = req.body["is-registration"];
 
         const eventData = {
@@ -585,11 +619,11 @@
           location: { "@id": `${linkedEventsURL}/place/${locationId}/` },
           offers: [
             {
-              is_free: req.body["has-price"],
+              is_free: hasPrice,
               price: {
-                fi: notFree ? req.body["price-fi"] : req.body["free-price-fi"],
-                sv: notFree ? req.body["price-sv"] : req.body["free-price-sv"],
-                en: notFree ? req.body["price-en"] : req.body["free-price-en"]
+                fi: hasPrice ? req.body["price-fi"] : req.body["free-price-fi"],
+                sv: hasPrice ? req.body["price-sv"] : req.body["free-price-sv"],
+                en: hasPrice ? req.body["price-en"] : req.body["free-price-en"]
               },
               info_url: req.body["price-url"],
               description: null

@@ -40,18 +40,24 @@ block content
             .col-xs-24
               p
                 !=event.description
+          if event.price
+            .row
+              .col-xs-24
+                p Hinta:
+                  = event.price
           if event.place
             .row
               .col-xs-24 
                 p Paikka: 
-                  =event.place
-          if event.address 
-            - var city = event.city || '';
-            - var zip = event.zip || '';
+                  =place.name.fi
+          if place.address_locality 
+            - var city = place.address_locality || '';
+            - var zip = place.postal_code || '';
+            - var streetAdress = place.street_address
             .row
               .col-xs-24 
                 p Osoite: 
-                  =event.address + ' ' + zip + ' ' + city
+                  =streetAdress + ' ' + zip + ' ' + city
 block ogTags
   - var pageUrl = baseUrl + pageRoute
   - var imageUrl = event.imageSrc ? baseUrl + event.imageSrc : baseUrl + '/gfx/layout/mantyharju_logo_625x350.jpg'
