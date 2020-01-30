@@ -227,6 +227,11 @@
       }
     });
 
+    function extractPlaceId(event) {
+      const placeId = event.place["@id"].split("/");
+      return placeId[5];
+    }
+
     app.get(Common.EVENTS_FOLDER, (req, res, next) => {
       try {
         res.render(
@@ -336,8 +341,9 @@
         const id = req.params.id;
         const event = await findEvent(id, null);
 
-        const placeId = event.place["@id"].split("http://mantyharju.linkedevents.fi/v1/place/");
-        const place = await findPlace(placeId[1].split("/")[0]);
+        const placeId = extractPlaceId(event);
+
+        const place = await findPlace(placeId);
 
         const latestEvents = await listEvents(50, 1, moment(), null, null);
 
@@ -582,7 +588,7 @@
           return;
         }
 
-        const hasPrice = req.body["has-price"] ? req.body["has-price"] : true;
+        const is_free = req.body["has-price"] ? req.body["has-price"] : true;
 
         const isRegistration = req.body["is-registration"];
 
@@ -621,11 +627,11 @@
           location: { "@id": `${linkedEventsURL}/place/${locationId}/` },
           offers: [
             {
-              is_free: hasPrice,
+              is_free: is_free,
               price: {
-                fi: hasPrice ? req.body["price-fi"] : req.body["free-price-fi"],
-                sv: hasPrice ? req.body["price-sv"] : req.body["free-price-sv"],
-                en: hasPrice ? req.body["price-en"] : req.body["free-price-en"]
+                fi: is_free ? req.body["price-fi"] : req.body["free-price-fi"],
+                sv: is_free ? req.body["price-sv"] : req.body["free-price-sv"],
+                en: is_free ? req.body["price-en"] : req.body["free-price-en"]
               },
               info_url: req.body["price-url"],
               description: null
