@@ -177,6 +177,10 @@
       return translateEvent(event, defaultImage);
     }
 
+    /**
+     * Finds place by id from LinkedEvents API
+     * @param {string} id
+     */
     async function findPlace(id) {
       const filterApi = getLinkedEventsFilterApi();
       const place = await filterApi.placeRetrieve(id);
@@ -227,9 +231,13 @@
       }
     });
 
+    /**
+     * Extracts place id from event place id ref
+     * @param {event} event
+     */
     function extractPlaceId(event) {
-      const placeId = event.place["@id"].split("/");
-      return placeId[5];
+      const placeId = event.place["@id"].slice(0, -1).split("/");
+      return placeId[placeId.length - 1];
     }
 
     app.get(Common.EVENTS_FOLDER, (req, res, next) => {
