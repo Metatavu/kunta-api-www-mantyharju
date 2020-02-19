@@ -87,6 +87,21 @@
     }
 
     /**
+     * Creates an event image from URL
+     * 
+     * @param {String} url 
+     * @returns {Promise} promise for created image
+     */
+    function createEventImage(url) {
+      const imageApi = Common.getLinkedEventsImagesApi(config);
+      return imageApi.imageCreate({
+        imageObject: {
+          url: url
+        }
+      });
+    }
+
+    /**
      * Translates LinkedEvents event into format expected by the pug templates
      *
      * @param {any} event LinkedEvents event
@@ -589,6 +604,8 @@
           }
         }
 
+        imageUrls = imageUrls.filter(imageUrl => imageUrl && imageUrl.trim());
+
         for (let i = 0; i < imageUrls.length; i++) {
           if (!validator.isURL(imageUrls[i], { require_tld: false })) {
             res
@@ -602,6 +619,7 @@
           imageUrls.push(req.body["default-image-url"]);
         }
 
+        const images = await Promise.all(imageUrls.map(url => createEventImage(url)));
         const nameFi = (req.body["name-fi"] || "").trim();
 
         if (!nameFi) {
@@ -655,7 +673,7 @@
             "registration-en": isRegistration ? req.body["registration-en"] : req.body["no-registration-en"],
             registration_url: req.body["registration-url"]
           },
-          "image-urls": imageUrls,
+          "images": images,
           keywords: keywords,
           location: { "@id": `${linkedEventsURL}/place/${locationId}/` },
           offers: [
@@ -717,7 +735,7 @@
         eventData["end_time"] = hasEndTime ? eventEnd.format() : eventEnd.format("YYYY-MM-DD");
         eventData["has_end_time"] = hasEndTime;
 
-        await eventApi.eventCreate({
+        const payload = {
           eventObject: LinkedEventsClient.Event.constructFromObject(
             Object.assign(
               {
@@ -727,7 +745,9 @@
               eventData
             )
           )
-        });
+        };
+
+        await eventApi.eventCreate(payload);
 
         res.sendStatus(200);
       } catch (err) {
