@@ -203,7 +203,7 @@
         {
           "title": "Puhelinnumero",
           "name": "provider-phone-number",
-          "type": "number",
+          "type": "text",
           "required": false
         },
         {
