@@ -19,6 +19,7 @@
   const Common = require(`${__dirname}/../common`);
   const Autolinker = require("autolinker");
   const LinkedEventsClient = require("linkedevents-client");
+  const stream = require("stream");
 
   function hasTime(date) {
     const momentDate = moment(date);
@@ -511,6 +512,30 @@
             url: fileUrl
           }
         ]);
+      } catch (err) {
+        next({
+          status: 500,
+          error: err
+        });
+      }
+    });
+
+    app.get("/user-uploads/:filename", (req, res, next) => {
+      try {
+        const filename = req.params.filename;      
+        const uploadFolder = config.get("uploads:path") || "uploads/";
+        const filePath = uploadFolder + filename;
+        
+        const readStream = fs.createReadStream(filePath);
+        const passThrough = new stream.PassThrough();
+        
+        stream.pipeline(readStream, passThrough, (err) => {
+          if (err) {
+            return res.sendStatus(500); 
+          }
+        });
+        
+        passThrough.pipe(res);
       } catch (err) {
         next({
           status: 500,
