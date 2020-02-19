@@ -111,6 +111,25 @@
       return new LinkedEventsClient.FilterApi();
     }
 
+    /**
+     * Returns filter API instance
+     *
+     * @returns {LinkedEventsClient.ImageApi} image API instance
+     */
+    static getLinkedEventsImagesApi(config) {
+      const apiUrl = config.get("linkedevents:api-url");
+      const apiKey = config.get("linkedevents:api-key");
+
+      const client = LinkedEventsClient.ApiClient.instance;
+
+      client.basePath = apiUrl;
+      client.defaultHeaders = {
+        apikey: apiKey
+      };
+
+      return new LinkedEventsClient.ImageApi();
+    }
+
     static parseMovieData($, movieElement) {
       const result = {};
       const simpleAttributes = ["title", "age-limit", "runtime", "price", "description", "trailer-url", "ticket-sales-url", "director", "cast"];
