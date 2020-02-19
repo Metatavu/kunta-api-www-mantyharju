@@ -231,7 +231,7 @@
         {
           "title": "Puhelinnumero",
           "name": "responsible-phone-number",
-          "type": "number",
+          "type": "text",
           "required": true
         },
         {
