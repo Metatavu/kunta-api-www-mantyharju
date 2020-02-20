@@ -189,7 +189,10 @@
      */
     async function findEvent(id, defaultImage) {
       const eventsApi = getLinkedEventsEventsApi();
-      const event = await eventsApi.eventRetrieve(id);
+      const event = await eventsApi.eventRetrieve(id, {
+        include: ["location"]
+      });
+
       return translateEvent(event, defaultImage);
     }
 
@@ -246,15 +249,6 @@
         files: 1
       }
     });
-
-    /**
-     * Extracts place id from event place id ref
-     * @param {event} event
-     */
-    function extractPlaceId(event) {
-      const placeId = event.place["@id"].slice(0, -1).split("/");
-      return placeId[placeId.length - 1];
-    }
 
     app.get(Common.EVENTS_FOLDER, (req, res, next) => {
       try {
@@ -364,10 +358,7 @@
       try {
         const id = req.params.id;
         const event = await findEvent(id, null);
-
-        const placeId = extractPlaceId(event);
-
-        const place = await findPlace(placeId);
+        const place = event.place;
 
         const latestEvents = await listEvents(50, 1, moment(), null, null);
 
