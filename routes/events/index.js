@@ -127,11 +127,11 @@
             if (event.offers[0].price.fi) {
               price = event.offers[0].price.fi;
             } else {
-              price = "Ei pääsymäksyä";
+              price = "Ei pääsymaksua";
             }
           }
         } else {
-          price = "Ei pääsymäksyä";
+          price = "Ei pääsymaksua";
         }
       }
 
