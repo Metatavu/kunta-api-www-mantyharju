@@ -125,9 +125,9 @@
             const activeMovies = Common.parseActiveMovies(Common.processPageContent(path, data[3]));
             const news = _.clone(data[0]).map(newsArticle => {
               return Object.assign(newsArticle, {
-                shortAbstract: _.truncate($.load(newsArticle.abstract).text(), {
+                shortAbstract: newsArticle.abstract ? _.truncate($.load(newsArticle.abstract).text(), {
                   length: 160
-                }),
+                }) : "",
                 shortDate: moment(newsArticle.published).format("D.M.YYYY"),
                 imageSrc: newsArticle.imageId ? util.format("/newsArticleImages/%s/%s", newsArticle.id, newsArticle.imageId) : null
               });
