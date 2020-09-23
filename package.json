@@ -24,7 +24,7 @@
     "html-entities": "^1.2.1",
     "is-number": "^7.0.0",
     "linkedevents-client": "0.0.20",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.16",
     "metaform-fields": "0.8.0",
     "moment": "^2.17.1",
     "moment-timezone": "^0.5.13",
