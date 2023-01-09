@@ -20,7 +20,7 @@
   "dependencies": {
     "autolinker": "^1.7.0",
     "cheerio": "^0.22.0",
-    "feed": "^2.0.4",
+    "feed": "^4.2.2",
     "html-entities": "^1.2.1",
     "is-number": "^7.0.0",
     "linkedevents-client": "0.0.20",
